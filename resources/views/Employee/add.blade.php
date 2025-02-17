@@ -71,7 +71,7 @@
                                             </div>
 
 
-                                            <h5 class="card-title">Disgnation Information</h5>
+                                            <h5 class="card-title">Designation Information</h5>
                                             <div class="row">
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Position <span class="text-red">*</span></label>

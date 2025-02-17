@@ -80,4 +80,20 @@ class EmployeeController extends Controller
         
         
     }
+
+
+    public function get_employee(Request $request){
+        try {
+            $request->validate([
+                'id' => 'required'
+            ]);
+
+            // $employee_data = Employee::find($request->id);
+            $employee_data = Employee::with(['gender', 'position', 'company', 'department'])->find($request->id);
+            return response()->json($employee_data);
+        } catch (\Throwable $th) {
+            return response()->json($th);
+            //throw $th;
+        }
+    }
 }

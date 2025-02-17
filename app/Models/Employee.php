@@ -33,4 +33,25 @@ class Employee extends Model
         'created_at',
         'updated_at',
     ];
+
+
+    public function gender()
+    {
+        return $this->belongsTo(Gender::class, 'gender_id');
+    }
+
+    public function position()
+    {
+        return $this->belongsTo(Position::class, 'position_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_data_id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_data_id');
+    }
 }
