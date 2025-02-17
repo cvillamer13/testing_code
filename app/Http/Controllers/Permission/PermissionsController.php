@@ -13,7 +13,7 @@ class PermissionsController extends Controller
     public function view()
     {
         $roles = Roles::all();
-        return view('permissions.view', ['roles' => $roles]);
+        return view('Permissions.view', ['roles' => $roles]);
     }
 
     public function Edit_View(Request $request, $id)
@@ -29,7 +29,7 @@ class PermissionsController extends Controller
         // print_r($pages[0]->page_category_data);
         // exit;
         // return $permissions;
-        return view('permissions.edit', ['roles' => $roles, 'permissions' => $permissions, 'pages' => $pages]);
+        return view('Permissions.edit', ['roles' => $roles, 'permissions' => $permissions, 'pages' => $pages]);
     }
 
 

@@ -11,7 +11,7 @@ class CompanyController extends Controller
     public function view()
     {
         $company = Company::all();
-        return view('company.view', [
+        return view('Company.view', [
             'company' => $company,
         ]);
     }

@@ -24,7 +24,7 @@ class EmployeeController extends Controller
         $gender = Gender::all();
         $company = Company::all();
         $department = Department::all();
-        return view('employee.add', [
+        return view('Employee.add', [
             'position' => $position,
             'gender' => $gender,
             'company' => $company,

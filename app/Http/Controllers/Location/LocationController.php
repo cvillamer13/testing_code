@@ -14,7 +14,7 @@ class LocationController extends Controller
     {
         $company = Company::all();
         $location = Location::all();
-        return view('location.view', [
+        return view('Location.view', [
             'company' => $company,
             'location' => $location,
         ]);

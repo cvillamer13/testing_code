@@ -13,7 +13,7 @@ class DepartmentController extends Controller
     {
         $company = Company::all();
         $department = Department::all();
-        return view('department.view', [
+        return view('Department.view', [
             'company' => $company,
             'department' => $department,
         ]);

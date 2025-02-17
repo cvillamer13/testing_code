@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         // $users = User::all();
         $users = User::with('role')->get();
-        return view('users.view', [
+        return view('Users.view', [
             'users' => $users,
         ]);
     }
@@ -23,7 +23,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Roles::all();
-        return view('users.add', [
+        return view('Users.add', [
             'roles' => $roles,
         ]);
     }
@@ -78,7 +78,7 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Roles::all();
         $company = Company::all();
-        return view('users.edit', [
+        return view('Users.edit', [
             'user' => $user,
             'roles' => $roles,
             'company' => $company,

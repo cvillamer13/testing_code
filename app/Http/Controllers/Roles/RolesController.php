@@ -11,7 +11,7 @@ class RolesController extends Controller
     public function view()
     {
         $roles = Roles::all();
-        return view('roles.view', ['roles' => $roles]);
+        return view('Roles.view', ['roles' => $roles]);
     }
 
     public function Create_Roles(Request $request)
