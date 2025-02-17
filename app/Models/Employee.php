@@ -23,6 +23,7 @@ class Employee extends Model
         'pwd_data',
         'address1',
         'address2',
+        'barangay',
         'city',
         'province',
         'country',

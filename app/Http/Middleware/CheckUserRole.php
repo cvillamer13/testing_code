@@ -39,6 +39,7 @@ class CheckUserRole
                     Session::put('user_id', $user->id);
                     Session::put('type_asset', $user->type_asset);
                     Session::put('company_data', $user->company);
+                    Session::put('user_email', $user->email);
                     Session::put('user_permissions', $permissions->map(function ($permission) {
                         return [
                             'page' => $permission->page->URL,

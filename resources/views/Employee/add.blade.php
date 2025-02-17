@@ -34,19 +34,19 @@
 
                                                 <div class="mb-3 col-md-4">
                                                     <label class="form-label">Middle Name</label>
-                                                    <input type="text" class="form-control" name="name">
+                                                    <input type="text" class="form-control" name="m_name" id="m_name">
                                                 </div>
 
                                                 <div class="mb-3 col-md-4">
                                                     <label class="form-label">Last Name<span class="text-red">*</span></label>
-                                                    <input type="text" class="form-control" name="name" required>
+                                                    <input type="text" class="form-control" name="l_name" id="l_name" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="mb-3 col-md-3">
                                                     <label class="form-label">Date of birth</label>
-                                                    <input type="text" class="form-control" name="name">
+                                                    <input type="date" class="form-control" name="dob" id="dob">
                                                 </div>
 
                                                 <div class="mb-3 col-md-3">
@@ -61,19 +61,19 @@
 
                                                 <div class="mb-3 col-md-3">
                                                     <label class="form-label">Email<span class="text-red">*</span></label>
-                                                    <input type="text" class="form-control" name="name" required>
+                                                    <input type="email" class="form-control" name="email_data" id="email_data" required>
                                                 </div>
 
                                                 <div class="mb-3 col-md-3">
                                                     <label class="form-label">Phone Number<span class="text-red">*</span></label>
-                                                    <input type="text" class="form-control" name="name" required>
+                                                    <input type="text" class="form-control" name="phone_number" id="phone_number" required>
                                                 </div>
                                             </div>
 
 
                                             <h5 class="card-title">Disgnation Information</h5>
                                             <div class="row">
-                                                <div class="mb-3 col-md-12">
+                                                <div class="mb-3 col-md-6">
                                                     <label class="form-label">Position <span class="text-red">*</span></label>
                                                     <select class="form-control" id="position_data" name="position_data" required>
                                                         <option value selected disabled> Please Choose</option>
@@ -82,11 +82,15 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Date of hired</label>
+                                                    <input type="date" class="form-control" name="doh" id="doh">
+                                                </div>
                                             </div>
                                             <div class="row">
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Company<span class="text-red">*</span></label>
-                                                    <select class="form-control" id="company_data" name="company_data" required>
+                                                    <select class="form-control" id="company_data" name="company_data" onchange="getDepartment()" required>
                                                         <option value selected disabled> Please Choose</option>
                                                         @foreach ($company as $com)
                                                             <option value="{{ $com->id }}">{{ $com->name }}</option>
@@ -101,17 +105,21 @@
                                                 </div>
                                             </div>
 
-                                            <div class="card p-3 mt-3">
+                                           
                                                 <h5 class="card-title">Present Address</h5>
                                                 <div class="row">
                                                     <!-- Street Address -->
                                                     <div class="mb-3 col-md-6">
                                                         <label class="form-label">Address 1</label>
-                                                        <input type="text" class="form-control" name="street">
+                                                        <input type="text" class="form-control" name="address1">
                                                     </div>
-                                                    <div class="mb-3 col-md-6">
+                                                    <div class="mb-3 col-md-3">
                                                         <label class="form-label">Address 2</label>
-                                                        <input type="text" class="form-control" name="street">
+                                                        <input type="text" class="form-control" name="address2">
+                                                    </div>
+                                                    <div class="mb-3 col-md-3">
+                                                        <label class="form-label">Barangay</label>
+                                                        <input type="text" class="form-control" name="barangay">
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -124,7 +132,7 @@
                                                     <!-- State -->
                                                     <div class="mb-3 col-md-3">
                                                         <label class="form-label">Province</label>
-                                                        <input type="text" class="form-control" name="state">
+                                                        <input type="text" class="form-control" name="province">
                                                     </div>
 
                                                     <!-- Zip Code -->
@@ -140,12 +148,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            
-                                               
-                                            
                                         </div>
-                                    </div>
+                                    
+                                        <button class="btn btn-primary mt-4 w-100" type="submit">Submit</button>
                                 </form>
                             </div>
                         </div>

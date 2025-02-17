@@ -31,4 +31,75 @@ class EmployeeController extends Controller
             'department' => $department
         ]);
     }
+
+    public function add_emp(Request $request){
+
+        try {
+            // echo "<pre>";
+            // print_r(session('user_email'));
+            // exit;
+            $request->validate([
+                'emp_no' => 'required',
+                'f_name' => 'required',
+                'l_name' => 'required',
+                'gender_data' => 'required',
+                'email_data' => 'required',
+                'phone_number' => 'required',
+                'position_data' => 'required',
+                'company_data' => 'required',
+                'depart_data' => 'required',
+            ]);
+            // 'emp_no',
+            // 'email',
+            // 'first_name',
+            // 'middle_name',
+            // 'last_name',
+            // 'date_of_birth',
+            // 'position_id ',
+            // 'gender_id ',
+            // 'company_data_id ',
+            // 'department_data_id ',
+            // 'phone_number',
+            // 'pwd_data',
+            // 'address1',
+            // 'address2',
+            // 'city',
+            // 'province',
+            // 'country',
+            // 'zip',
+            // 'created_by',
+            // 'updated_by',
+            // 'created_at',
+            // 'updated_at',
+
+            $emp = new Employee();
+            $emp->emp_no = $request->emp_no;
+            $emp->first_name = $request->f_name;
+            $emp->middle_name = $request->m_name;
+            $emp->last_name = $request->l_name;
+            $emp->date_of_birth = $request->dob;
+            $emp->gender_id = $request->gender_data;
+            $emp->email = $request->email_data;
+            $emp->company_data_id = $request->company_data;
+            $emp->department_data_id = $request->depart_data;
+            $emp->phone_number = $request->phone_number;
+            $emp->position_id = $request->position_data;
+            // $emp->pwd_data = $request->emp_no;
+            $emp->address1 = $request->address1;
+            $emp->address2 = $request->address2;
+            $emp->barangay = $request->barangay;
+            $emp->city = $request->city;
+            $emp->province = $request->province;
+            $emp->country = $request->country;
+            $emp->zip = $request->zip;
+            $emp->created_by = $request->emp_no;
+            $emp->save();
+
+            return redirect()->route('employee.view')->with('success', 'Employee '. $emp->emp_no .' created successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+        
+        
+    }
 }
