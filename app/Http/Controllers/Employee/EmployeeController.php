@@ -49,29 +49,6 @@ class EmployeeController extends Controller
                 'company_data' => 'required',
                 'depart_data' => 'required',
             ]);
-            // 'emp_no',
-            // 'email',
-            // 'first_name',
-            // 'middle_name',
-            // 'last_name',
-            // 'date_of_birth',
-            // 'position_id ',
-            // 'gender_id ',
-            // 'company_data_id ',
-            // 'department_data_id ',
-            // 'phone_number',
-            // 'pwd_data',
-            // 'address1',
-            // 'address2',
-            // 'city',
-            // 'province',
-            // 'country',
-            // 'zip',
-            // 'created_by',
-            // 'updated_by',
-            // 'created_at',
-            // 'updated_at',
-
             $emp = new Employee();
             $emp->emp_no = $request->emp_no;
             $emp->first_name = $request->f_name;
@@ -92,7 +69,8 @@ class EmployeeController extends Controller
             $emp->province = $request->province;
             $emp->country = $request->country;
             $emp->zip = $request->zip;
-            $emp->created_by = $request->emp_no;
+            $emp->created_by = session('user_email');
+        
             $emp->save();
 
             return redirect()->route('employee.view')->with('success', 'Employee '. $emp->emp_no .' created successfully');
