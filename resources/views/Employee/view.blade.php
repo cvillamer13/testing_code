@@ -216,7 +216,7 @@
                         success: function (response) {
                             toastr.success("Employee Found!");
 
-                            console.log(response)
+                            // console.log(response)
                             document.getElementById("emp_no").innerHTML = response.emp_no;
                             document.getElementById("f_name").innerHTML = response.first_name;
                             document.getElementById("m_name").innerHTML = response.middle_name;
@@ -242,13 +242,6 @@
                             document.getElementById("zip_code").innerHTML = response.zip;
                             document.getElementById("country").innerHTML = response.country;
                             
-
-
-
-
-
-
-
                         },
                         error: function (error) {
                             toastr.error("Employee not found");
