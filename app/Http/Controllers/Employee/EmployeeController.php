@@ -15,7 +15,7 @@ class EmployeeController extends Controller
     public function view()
     {
         $employees = Employee::all();
-        return view('employee.view', ['employees' => $employees]);
+        return view('Employee.view', ['employees' => $employees]);
     }
 
     public function add()
