@@ -61,7 +61,7 @@ class EmployeeController extends Controller
             $emp->department_data_id = $request->depart_data;
             $emp->phone_number = $request->phone_number;
             $emp->position_id = $request->position_data;
-            // $emp->pwd_data = $request->emp_no;
+            $emp->date_of_hired = $request->doh;
             $emp->address1 = $request->address1;
             $emp->address2 = $request->address2;
             $emp->barangay = $request->barangay;
@@ -95,5 +95,72 @@ class EmployeeController extends Controller
             return response()->json($th);
             //throw $th;
         }
+    }
+
+    public function edit(Request $request, $id){
+        try {
+            $employee = Employee::with(['gender', 'position', 'company', 'department'])->find($id);
+            $position = Position::all();
+            $gender = Gender::all();
+            $company = Company::all();
+            $department = Department::all();
+            return view('Employee.edit', [
+                'position' => $position,
+                'gender' => $gender,
+                'company' => $company,
+                'department' => $department,
+                'employee' => $employee
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+    }
+
+
+    public function update(Request $request, $id){
+        try {
+            // echo "<pre>";
+            // print_r($request->all());
+            // exit;
+
+            $request->validate([
+                'f_name' => 'required',
+                'l_name' => 'required',
+                'gender_data' => 'required',
+                'email_data' => 'required',
+                'phone_number' => 'required',
+                'position_data' => 'required',
+                'company_data' => 'required',
+                'depart_data' => 'required',
+            ]);
+
+            $emp = Employee::find($id);
+            $emp->first_name = $request->f_name;
+            $emp->middle_name = $request->m_name;
+            $emp->last_name = $request->l_name;
+            $emp->date_of_birth = $request->dob;
+            $emp->gender_id = $request->gender_data;
+            $emp->email = $request->email_data;
+            $emp->company_data_id = $request->company_data;
+            $emp->department_data_id = $request->depart_data;
+            $emp->phone_number = $request->phone_number;
+            $emp->position_id = $request->position_data;
+            $emp->date_of_hired = $request->doh;
+            $emp->address1 = $request->address1;
+            $emp->address2 = $request->address2;
+            $emp->barangay = $request->barangay;
+            $emp->city = $request->city;
+            $emp->province = $request->province;
+            $emp->country = $request->country;
+            $emp->zip = $request->zip;
+            $emp->updated_by = session('user_email');
+            $emp->save();
+
+            return redirect()->route('employee.view')->with('success', 'Employee '. $emp->emp_no .' updated successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
     }
 }

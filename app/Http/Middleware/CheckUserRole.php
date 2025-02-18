@@ -55,7 +55,7 @@ class CheckUserRole
             }else{
                 Auth::logout();
                 Session::flush();
-                return redirect()->route('login');
+                return redirect()->route('login')->with('error', 'Login First!');
             }
             // dd($role);
         }

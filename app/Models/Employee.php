@@ -20,6 +20,7 @@ class Employee extends Model
         'company_data_id ',
         'department_data_id ',
         'phone_number',
+        'date_of_hired',
         'pwd_data',
         'address1',
         'address2',

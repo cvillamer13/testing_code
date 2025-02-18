@@ -28,6 +28,7 @@
                                         <th class="staff_thead_name">Full Name</th>
                                         <th class="staff_thead_email">Email </th>
                                         <th class="staff_thead_status">Status</th>
+                                        <th class="staff_thead_status">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -38,8 +39,9 @@
                                             <td>{{ $employee->email }}</td>
                                             <td>
                                                 <span class="badge badge-lg badge-outline-success">Active</span>
-                                                <span class="badge badge-lg badge-outline-danger">Resigned</span>
+                                                {{-- <span class="badge badge-lg badge-outline-danger">Resigned</span> --}}
                                             </td>
+                                            <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $employee->id }}"><i class="la la-pencil"></i>Edit</a></td>
                                         </tr>
                                     @endforeach
                             </table>
@@ -229,7 +231,7 @@
                             document.getElementById("phone_number").innerHTML = response.phone_number;
                             
                             document.getElementById("pistion_data").innerHTML = response.position.position_name;
-                            document.getElementById("date_hired").innerHTML = "";
+                            document.getElementById("date_hired").innerHTML = response.date_of_hired;
                             document.getElementById("company_data").innerHTML = response.company.name;
                             document.getElementById("department").innerHTML = response.department.name;
 
