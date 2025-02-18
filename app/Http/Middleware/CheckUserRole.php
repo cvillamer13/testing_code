@@ -36,12 +36,14 @@ class CheckUserRole
                     Session::put('user_name', $user->name); // Store user name
                     Session::put('image_path', $data_images); // Store user 
                     Session::put('user_role', $role->name);
+                    Session::put('role_id', $role->id);
                     Session::put('user_id', $user->id);
                     Session::put('type_asset', $user->type_asset);
                     Session::put('company_data', $user->company);
                     Session::put('user_email', $user->email);
                     Session::put('user_permissions', $permissions->map(function ($permission) {
                         return [
+                            'page_id' => $permission->page->id,
                             'page' => $permission->page->URL,
                             'page_name' => $permission->page->name,
                             'icon_data' => $permission->page->icon_data,

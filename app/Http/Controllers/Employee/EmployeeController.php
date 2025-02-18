@@ -9,27 +9,57 @@ use App\Models\Company;
 use App\Models\Department;
 use App\Models\Position;
 use App\Models\Gender;
+use App\Models\User_pages_permission;
 
 class EmployeeController extends Controller
-{
+{   
+    public function checkingpages(){
+        $role_id = session('role_id');
+        $current_page = session('current_page');
+
+        $permissions = User_pages_permission::where('pages_id', $role_id)
+                                                ->where('roles_id', $role_id)
+                                                ->first();
+            
+            return $permissions; 
+    }
+    
     public function view()
     {
-        $employees = Employee::all();
-        return view('Employee.view', ['employees' => $employees]);
+        $permissions = $this->checkingpages();
+            // echo "<pre>";
+            // print_r($permissions->isView);
+            // exit;
+
+        if($permissions->isView){
+            $employees = Employee::all();
+            return view('Employee.view', ['employees' => $employees]);
+        }else{
+            return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
+        }
+        
     }
 
     public function add()
     {
-        $position = Position::all();
-        $gender = Gender::all();
-        $company = Company::all();
-        $department = Department::all();
-        return view('Employee.add', [
-            'position' => $position,
-            'gender' => $gender,
-            'company' => $company,
-            'department' => $department
-        ]);
+        $permissions = $this->checkingpages();
+
+        if($permissions->isCreate){
+            $position = Position::all();
+            $gender = Gender::all();
+            $company = Company::all();
+            $department = Department::all();
+            return view('Employee.add', [
+                'position' => $position,
+                'gender' => $gender,
+                'company' => $company,
+                'department' => $department
+            ]);
+        }else{
+            return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
+        }
+
+        
     }
 
     public function add_emp(Request $request){
@@ -99,18 +129,26 @@ class EmployeeController extends Controller
 
     public function edit(Request $request, $id){
         try {
-            $employee = Employee::with(['gender', 'position', 'company', 'department'])->find($id);
-            $position = Position::all();
-            $gender = Gender::all();
-            $company = Company::all();
-            $department = Department::all();
-            return view('Employee.edit', [
-                'position' => $position,
-                'gender' => $gender,
-                'company' => $company,
-                'department' => $department,
-                'employee' => $employee
-            ]);
+
+            $permissions = $this->checkingpages();
+
+            if($permissions->isUpdate){
+                $employee = Employee::with(['gender', 'position', 'company', 'department'])->find($id);
+                $position = Position::all();
+                $gender = Gender::all();
+                $company = Company::all();
+                $department = Department::all();
+                return view('Employee.edit', [
+                    'position' => $position,
+                    'gender' => $gender,
+                    'company' => $company,
+                    'department' => $department,
+                    'employee' => $employee
+                ]);
+            }else{
+                return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
+            }
+            
         } catch (\Throwable $th) {
             //throw $th;
         }

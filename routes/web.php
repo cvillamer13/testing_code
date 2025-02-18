@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/Permissions/view', [PermissionsController::class, 'view'])->name('permissions');
     Route::get('/Permissions/view_edit/{id}', [PermissionsController::class, 'Edit_View'])->name('permissions.edit');
     Route::post('/permissions/update/{id}', [PermissionsController::class, 'Edit_saved'])->name('permissions.update');
+    Route::post('/permissions/check', [PermissionsController::class, 'check_page']);
 
     // Create and Edit of Company
     Route::get('/Company/view', [CompanyController::class, 'view'])->name('company');

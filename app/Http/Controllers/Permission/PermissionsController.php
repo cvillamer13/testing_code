@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Roles;
 use App\Models\User_pages_permission;
 use App\Models\Pages;
+use Illuminate\Support\Facades\Session;
 
 class PermissionsController extends Controller
 {
@@ -60,6 +61,34 @@ class PermissionsController extends Controller
         }
 
         return redirect()->back()->with('success', 'Permissions updated successfully!');
+    }
+
+
+
+    public function check_page(Request $request){
+        try {
+            $request->validate([
+                'page_id' => 'required'
+            ]);
+            $page = Pages::find($request->page_id);
+            $permissions = User_pages_permission::where('pages_id', $page->id)
+                                                ->where('roles_id', session('role_id'))
+                                                ->first();
+
+            Session::put('current_page', $page->id);
+            return response()->json([
+                'status' => 'success',
+                'page' => $page,
+                'permission' => $permissions,
+            ], 200); 
+            // return response()->json($page);
+            // print_r($page->name);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400); 
+        }
     }
 
 }

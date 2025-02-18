@@ -20,7 +20,9 @@
                     @foreach(Session::get('user_permissions') as $permission)
                         @if($permission['isView']) 
                             <li>
-                            <a href="{{ $permission['page'] }}" class="has-arrow ai-icon" aria-expanded="false">
+                                {{-- pages_checker --}}
+                            {{-- <a href="{{ $permission['page'] }}" class="has-arrow ai-icon" aria-expanded="false"> --}}
+                            <a onclick="pages_checker({{ $permission['page_id'] }})" class="has-arrow ai-icon" aria-expanded="false">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g> 
                                     <g> 
