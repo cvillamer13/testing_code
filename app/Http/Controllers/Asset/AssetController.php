@@ -119,6 +119,9 @@ class AssetController extends Controller
             $asset->ram_details = $request->ram_details;
             $asset->serial_number = $request->serial_number;
             $asset->accounting_code = $request->MISAssetNo;
+            $asset->date_manufacture = $request->DateOfManufacture;
+            $asset->warranty_month = $request->WarranetyInMonth;
+            $asset->deprication_month = $request->DepreciationInMonth;
             $asset->createdby = session('user_email'); // Assuming the authenticated user creates the asset
 
             if ($request->hasFile('ImageURLDetails')) {
@@ -148,6 +151,107 @@ class AssetController extends Controller
             // echo "File: " . $th->getFile() . "<br>";
             // echo "Line: " . $th->getLine() . "<br>";
             // exit;
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
+
+    public function edit(Request $request, $id){
+        try {
+            $permissions = $this->checkingpages();
+            if($permissions->isUpdate){
+                $unit = Unit::where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
+                $category = Category::where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
+                $supplier = Supplier::where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
+                $status_asset = Asset_Status::where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
+                $employee = Employee::all();
+                $company = Company::all();
+                $asset_data = Asset::find($id);
+
+                return view('Asset.edit', [
+                    'unit' => $unit,
+                    'category' => $category,
+                    'supplier' => $supplier,
+                    'status_asset' => $status_asset,
+                    'employee' => $employee,
+                    'company' => $company,
+                    'asset_data' => $asset_data
+                ]);
+            }else {
+                return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function update(Request $request, $id){
+        try {
+            $request->validate([
+                'AssetId' => 'required',
+                'MISAssetNo' => 'required',
+                'AssetModelNo' => 'required',
+                'Name' => 'required',
+                'Company' => 'required',
+                'Department' => 'required',
+                'LocationArea' => 'required',
+                'Description' => 'required',
+                'Category' => 'required',
+                'Unit' => 'required'
+            ]);
+
+            $asset = Asset::find($id);
+            $asset->asset_id = $request->AssetId;
+            $asset->name = $request->Name;
+            $asset->asset_description = $request->Description;
+            $asset->unit_id = $request->Unit;
+            $asset->model_no = $request->AssetModelNo;
+            $asset->unit_price = $request->UnitPrice;
+            $asset->category = $request->Category;
+            $asset->date_of_purchase = $request->DateOfPurchase;
+            $asset->supplier_id = $request->Supplier;
+            $asset->assign_employee_id = $request->AssignEmployeeId;
+            $asset->asset_status_id = $request->AssetStatus;
+            $asset->company_id = $request->Company;
+            $asset->department_id = $request->Department;
+            $asset->location_id = $request->LocationArea;
+            $asset->type_of_asset = "3";
+            $asset->note = $request->Note;
+            $asset->os_details = $request->OSDetails;
+            $asset->processor_model = $request->processor_model;
+            $asset->desk_details = $request->desk_details;
+            $asset->ram_details = $request->ram_details;
+            $asset->serial_number = $request->serial_number;
+            $asset->accounting_code = $request->MISAssetNo;
+            $asset->date_manufacture = $request->DateOfManufacture;
+            $asset->warranty_month = $request->WarranetyInMonth;
+            $asset->deprication_month = $request->DepreciationInMonth;
+            $asset->updatedby = session('user_email'); // Assuming the authenticated user creates the asset
+
+            if ($request->hasFile('ImageURLDetails')) {
+                $image = $request->file('ImageURLDetails');
+                $extension = $image->getClientOriginalExtension(); // Get file extension
+                $imageName = Str::uuid() . '.' . $extension; // Generate a unique filename
+                $path = $image->storeAs('public/', $imageName); // Store the image
+                $asset->image_path = $imageName; // Save the filename in DB
+            }
+
+            if ($request->hasFile('PurchaseReceiptDetails')) {
+                $image1 = $request->file('PurchaseReceiptDetails');
+                $extension1 = $image1->getClientOriginalExtension(); // Get file extension
+                $imageName1 = Str::uuid() . '.' . $extension1; // Generate a unique filename
+                $path1 = $image->storeAs('public/', $imageName1); // Store the image
+            
+                $asset->reciept_path = $imageName1; // Save the filename in DB
+            }
+            // echo "<pre>";
+            // print_r($asset);
+            // exit;
+            $asset->save();
+            return redirect()->route('Asset.view')->with('success', 'Asset ' . $asset->asset_id . ' updated successfully.');
+        } catch (\Throwable $th) {
+            //throw $th;
             return redirect()->back()->with('error', $th->getMessage());
         }
     }

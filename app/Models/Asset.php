@@ -39,6 +39,9 @@ class Asset extends Model
         'updatedby',
         'deletedby',
         'isDelete',
+        'date_manufacture',
+        'warranty_month',
+        'deprication_month'
     ];
 
     public function unit_data(){
