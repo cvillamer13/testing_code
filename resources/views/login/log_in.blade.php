@@ -39,7 +39,7 @@
                                         </div>
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-outline-primary btn-block">Sign Me In</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-block">Sign In</button>
                                         </div>
 
                                         <div class="block mt-4">

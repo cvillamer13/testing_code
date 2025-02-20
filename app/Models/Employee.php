@@ -33,6 +33,7 @@ class Employee extends Model
         'updated_by',
         'created_at',
         'updated_at',
+        'image_path'
     ];
 
 

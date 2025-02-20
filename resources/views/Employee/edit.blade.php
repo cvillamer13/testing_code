@@ -24,6 +24,15 @@
                                                     <label class="form-label">Employee number<span class="text-red">*</span></label>
                                                     <input type4="text" class="form-control" name="emp_no" id="emp_no" value="{{ $employee->emp_no }}" readonly required>
                                                 </div>
+
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Upload Profile Picture</label>
+                                                    <input type="file" class="form-control" name="profile_picture" id="profile_picture" accept="image/*">
+                                                </div>
+
+                                                <div class="mb-3 col-md-3">
+                                                    <img class="rounded-box" width="200" src="{{ asset('storage/'.$employee->image_path) }}" alt="image">
+                                                </div>
                                             </div>
 
                                             <div class="row">
@@ -92,7 +101,7 @@
                                                 </div>
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Date of hired</label>
-                                                    <input type="date" class="form-control" name="doh" id="doh" value="{{ $pos->date_of_hired }}">
+                                                    <input type="date" class="form-control" name="doh" id="doh" value="{{ $employee->date_of_hired }}">
                                                 </div>
                                             </div>
                                             <div class="row">

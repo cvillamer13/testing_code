@@ -24,6 +24,11 @@
                                                     <label class="form-label">Employee number<span class="text-red">*</span></label>
                                                     <input type4="text" class="form-control" name="emp_no" id="emp_no" required>
                                                 </div>
+
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Upload Profile Picture</label>
+                                                    <input type="file" class="form-control" name="profile_picture" id="profile_picture" accept="image/*">
+                                                </div>
                                             </div>
 
                                             <div class="row">
@@ -146,6 +151,8 @@
                                                         <label class="form-label">Country</label>
                                                         <input type="text" class="form-control" name="country">
                                                     </div>
+
+                                                    
                                                 </div>
                                             </div>
                                         </div>

@@ -24,6 +24,7 @@
                             <table id="example" class="table table-responsive-sm text-center">
                                 <thead>
                                     <tr>
+                                        <th class="staff_thead_no">Image</th>
                                         <th class="staff_thead_no">Employee Number</th>
                                         <th class="staff_thead_name">Full Name</th>
                                         <th class="staff_thead_email">Email </th>
@@ -34,6 +35,7 @@
                                 <tbody>
                                     @foreach($employees as $employee)
                                         <tr>
+                                            <td><img class="rounded-circle" width="75" height="60" src="{{ asset('storage/'.$employee->image_path) }}" alt="image"></td>
                                             <td><a class="link-info" data-toggle="modal" data-target="#EmployeeInfo" onclick="EmpNodata({{ $employee->id }})">{{ $employee->emp_no }} </a></td>
                                             <td>{{ $employee->first_name . " " . $employee->last_name }}</td>
                                             <td>{{ $employee->email }}</td>
@@ -65,7 +67,7 @@
                                 <!-- Profile Image Upload -->
                                 <div class="mb-3 col-md-12 text-center">
                                     <label for="profile_image" class="form-label d-block">Profile Image</label>
-                                    <img id="imagePreview" src="https://placehold.co/200" alt="Profile Image" class="img-fluid rounded-circle mb-2" width="200">
+                                    <img id="imagePreview" src="" alt="Profile Image" class="img-fluid rounded-circle mb-2" width="200">
                                 </div>
         
                             </div>
@@ -218,13 +220,14 @@
                         success: function (response) {
                             toastr.success("Employee Found!");
 
-                            // console.log(response)
+                            console.log(response)
                             document.getElementById("emp_no").innerHTML = response.emp_no;
                             document.getElementById("f_name").innerHTML = response.first_name;
                             document.getElementById("m_name").innerHTML = response.middle_name;
                             document.getElementById("l_name").innerHTML = response.last_name;
-
-
+                            // https://placehold.co/200
+                            // image_path
+                            document.getElementById("imagePreview").src = "../storage/"+response.image_path
                             document.getElementById("dob").innerHTML = response.date_of_birth;
                             document.getElementById("gender_data").innerHTML = response.gender.gender_name;
                             document.getElementById("email_data").innerHTML = response.email;

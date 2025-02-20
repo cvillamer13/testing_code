@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/Location/add', [LocationController::class, 'Add_Location']);
     Route::post('/Location/edit/{id}', [LocationController::class, 'Edit_Location']);
     Route::post('/Location/getDepartment', [LocationController::class, 'getDepartment']);
-    
+    Route::post('/Location/getLocation', [LocationController::class, 'getLocation']);
     
 });
 

@@ -10,6 +10,7 @@ use App\Models\Department;
 use App\Models\Position;
 use App\Models\Gender;
 use App\Models\User_pages_permission;
+use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
 {   
@@ -42,6 +43,8 @@ class EmployeeController extends Controller
 
     public function add()
     {
+
+        
         $permissions = $this->checkingpages();
 
         if($permissions->isCreate){
@@ -66,7 +69,7 @@ class EmployeeController extends Controller
 
         try {
             // echo "<pre>";
-            // print_r(session('user_email'));
+            // print_r($request->all());
             // exit;
             $request->validate([
                 'emp_no' => 'required',
@@ -100,6 +103,15 @@ class EmployeeController extends Controller
             $emp->country = $request->country;
             $emp->zip = $request->zip;
             $emp->created_by = session('user_email');
+
+            if ($request->hasFile('profile_picture')) {
+                $image = $request->file('profile_picture');
+                $extension = $image->getClientOriginalExtension(); // Get file extension
+                $imageName = Str::uuid() . '.' . $extension; // Generate a unique filename
+                $path = $image->storeAs('public/', $imageName); // Store the image
+            
+                $emp->image_path = $imageName; // Save the filename in DB
+            }
         
             $emp->save();
 
@@ -193,6 +205,14 @@ class EmployeeController extends Controller
             $emp->country = $request->country;
             $emp->zip = $request->zip;
             $emp->updated_by = session('user_email');
+            if ($request->hasFile('profile_picture')) {
+                $image = $request->file('profile_picture');
+                $extension = $image->getClientOriginalExtension(); // Get file extension
+                $imageName = Str::uuid() . '.' . $extension; // Generate a unique filename
+                $path = $image->storeAs('public/', $imageName); // Store the image
+            
+                $emp->image_path = $imageName; // Save the filename in DB
+            }
             $emp->save();
 
             return redirect()->route('employee.view')->with('success', 'Employee '. $emp->emp_no .' updated successfully');

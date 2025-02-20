@@ -32,17 +32,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach($employees as $employee)
+                                    @foreach($asset as $ass)
                                         <tr>
-                                            <td><a class="link-info" data-toggle="modal" data-target="#EmployeeInfo" onclick="EmpNodata({{ $employee->id }})">{{ $employee->emp_no }} </a></td>
-                                            <td>{{ $employee->first_name . " " . $employee->last_name }}</td>
-                                            <td>{{ $employee->email }}</td>
+                                            <td><img class="rounded-circle" width="75" height="60" src="{{ asset('storage/'.$ass->image_path ) }}" alt="image"></td>
+                                            <td>{{ $ass->asset_id }}</td>
+                                            <td>{{ $ass->asset_description }}</td>
                                             <td>
-                                                <span class="badge badge-lg badge-outline-success">Active</span>
+                                                {{ $ass->asset_status_data->status }}
                                             </td>
-                                            <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $employee->id }}"><i class="la la-pencil"></i>Edit</a></td>
+                                            <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $ass->id }}"><i class="la la-pencil"></i>Edit</a></td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                             </table>
                         </div>
                     </div>

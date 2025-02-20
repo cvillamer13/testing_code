@@ -57,9 +57,9 @@ class UserController extends Controller
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = $image->getClientOriginalName();
-                $path = "public/{$user->id}/{$imageName}";
-                $image->storeAs("public/{$user->id}", $imageName);
-                $user->image_path = "{$user->id}/{$imageName}";
+                $path = "public/{$imageName}";
+                $image->storeAs("public/}", $imageName);
+                $user->image_path = "{$imageName}";
             }
             $user->save();
     
