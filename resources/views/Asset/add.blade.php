@@ -19,24 +19,26 @@
 
                                     <div class="card card-primary card-outline card-tabs">
                                         <div class="card-header p-0 pt-1 border-bottom-0">
-                                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-                                                <li class="nav-item">
-                                                    <a class="nav-link active" id="BasicInfo" data-toggle="pill" href="#divBasicInfo" role="tab" aria-controls="BasicInfo" aria-selected="true">Basic Asset Info</a>
-                                                </li>
-                                                
-                                                <li class="nav-item">
-                                                    <a class="nav-link" id="OtherInfo" data-toggle="pill" href="#divOtherInfo" role="tab" aria-controls="OtherInfo" aria-selected="false">Other Info / Specification</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" id="UploadInfo" data-toggle="pill" href="#divUploadInfo" role="tab" aria-controls="UploadInfo" aria-selected="false">Upload File</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" id="AssetCompany" data-toggle="pill" href="#divAssetCompany" role="tab" aria-controls="AssetCompany" aria-selected="false">Company / Location</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" id="OtherTab" data-toggle="pill" href="#divOtherTab" role="tab" aria-controls="OtherTab" aria-selected="false">Asset Assign</a>
-                                                </li>
-                                            </ul>
+                                            <div class="d-flex overflow-auto">
+                                                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" id="BasicInfo" data-toggle="pill" href="#divBasicInfo" role="tab" aria-controls="BasicInfo" aria-selected="true">Basic Asset Info</a>
+                                                    </li>
+                                                    
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="OtherInfo" data-toggle="pill" href="#divOtherInfo" role="tab" aria-controls="OtherInfo" aria-selected="false">Other Info / Specification</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="UploadInfo" data-toggle="pill" href="#divUploadInfo" role="tab" aria-controls="UploadInfo" aria-selected="false">Upload File</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="AssetCompany" data-toggle="pill" href="#divAssetCompany" role="tab" aria-controls="AssetCompany" aria-selected="false">Company / Location</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="OtherTab" data-toggle="pill" href="#divOtherTab" role="tab" aria-controls="OtherTab" aria-selected="false">Asset Assign</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                     
                                         <div class="card-body">
