@@ -50,8 +50,8 @@
                                                                 <label class="col-sm-3 col-form-label" for="ImageURL">Image</label>
                                                                 <div class="col-sm-9">
                                                                     <span class="control-fileupload">
-                                                                        <label for="file">Choose a file :</label>
-                                                                        <input type="file" id="ImageURLDetails" name="ImageURLDetails">
+                                                                    
+                                                                        <input type="file" class="form-control" id="ImageURLDetails" name="ImageURLDetails">
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -59,12 +59,30 @@
                                                                 <label class="col-sm-3 col-form-label" for="PurchaseReceipt">Purchase Receipt</label>
                                                                 <div class="col-sm-9">
                                                                     <span class="control-fileupload">
-                                                                        <label for="file">Choose a file :</label>
-                                                                        <input type="file" id="PurchaseReceiptDetails" name="PurchaseReceiptDetails">
+                                                                        
+                                                                        <input type="file" class="form-control" id="PurchaseReceiptDetails" name="PurchaseReceiptDetails">
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
+                                                        <div class="col-6 col-sm-6">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-3 col-form-label" for="ImageURL">Image</label>
+                                                                <div class="col-sm-9">
+                                                                    <img class="rounded-circle" width="75" height="60" src="{{ asset('storage/'.$asset_data->image_path ) }}" alt="image">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-3 col-form-label" for="PurchaseReceipt">Purchase Receipt</label>
+                                                                <div class="col-sm-9">
+                                                                    <a href="{{ asset('storage/'.$asset_data->reciept_path ) }}" class="link-primary" target="_blank">{{ $asset_data->reciept_path }}</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
                                                     </div>
                                                 </div>
 
@@ -288,7 +306,7 @@
                                                             <div class="form-group row">
                                                                 <label class="col-sm-4 col-form-label" for="DepreciationInMonth">Depreciation In Month</label>
                                                                 <div class="col-sm-8">
-                                                                    <input class="form-control" id="DepreciationInMonth" type="text" name="DepreciationInMonth" value="{{ $asset_data->depriication_month }}">
+                                                                    <input class="form-control" id="DepreciationInMonth" type="text" name="DepreciationInMonth" value="{{ $asset_data->deprication_month }}">
                                                                     <span class="text-danger field-validation-valid" data-valmsg-for="DepreciationInMonth" data-valmsg-replace="true"></span>
                                                                 </div>
                                                             </div>
@@ -506,8 +524,8 @@
                 })
 
                 getDepartment();
-
-
+                getBarcode();
+                GenerateQRCode();
                 $('#btnSave').on('click', function() {
                     // alert("test");
                     let form = document.getElementById("assetform");
