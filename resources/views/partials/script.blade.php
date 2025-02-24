@@ -13,17 +13,17 @@
 <script src="{{ asset('js/pdf/html2canvas.min.js') }}"></script>
 
 <!-- Datatable -->
-{{-- <script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script> --}}
+<script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/metismenu/3.0.7/metisMenu.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/metismenu/3.0.7/metisMenu.min.js"></script> --}}
 
-<!-- jQuery -->
+{{-- <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script> --}}
 
 <!-- DataTables Buttons Extension -->
 <script src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>

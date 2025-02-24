@@ -39,7 +39,11 @@
                 
        
         {{-- </div> --}}
+
+       
     </body>
+   
     @include('partials.toastr')
     @include('partials.script')
+    @include('partials.footer')
 </html>
