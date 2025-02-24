@@ -381,6 +381,20 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
+                                                        <div class="col-6 col-sm-6">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-12 col-form-label" for="AssignEmployeeId">If Not Applicable Please check this to assign in department</label>
+                                                                <div class="col-sm-12">
+                                                                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                                                        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                                                                        <label class="btn btn-outline-primary" for="btncheck1">Assign to Department</label>
+                                                                        <input type="hidden" name="assntodep" id="assntodep" value="{{ $asset_data->isDepartmentAssign }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -487,6 +501,17 @@
                             }
                         });
             }
+
+            function getSelected(){
+                const NAdep = $("#assntodep").val();
+                if(NAdep == "true"){
+                    document.getElementById("AssignEmployeeId").disabled = true;
+                    document.getElementById("btncheck1").checked = true;
+                }else{;
+                    document.getElementById("AssignEmployeeId").disabled = false;
+                    document.getElementById("btncheck1").checked = false;
+                }
+            }
             function getLocation(com_id, dep_id){
                 $.ajax({
                         url: "/Location/getLocation",
@@ -523,6 +548,17 @@
                     getLocation(company_id, department_id);
                 })
 
+                $('#btncheck1').on('click', function() {
+                    const NAdep = $("#assntodep").val();
+                    if(NAdep == "true"){
+                        $("#assntodep").val("false");
+                        document.getElementById("AssignEmployeeId").disabled = false;
+                    }else{
+                        $("#assntodep").val("true");
+                        document.getElementById("AssignEmployeeId").disabled = true;
+                    }
+                })
+                getSelected();
                 getDepartment();
                 getBarcode();
                 GenerateQRCode();

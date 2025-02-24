@@ -335,6 +335,19 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <div class="col-6 col-sm-6">
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-12 col-form-label" for="AssignEmployeeId">If Not Applicable Please check this to assign in department</label>
+                                                                <div class="col-sm-12">
+                                                                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                                                        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                                                                        <label class="btn btn-outline-primary" for="btncheck1">Assign to Department</label>
+                                                                        <input type="hidden" name="assntodep" id="assntodep" value="false">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -462,6 +475,18 @@
                     });
                 })
 
+                
+
+                $('#btncheck1').on('click', function() {
+                    const NAdep = $("#assntodep").val();
+                    if(NAdep == "true"){
+                        $("#assntodep").val("false");
+                        document.getElementById("AssignEmployeeId").disabled = false;
+                    }else{
+                        $("#assntodep").val("true");
+                        document.getElementById("AssignEmployeeId").disabled = true;
+                    }
+                })
 
                 $('#btnSave').on('click', function() {
                     // alert("test");

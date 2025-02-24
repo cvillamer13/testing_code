@@ -41,7 +41,8 @@ class Asset extends Model
         'isDelete',
         'date_manufacture',
         'warranty_month',
-        'deprication_month'
+        'deprication_month',
+        'isDepartmentAssign'
     ];
 
     public function unit_data(){

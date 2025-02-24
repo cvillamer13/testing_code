@@ -34,12 +34,10 @@
                                 <tbody>
                                     @foreach($asset as $ass)
                                         <tr>
-                                            <td><img class="rounded-circle" width="75" height="60" src="{{ asset('storage/'.$ass->image_path ) }}" alt="image"></td>
+                                            <td><img class="rounded-circle" width="75" height="60" src="{{ $ass->image_path == "" ? asset('images/dummy-prod-1.jpg' ): asset('storage/'.$ass->image_path )  }}" alt="image"></td>
                                             <td>{{ $ass->asset_id }}</td>
                                             <td>{{ $ass->asset_description }}</td>
-                                            <td>
-                                                {{ $ass->asset_status_data->status }}
-                                            </td>
+                                            <td>{{ $ass->asset_status_data->status ?? 'N/A' }}</td>
                                             <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $ass->id }}"><i class="la la-pencil"></i>Edit</a></td>
                                         </tr>
                                     @endforeach

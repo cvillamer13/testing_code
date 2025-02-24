@@ -35,7 +35,8 @@
                                 <tbody>
                                     @foreach($employees as $employee)
                                         <tr>
-                                            <td><img class="rounded-circle" width="75" height="60" src="{{ asset('storage/'.$employee->image_path) }}" alt="image"></td>
+                                            {{-- <td><img class="rounded-circle" width="75" height="60" src="{{ asset('storage/'.$employee->image_path) }}" alt="image"></td> --}}
+                                            <td><img class="rounded-circle" width="75" height="60" src="{{ $employee->image_path == "" ? asset('images/images.jpg' ): asset('storage/'.$ass->image_path )  }}" alt="image"></td>
                                             <td><a class="link-info" data-toggle="modal" data-target="#EmployeeInfo" onclick="EmpNodata({{ $employee->id }})">{{ $employee->emp_no }} </a></td>
                                             <td>{{ $employee->first_name . " " . $employee->last_name }}</td>
                                             <td>{{ $employee->email }}</td>
