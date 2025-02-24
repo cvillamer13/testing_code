@@ -43,6 +43,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->prefix('Asset')
                 ->group(base_path('routes/asset/asset.php'));
+
+            Route::middleware('web')
+                ->prefix('AssetAssign')
+                ->group(base_path('routes/asset_assign/asset_assigns.php'));
         });
     }
 }

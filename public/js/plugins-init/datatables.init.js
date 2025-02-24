@@ -44,6 +44,57 @@ let dataSet = [
     "use strict"
     //example 1
     var table = $('#example').DataTable({
+        
+        lengthMenu: [[10, 25, 50, 100, -1], [ 10, 25, 50, 100, "All"]],
+        dom: 'Bfrtip',
+        "buttons": [
+            'pageLength',
+            {
+                extend: 'collection',
+                text: 'Export',
+                // buttons: [
+                //     'copyHtml5',
+                //     'excelHtml5',
+                //     {
+                //         extend: 'csvHtml5',
+                //         exportOptions: { columns: [1, 2, 3], page: 'all' }
+                //     },
+                //     {
+                //         extend: 'print',
+                //         exportOptions: { columns: [1, 2, 3], page: 'all' }
+                //     }
+                // ]
+
+
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copy',
+                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Export to Excel',
+                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: 'Export to CSV',
+                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'Export to PDF',
+                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                    }
+                ]
+            }
+        ],
         createdRow: function ( row, data, index ) {
            $(row).addClass('selected')
         } 
