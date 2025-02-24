@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Asset;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User_pages_permission;
+use App\Models\AssetScanned;
 
 class AssetAssignScannedController extends Controller
 {
@@ -25,8 +26,9 @@ class AssetAssignScannedController extends Controller
         $permissions = $this->checkingpages();
         if($permissions->isView){
             // $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
+            $asset_scanned_data = AssetScanned::all();
             return view('AssetScanned.view', [
-                // 'asset' => $asset_data,
+                'asset_scanned' => $asset_scanned_data,
                 
             ]);
         }else {
