@@ -26,7 +26,12 @@ class AssetAssignScannedController extends Controller
         $permissions = $this->checkingpages();
         if($permissions->isView){
             // $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
-            $asset_scanned_data = AssetScanned::all();
+            // $asset_scanned_data = AssetScanned::with('getAsset')->all();
+            $asset_scanned_data = AssetScanned::with('getAsset')->get();
+
+            // echo "<pre>";
+            // print_r($asset_scanned_data[1877]->getAsset->asset_id);
+            // exit;
             return view('AssetScanned.view', [
                 'asset_scanned' => $asset_scanned_data,
                 

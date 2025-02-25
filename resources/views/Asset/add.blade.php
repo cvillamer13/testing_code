@@ -65,6 +65,23 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <div class="col-6 col-sm-6">
+                                                            
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-3 col-form-label" for="AssetId">SI No.</label>
+                                                                <div class="col-sm-9">
+                                                                    <input class="form-control" id="AssetId" type="text" data-val="true" data-val-required="The Asset Id field is required." name="si_no">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-3 col-form-label" for="AssetId">DR No.</label>
+                                                                <div class="col-sm-9">
+                                                                    <input class="form-control" id="AssetId" type="text" name="dr_no">
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 

@@ -123,6 +123,9 @@ class AssetController extends Controller
             $asset->warranty_month = $request->WarranetyInMonth;
             $asset->deprication_month = $request->DepreciationInMonth;
             $asset->isDepartmentAssign = $request->assntodep;
+
+            $asset->si_no = $request->si_no;
+            $asset->dr_no = $request->dr_no;
             $asset->createdby = session('user_email'); // Assuming the authenticated user creates the asset
 
             if ($request->hasFile('ImageURLDetails')) {
@@ -138,7 +141,7 @@ class AssetController extends Controller
                 $image1 = $request->file('PurchaseReceiptDetails');
                 $extension1 = $image1->getClientOriginalExtension(); // Get file extension
                 $imageName1 = Str::uuid() . '.' . $extension1; // Generate a unique filename
-                $path1 = $image->storeAs('public/', $imageName1); // Store the image
+                $path1 = $image1->storeAs('public/', $imageName1); // Store the image
             
                 $asset->reciept_path = $imageName1; // Save the filename in DB
             }
@@ -229,6 +232,8 @@ class AssetController extends Controller
             $asset->warranty_month = $request->WarranetyInMonth;
             $asset->deprication_month = $request->DepreciationInMonth;
             $asset->isDepartmentAssign = $request->assntodep;
+            $asset->si_no = $request->si_no;
+            $asset->dr_no = $request->dr_no;
             $asset->updatedby = session('user_email'); // Assuming the authenticated user creates the asset
 
             if ($request->hasFile('ImageURLDetails')) {
@@ -243,7 +248,7 @@ class AssetController extends Controller
                 $image1 = $request->file('PurchaseReceiptDetails');
                 $extension1 = $image1->getClientOriginalExtension(); // Get file extension
                 $imageName1 = Str::uuid() . '.' . $extension1; // Generate a unique filename
-                $path1 = $image->storeAs('public/', $imageName1); // Store the image
+                $path1 = $image1->storeAs('public/', $imageName1); // Store the image
                 $asset->reciept_path = $imageName1; // Save the filename in DB
             }
             // echo "<pre>";

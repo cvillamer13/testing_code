@@ -42,7 +42,9 @@ class Asset extends Model
         'date_manufacture',
         'warranty_month',
         'deprication_month',
-        'isDepartmentAssign'
+        'isDepartmentAssign',
+        'si_no',
+        'dr_no'
     ];
 
     public function unit_data(){

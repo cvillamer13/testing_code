@@ -83,7 +83,7 @@
 
                                     @foreach ($asset_scanned as $scanned)
                                         <tr>
-                                            <td>{{ $scanned->asset_id }}</td>
+                                            <td>{{ is_null($scanned->getAsset) == 1 ?  $scanned->asset_id : $scanned->getAsset->asset_id   }}</td>
                                             <td>{{ $scanned->scanned_date }}</td>
                                             <td>{{ $scanned->scanned_time }}</td>
                                         </tr>

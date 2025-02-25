@@ -17,4 +17,8 @@ class AssetScanned extends Model
         'createdby',
         'updatedby',
     ];
+
+    public function getAsset(){
+        return $this->belongsTo(Asset::class, 'asset_id');
+    }
 }
