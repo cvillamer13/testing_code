@@ -77,11 +77,11 @@
                         <div class="table-responsive">
                             <table id="example2" class="table table-responsive-sm text-center">
                                 <thead>
-                                    <tr>
+                                    {{-- <tr>
                                         <th class="staff_thead_email">Asset Id </th>
                                         <th class="staff_thead_no">Date</th>
                                         <th class="staff_thead_name">Time</th>
-                                    </tr>
+                                    </tr> --}}
                                 </thead>
                                 <tbody id="tbody_data">
 
