@@ -195,6 +195,29 @@
             $("#barcodeInput").on("change", function () {
                 let barcode = $(this).val();
                 if (isScanning && barcode.trim() !== "") {
+                    $.ajax({
+                        type: "POST",
+                        url: "./getScanned",
+                        data:   {
+                            "_token": "{{ csrf_token() }}",
+                            asset_id: barcode
+                        },
+                        success: function (response) {
+                            console.log(response)
+
+                            $.ajax({
+                                type: "POST",
+                                url: "./scanned_data",
+                                data:   {
+                                    "_token": "{{ csrf_token() }}",
+                                    asset_id: response.data.id
+                                },
+                                success: function (response1) {
+                                    console.log(response1)
+                                }
+                            });
+                        }
+                    });
                     console.log("Scanned barcode:", barcode);
                     $("#test123").text(barcode);
                     $(this).val(""); // Clear input for next scan

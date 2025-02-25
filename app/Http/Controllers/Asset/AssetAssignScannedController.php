@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User_pages_permission;
 use App\Models\AssetScanned;
+use App\Models\Asset;
+use Carbon\Carbon;
 
 class AssetAssignScannedController extends Controller
 {
@@ -61,11 +63,47 @@ class AssetAssignScannedController extends Controller
     }
 
 
-    public function getALLScanned(Request $request){
+    public function getScanned(Request $request){
         try {
-            //code...
+            $request->validate([
+                'asset_id' => 'required',
+            ]);
+
+            $asset_data = Asset::where('asset_id', $request->asset_id)->first();
+            return response()->json([
+                'status' => 'success',
+                'data' => $asset_data,
+            ], 200);
         } catch (\Throwable $th) {
-            //throw $th;
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
         }
+    }
+
+
+    public function scanned_data(Request $request){
+            try {
+                $request->validate([
+                    'asset_id' => 'required',
+                ]);
+
+
+                $today = Carbon::today()->toDateString(); // '2025-02-28'
+                $now = Carbon::now()->format('H:i:s');
+                // echo $today;
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => $now
+                ], 200);
+    
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $th->getMessage()
+                ], 400);
+            }
     }
 }

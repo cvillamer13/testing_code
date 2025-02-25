@@ -5,5 +5,6 @@ use App\Http\Controllers\Asset\AssetAssignScannedController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/view', [AssetAssignScannedController::class, 'view'])->name('AssetScanned.view');
-    Route::post('/getALLScanned', [AssetAssignScannedController::class, 'getALLScanned']);
+    Route::post('/getScanned', [AssetAssignScannedController::class, 'getScanned']);
+    Route::post('/scanned_data', [AssetAssignScannedController::class, 'scanned_data']);
 });
