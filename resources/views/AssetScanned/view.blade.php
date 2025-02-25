@@ -85,14 +85,14 @@
                                 </thead>
                                 <tbody id="tbody_data">
 
-                                    {{-- @foreach ($asset_scanned as $scanned)
+                                    @foreach ($asset_scanned as $scanned)
                                         <tr>
                                             <td>{{ is_null($scanned->getAsset) == 1 ?  "No Asset: " . $scanned->asset_id : $scanned->getAsset->asset_id   }}</td>
                                             <td>{{ date("F j, Y", strtotime($scanned->scanned_date))  }}</td>
                                             <td>{{date("h:i A", strtotime($scanned->scanned_time)) }}</td>
                                         </tr>
                                         
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
