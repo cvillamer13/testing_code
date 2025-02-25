@@ -32,7 +32,8 @@ class AssetAssignScannedController extends Controller
                 ->whereHas('getAsset', function ($query) {
                     $query->where('type_of_asset', session('type_asset'));
                 })
-                ->orderBy('scanned_date', 'desc') 
+                ->orderBy('scanned_date', 'desc')
+                ->limit(10) 
                 ->get();
 
             
