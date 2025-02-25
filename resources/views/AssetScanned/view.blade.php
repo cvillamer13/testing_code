@@ -17,7 +17,8 @@
                             </a>
                         </div>
                     </div>
-                    <input type="text" id="barcode_input" style="position: absolute; opacity: 0;" autocomplete="off">
+                    <input type="text" id="barcodeInput" style="position: absolute; left: -9999px;" autocomplete="off">
+
 
                     <h1 id="test123"></h1>
                     {{-- <div class="card-header">
@@ -167,6 +168,38 @@
             //         isScanning = false;
             //     }
             // });
+
+
+            let isScanning = false;
+    
+            $("#scanned_start").click(function (e) {
+                e.preventDefault(); // Prevent default action
+
+                $(this).toggleClass("btn-info btn-danger");
+
+                if ($(this).hasClass("btn-danger")) { // Start scanning
+                    $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-stop-circle color-danger"></i></span> Stop Scan Asset');
+                    console.log("Start scanning");
+
+                    isScanning = true;
+                    let inputField = document.getElementById("barcodeInput");
+                    inputField.focus(); // Ensure input field is active to receive barcode scan
+                } else { // Stop scanning
+                    $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
+                    console.log("Stop scanning");
+
+                    isScanning = false;
+                }
+            });
+
+            $("#barcodeInput").on("change", function () {
+                let barcode = $(this).val();
+                if (isScanning && barcode.trim() !== "") {
+                    console.log("Scanned barcode:", barcode);
+                    $("#test123").text(barcode);
+                    $(this).val(""); // Clear input for next scan
+                }
+            });
 
         </script>
         
