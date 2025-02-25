@@ -71,14 +71,14 @@
                                                             <div class="form-group row">
                                                                 <label class="col-sm-3 col-form-label" for="AssetId">SI No.</label>
                                                                 <div class="col-sm-9">
-                                                                    <input class="form-control" id="AssetId" type="text" data-val="true" data-val-required="The Asset Id field is required." name="si_no">
+                                                                    <input class="form-control" id="si_no" type="text" data-val="true" data-val-required="The Asset Id field is required." name="si_no">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group row">
                                                                 <label class="col-sm-3 col-form-label" for="AssetId">DR No.</label>
                                                                 <div class="col-sm-9">
-                                                                    <input class="form-control" id="AssetId" type="text" name="dr_no">
+                                                                    <input class="form-control" id="dr_no" type="text" name="dr_no">
                                                                 </div>
                                                             </div>
                                                         </div>

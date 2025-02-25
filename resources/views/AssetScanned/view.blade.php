@@ -130,43 +130,43 @@
             // });
 
 
-            let barcodeString = ""; // Store scanned barcode
-            let isScanning = false; // Track scanning state
-            let keypressHandler = function (event) {
-                console.log("Key pressed:", event.key);
+            // let barcodeString = ""; // Store scanned barcode
+            // let isScanning = false; // Track scanning state
+            // let keypressHandler = function (event) {
+            //     console.log("Key pressed:", event.key);
                
-                // alert(event.key)
-                if (event.key === "Enter") { // If 'Enter' is pressed, log barcode
-                    console.log("Scanned barcode:", barcodeString);
-                    document.getElementById("test123").innerHTML = barcodeString
-                    // alert(barcodeString)
-                    barcodeString = ""; // Reset for next scan
-                } else {
-                    barcodeString += event.key; // Append characters
-                }
-            };
+            //     // alert(event.key)
+            //     if (event.key === "Enter") { // If 'Enter' is pressed, log barcode
+            //         console.log("Scanned barcode:", barcodeString);
+            //         document.getElementById("test123").innerHTML = barcodeString
+            //         // alert(barcodeString)
+            //         barcodeString = ""; // Reset for next scan
+            //     } else {
+            //         barcodeString += event.key; // Append characters
+            //     }
+            // };
 
-            $('#scanned_start').click(function (e) {
-                e.preventDefault(); // Prevent default action
+            // $('#scanned_start').click(function (e) {
+            //     e.preventDefault(); // Prevent default action
 
-                $(this).toggleClass("btn-info btn-danger");
+            //     $(this).toggleClass("btn-info btn-danger");
 
-                if ($(this).hasClass("btn-danger")) { // Start scanning
-                    $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-stop-circle color-danger"></i></span> Stop Scan Asset');
-                    console.log("Start scanning");
+            //     if ($(this).hasClass("btn-danger")) { // Start scanning
+            //         $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-stop-circle color-danger"></i></span> Stop Scan Asset');
+            //         console.log("Start scanning");
 
-                    if (!isScanning) {
-                        document.addEventListener('keyup', keypressHandler); // Attach keypress event
-                        isScanning = true;
-                    }
-                } else { // Stop scanning
-                    $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
-                    console.log("Stop scanning");
+            //         if (!isScanning) {
+            //             document.addEventListener('keyup', keypressHandler); // Attach keypress event
+            //             isScanning = true;
+            //         }
+            //     } else { // Stop scanning
+            //         $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
+            //         console.log("Stop scanning");
 
-                    document.removeEventListener('keyup', keypressHandler); // Remove keypress event
-                    isScanning = false;
-                }
-            });
+            //         document.removeEventListener('keyup', keypressHandler); // Remove keypress event
+            //         isScanning = false;
+            //     }
+            // });
 
         </script>
         
