@@ -9,7 +9,7 @@
                     <div class="card-header">
                         <h4 class="card-title col-6">List of Asset Scanned</h4>
                         <div class="card-title col-6 text-end">
-                            <a class="btn btn-rounded btn-info" data-target="#exampleModal">
+                            <a class="btn btn-rounded btn-info" id="scanned_start">
                                 Start Scan Asset
                                 <span class="btn-icon-start text-info"><i
                                         class="fa fa-barcode color-info"></i>
@@ -104,21 +104,66 @@
         </div>
         
         <script>
-            $(document).ready(function () {
-                $.ajax({
-                    type: "./getALLScanned",
-                    url: "url",
-                    data: "data",
-                    dataType: "dataType",
-                    success: function (response) {
-                        
-                    }
-                });
-            });
-            // $(selector).click(function (e) { 
-            //     e.preventDefault();
-                
+            // $('#scanned_start').click(function (e) { 
+            //     $(this).toggleClass("btn-info btn-danger");
+            //     if ($(this).hasClass("btn-danger")) {
+            //         $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-stop-circle color-danger"></i></span> Stop Scan Asset');
+
+            //         console.log("start")
+            //         let barcodestring = '';
+            //         document.addEventListener('keypress', function(event) {
+            //             console.log("Key pressed:", event.key);
+
+            //             if(event.key = ""){
+            //                 console.log("Scanned barcode:", barcodestring);
+            //                 barcodestring = ""; 
+            //             }else{
+            //                 barcodestring += event.key
+            //             }
+            //         });
+            //     } else {
+            //         $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
+            //         console.log("stop")
+            //     }
             // });
+
+
+            let barcodeString = ""; // Store scanned barcode
+            let isScanning = false; // Track scanning state
+            let keypressHandler = function (event) {
+                console.log("Key pressed:", event.key);
+
+                if (event.key === "Enter") { // If 'Enter' is pressed, log barcode
+                    console.log("Scanned barcode:", barcodeString);
+                    alert(barcodeString)
+                    barcodeString = ""; // Reset for next scan
+                } else {
+                    barcodeString += event.key; // Append characters
+                }
+            };
+
+            $('#scanned_start').click(function (e) {
+                e.preventDefault(); // Prevent default action
+
+                $(this).toggleClass("btn-info btn-danger");
+
+                if ($(this).hasClass("btn-danger")) { // Start scanning
+                    $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-stop-circle color-danger"></i></span> Stop Scan Asset');
+                    console.log("Start scanning");
+
+                    if (!isScanning) {
+                        document.addEventListener('keydown', keypressHandler); // Attach keypress event
+                        isScanning = true;
+                    }
+                } else { // Stop scanning
+                    $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
+                    console.log("Stop scanning");
+
+                    document.removeEventListener('keydown', keypressHandler); // Remove keypress event
+                    isScanning = false;
+                }
+            });
+
         </script>
         
 
