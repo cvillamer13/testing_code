@@ -18,7 +18,7 @@
                         </div>
                     </div>
 
-                    <div class="card-header">
+                    {{-- <div class="card-header">
                         
                         <div class="card-title col-2">
                             <label>Company </label>
@@ -61,20 +61,21 @@
                         </div>
 
                         
-                    </div>
+                    </div> --}}
 
-                    <div class="card-title col-2">
+                    {{-- <div class="card-title col-2">
                         <a class="btn btn-rounded btn-info" data-target="#exampleModal">
                             Filter
                             <span class="btn-icon-start text-info"><i
                                     class="fa fa-filter color-info"></i>
                             </span>
                         </a>
-                    </div>
+                    </div> --}}
 
                     <div class="card py-3 px-3">
                     <div class="settings-form">
                         <div class="table-responsive">
+                            <h4>History</h4>
                             <table id="example2" class="table table-responsive-sm text-center">
                                 <thead>
                                     {{-- <tr>
