@@ -17,7 +17,7 @@
                             </a>
                         </div>
                     </div>
-
+                    <h1 id="test123"></h1>
                     {{-- <div class="card-header">
                         
                         <div class="card-title col-2">
@@ -132,10 +132,11 @@
             let isScanning = false; // Track scanning state
             let keypressHandler = function (event) {
                 console.log("Key pressed:", event.key);
-                alert(event.key)
+                document.getElementById("test123").innerHTML = event.key
+                // alert(event.key)
                 if (event.key === "Enter") { // If 'Enter' is pressed, log barcode
                     console.log("Scanned barcode:", barcodeString);
-                    alert(barcodeString)
+                    // alert(barcodeString)
                     barcodeString = ""; // Reset for next scan
                 } else {
                     barcodeString += event.key; // Append characters
