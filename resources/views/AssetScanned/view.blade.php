@@ -17,6 +17,8 @@
                             </a>
                         </div>
                     </div>
+                    <input type="text" id="barcode_input" style="position: absolute; opacity: 0;" autocomplete="off">
+
                     <h1 id="test123"></h1>
                     {{-- <div class="card-header">
                         
@@ -128,43 +130,40 @@
             // });
 
 
-            let barcodeString = ""; // Store scanned barcode
-            let isScanning = false; // Track scanning state
-            let keypressHandler = function (event) {
-                console.log("Key pressed:", event.key);
-               
-                // alert(event.key)
-                if (event.key === "Enter") { // If 'Enter' is pressed, log barcode
-                    console.log("Scanned barcode:", barcodeString);
-                    document.getElementById("test123").innerHTML = barcodeString
-                    // alert(barcodeString)
-                    barcodeString = ""; // Reset for next scan
-                } else {
-                    barcodeString += event.key; // Append characters
-                }
-            };
+            let isScanning = false;
+            let barcodeInput = document.getElementById("barcode_input");
 
             $('#scanned_start').click(function (e) {
-                e.preventDefault(); // Prevent default action
-
+                e.preventDefault(); 
                 $(this).toggleClass("btn-info btn-danger");
 
-                if ($(this).hasClass("btn-danger")) { // Start scanning
+                if ($(this).hasClass("btn-danger")) { 
                     $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-stop-circle color-danger"></i></span> Stop Scan Asset');
                     console.log("Start scanning");
 
-                    if (!isScanning) {
-                        document.addEventListener('keyup', keypressHandler); // Attach keypress event
-                        isScanning = true;
-                    }
-                } else { // Stop scanning
+                    isScanning = true;
+                    barcodeInput.value = ""; // Clear previous input
+                    barcodeInput.focus(); // Focus input field (works for mobile scanners)
+                } else { 
                     $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
                     console.log("Stop scanning");
 
-                    document.removeEventListener('keyup', keypressHandler); // Remove keypress event
                     isScanning = false;
+                    barcodeInput.blur(); // Remove focus
                 }
             });
+
+            // Capture barcode from input field
+            barcodeInput.addEventListener("input", function () {
+                console.log(isScanning)
+                if (isScanning) {
+                    console.log("Scanned barcode:", barcodeInput.value);
+                    alert(barcodeInput.value)
+                    barcodeInput.value = ""; // Reset after reading barcode
+                }
+            }
+        );
+
 
         </script>
         
