@@ -8,6 +8,7 @@ use App\Models\User_pages_permission;
 use App\Models\AssetScanned;
 use App\Models\Asset;
 use Carbon\Carbon;
+use Exception;
 
 class AssetAssignScannedController extends Controller
 {
@@ -70,11 +71,16 @@ class AssetAssignScannedController extends Controller
             ]);
 
             $asset_data = Asset::where('asset_id', $request->asset_id)->first();
+            if(is_null($asset_data)){
+                throw new Exception("No data found!");
+            }
             return response()->json([
                 'status' => 'success',
+                'count' => count($asset_data),
                 'data' => $asset_data,
+                
             ], 200);
-        } catch (\Throwable $th) {
+        } catch (Exception $th) {
             return response()->json([
                 'status' => 'error',
                 'message' => $th->getMessage()

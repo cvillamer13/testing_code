@@ -18,9 +18,6 @@
                         </div>
                     </div>
                     <input type="text" id="barcodeInput" style="position: absolute; left: -9999px;" autocomplete="off">
-
-
-                    <h1 id="test123"></h1>
                     {{-- <div class="card-header">
                         
                         <div class="card-title col-2">
@@ -205,21 +202,28 @@
                         success: function (response) {
                             console.log(response)
 
-                            $.ajax({
-                                type: "POST",
-                                url: "./scanned_data",
-                                data:   {
-                                    "_token": "{{ csrf_token() }}",
-                                    asset_id: response.data.id
-                                },
-                                success: function (response1) {
-                                    console.log(response1)
-                                }
-                            });
+                            // $.ajax({
+                            //     type: "POST",
+                            //     url: "./scanned_data",
+                            //     data:   {
+                            //         "_token": "{{ csrf_token() }}",
+                            //         asset_id: response.data.id
+                            //     },
+                            //     success: function (response1) {
+                            //         console.log(response1)
+                            //     }
+                            // });
+                        },
+                        error: function(error) {
+                            if(error.responseJSON.status == "error"){
+                                Swal.fire({
+                                    title: error.responseJSON.message,
+                                    icon: "error"
+                                });
+                            }
                         }
                     });
                     console.log("Scanned barcode:", barcode);
-                    $("#test123").text(barcode);
                     $(this).val(""); // Clear input for next scan
                 }
             });
