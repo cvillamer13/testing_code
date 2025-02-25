@@ -10,7 +10,7 @@
                         <h4 class="card-title col-6">List of Asset Scanned</h4>
                         <div class="card-title col-6 text-end">
                             <a class="btn btn-rounded btn-info" data-target="#exampleModal">
-                                Scan Asset
+                                Start Scan Asset
                                 <span class="btn-icon-start text-info"><i
                                         class="fa fa-barcode color-info"></i>
                                 </span>

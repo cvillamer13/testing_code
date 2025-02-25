@@ -27,6 +27,7 @@
                                         <th class="staff_thead_no">Image</th>
                                         <th class="staff_thead_name">Asset Code</th>
                                         <th class="staff_thead_email">Asset Description </th>
+                                        <th class="staff_thead_email">Serial Number </th>
                                         <th class="staff_thead_status">Status</th>
                                         <th class="staff_thead_status">Action</th>
                                     </tr>
@@ -37,6 +38,7 @@
                                             <td><img class="rounded-circle" width="75" height="60" src="{{ $ass->image_path == "" ? asset('images/dummy-prod-1.jpg' ): asset('storage/'.$ass->image_path )  }}" alt="image"></td>
                                             <td>{{ $ass->asset_id }}</td>
                                             <td>{{ $ass->asset_description }}</td>
+                                            <td>{{ $ass->serial_number }}</td>
                                             <td>{{ $ass->asset_status_data->status ?? 'N/A' }}</td>
                                             <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $ass->id }}"><i class="la la-pencil"></i>Edit</a></td>
                                         </tr>
