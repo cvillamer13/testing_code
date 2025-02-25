@@ -132,10 +132,11 @@
             let isScanning = false; // Track scanning state
             let keypressHandler = function (event) {
                 console.log("Key pressed:", event.key);
-                document.getElementById("test123").innerHTML = event.key
+               
                 // alert(event.key)
                 if (event.key === "Enter") { // If 'Enter' is pressed, log barcode
                     console.log("Scanned barcode:", barcodeString);
+                    document.getElementById("test123").innerHTML = barcodeString
                     // alert(barcodeString)
                     barcodeString = ""; // Reset for next scan
                 } else {
