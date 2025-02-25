@@ -154,14 +154,14 @@
                     console.log("Start scanning");
 
                     if (!isScanning) {
-                        document.addEventListener('keydown', keypressHandler); // Attach keypress event
+                        document.addEventListener('keyup', keypressHandler); // Attach keypress event
                         isScanning = true;
                     }
                 } else { // Stop scanning
                     $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
                     console.log("Stop scanning");
 
-                    document.removeEventListener('keydown', keypressHandler); // Remove keypress event
+                    document.removeEventListener('keyup', keypressHandler); // Remove keypress event
                     isScanning = false;
                 }
             });
