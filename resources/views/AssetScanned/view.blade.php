@@ -205,7 +205,7 @@
                                 title: "<h1>Details of Asset.</h1>",
                                 // text: "You won't be able to revert this!",
                                 html: `
-                                    <table>
+                                    <table class="table-primary">
                                         <tr>
                                                 <td>Asset Code: <b>`+ response.data.asset_id + `</b></td>
                                         </tr>
@@ -219,39 +219,63 @@
                                                 <td>Asset Description: `+ response.data.asset_description + `</td>
                                         </tr>
                                         <tr>
-                                                <td>ACQ. Date: `+ response.data.date_of_purchase ?? "NA" + `</td>
-                                        </tr>
-                                        <tr>
                                                 <td>Location: `+ response.data.location_data.name + `</td>
                                         </tr>
                                     </table>
+
+                                    <div class="row">
+                                    </div>
                                 `,
                                 // icon: "warning",
-                                allowOutsideClick: true,
+                                
                                 showCancelButton: true,
-                                confirmButtonColor: "#3085d6",
-                                cancelButtonColor: "#d33",
-                                confirmButtonText: "Yes, delete it!"
+                                // confirmButtonColor: "#3085d6",
+                                // cancelButtonColor: "#d33",
+                                confirmButtonText: "Finalize",
+                                allowOutsideClick: true,
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    Swal.fire({
-                                    title: "Deleted!",
-                                    text: "Your file has been deleted.",
-                                    icon: "success"
+                                    // Swal.fire({
+                                    // title: "Deleted!",
+                                    // text: "Your file has been deleted.",
+                                    // icon: "success"
+                                    // });
+
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "./scanned_data",
+                                        data:   {
+                                            "_token": "{{ csrf_token() }}",
+                                            asset_id: response.data.id
+                                        },
+                                        success: function (response1) {
+                                            console.log(response1)
+
+                                            if(response1.status == "success"){
+                                                Swal.fire({
+                                                    title: "Asset Scanned!",
+                                                    html: `
+                                                        Scanned Date : <b>${response1.message.scanned_date}</b><br>
+                                                        Scanned Time : <b>${response1.message.scanned_time}</b><br>
+                                                        Scanned By : <b>${response1.message.updatedby}</b>
+                                                    `,
+                                                    icon: "success"
+                                                });
+                                            }
+                                        },
+                                        error: function name(error) {
+                                            console.log(error.responseJSON)
+                                            if(error.responseJSON.status == "error"){
+                                                Swal.fire({
+                                                    title: error.responseJSON.message,
+                                                    icon: "error"
+                                                });
+                                            }
+                                        }
                                     });
                                 }
                             });
-                            // $.ajax({
-                            //     type: "POST",
-                            //     url: "./scanned_data",
-                            //     data:   {
-                            //         "_token": "{{ csrf_token() }}",
-                            //         asset_id: response.data.id
-                            //     },
-                            //     success: function (response1) {
-                            //         console.log(response1)
-                            //     }
-                            // });
+                            
                         },
                         error: function(error) {
                             if(error.responseJSON.status == "error"){

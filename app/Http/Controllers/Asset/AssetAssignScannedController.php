@@ -98,11 +98,29 @@ class AssetAssignScannedController extends Controller
                 $today = Carbon::today()->toDateString(); // '2025-02-28'
                 $now = Carbon::now()->format('H:i:s');
                 // echo $today;
+                $asset_scanned_data = AssetScanned::where('scanned_date', $today)->get();
+                if(count($asset_scanned_data) > 0){
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => "Already Scanned"
+                    ], 400);
+                } else {
+                    $asset_detl = new AssetScanned();
+                    $asset_detl->scanned_date = $today;
+                    $asset_detl->scanned_time = $now;
+                    $asset_detl->asset_id = $request->asset_id;
+                    $asset_detl->createdby = session('user_email');
+                    $asset_detl->updatedby = session('user_email');
+                    $asset_detl->created_at = $today . " " . $now;
+                    $asset_detl->updated_at = $today . " " . $now;
+                    $asset_detl->save();
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => $now
-                ], 200);
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => $asset_detl
+                    ], 200);
+                }
+                
     
             } catch (\Throwable $th) {
                 return response()->json([
