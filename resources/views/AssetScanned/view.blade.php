@@ -201,7 +201,10 @@
                         },
                         success: function (response) {
                             console.log(response)
-
+                            Swal.fire({
+                                    title: "Hello",
+                                    icon: "success"
+                                });
                             // $.ajax({
                             //     type: "POST",
                             //     url: "./scanned_data",
