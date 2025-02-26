@@ -200,10 +200,46 @@
                             asset_id: barcode
                         },
                         success: function (response) {
-                            console.log(response)
+                            console.log(response.data)
                             Swal.fire({
-                                title: "Hello",
-                                icon: "success"
+                                title: "<h1>Details of Asset.</h1>",
+                                // text: "You won't be able to revert this!",
+                                html: `
+                                    <table>
+                                        <tr>
+                                                <td>Asset Code: <b>`+ response.data.asset_id + `</b></td>
+                                        </tr>
+                                        <tr>
+                                                <td>Asset Name: `+ response.data.name + `</td>
+                                        </tr>
+                                        <tr>
+                                                <td>Asset Class: `+ response.data.category_data.name + `</td>
+                                        </tr>
+                                        <tr>
+                                                <td>Asset Description: `+ response.data.asset_description + `</td>
+                                        </tr>
+                                        <tr>
+                                                <td>ACQ. Date: `+ response.data.date_of_purchase + `</td>
+                                        </tr>
+                                        <tr>
+                                                <td>Location: `+ response.data.location_data.name + `</td>
+                                        </tr>
+                                    </table>
+                                `,
+                                // icon: "warning",
+                                allowOutsideClick: true,
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    icon: "success"
+                                    });
+                                }
                             });
                             // $.ajax({
                             //     type: "POST",
