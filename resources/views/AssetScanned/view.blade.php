@@ -219,7 +219,7 @@
                                                 <td>Asset Description: `+ response.data.asset_description + `</td>
                                         </tr>
                                         <tr>
-                                                <td>ACQ. Date: `+ response.data.date_of_purchase + `</td>
+                                                <td>ACQ. Date: `+ response.data.date_of_purchase ?? "NA" + `</td>
                                         </tr>
                                         <tr>
                                                 <td>Location: `+ response.data.location_data.name + `</td>
