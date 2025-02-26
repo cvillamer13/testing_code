@@ -98,7 +98,7 @@ class AssetAssignScannedController extends Controller
                 $today = Carbon::today()->toDateString(); // '2025-02-28'
                 $now = Carbon::now()->format('H:i:s');
                 // echo $today;
-                $asset_scanned_data = AssetScanned::where('scanned_date', $today)->get();
+                $asset_scanned_data = AssetScanned::where('scanned_date', $today)->where('asset_id',$request->asset_id)->get();
                 if(count($asset_scanned_data) > 0){
                     return response()->json([
                         'status' => 'error',
