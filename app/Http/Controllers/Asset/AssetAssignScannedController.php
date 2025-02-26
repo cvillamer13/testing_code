@@ -99,10 +99,12 @@ class AssetAssignScannedController extends Controller
                 $now = Carbon::now()->format('H:i:s');
                 // echo $today;
                 $asset_scanned_data = AssetScanned::where('scanned_date', $today)->where('asset_id',$request->asset_id)->get();
+
                 if(count($asset_scanned_data) > 0){
                     return response()->json([
-                        'status' => 'error',
-                        'message' => "Already Scanned"
+                        'status' => 'info',
+                        'message' => 'Scanned Date : <b>'. $asset_scanned_data[0]->scanned_date.'</b><br> Scanned Time : <b>'. $asset_scanned_data[0]->scanned_time .'</b><br>Scanned By : <b>'.$asset_scanned_data[0]->updatedby.'</b>' ,
+                        'titled' => "Already Scanned!",
                     ], 400);
                 } else {
                     $asset_detl = new AssetScanned();

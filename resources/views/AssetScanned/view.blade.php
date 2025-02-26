@@ -265,10 +265,11 @@
                                         },
                                         error: function name(error) {
                                             console.log(error.responseJSON)
-                                            if(error.responseJSON.status == "error"){
+                                            if(error.responseJSON.status == "info"){
                                                 Swal.fire({
-                                                    title: error.responseJSON.message,
-                                                    icon: "error"
+                                                    title: error.responseJSON.titled,
+                                                    html : error.responseJSON.message,
+                                                    icon: error.responseJSON.status 
                                                 });
                                             }
                                         }
