@@ -76,7 +76,6 @@ class AssetAssignScannedController extends Controller
             }
             return response()->json([
                 'status' => 'success',
-                'count' => count($asset_data),
                 'data' => $asset_data,
                 
             ], 200);
