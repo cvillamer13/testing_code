@@ -1,3 +1,23 @@
+<style>
+  @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .new-row {
+        animation: fadeIn 0.5s ease-out;
+        background-color: lightgreen;
+    }
+
+
+</style>
+
 <x-app-layout>
     <x-slot name="header">
             {{ __('Asset Scanned') }}
@@ -18,71 +38,12 @@
                         </div>
                     </div>
                     <input type="text" id="barcodeInput" style="position: absolute; left: -9999px;" autocomplete="off">
-                    {{-- <div class="card-header">
-                        
-                        <div class="card-title col-2">
-                            <label>Company </label>
-                            <select class="form-control" name="" id="">
-                                <option value="all">ALL</option>
-                            </select>
-                        </div>
-
-                        <div class="card-title col-2">
-                            <label>Company </label>
-                            <select class="form-control" name="" id="">
-                                <option value="all">ALL</option>
-                            </select>
-                        </div>
-
-                        <div class="card-title col-2">
-                            <label>Department </label>
-                            <select class="form-control" name="" id="">
-                                <option value="all">ALL</option>
-                            </select>
-                        </div>
-
-                        <div class="card-title col-2">
-                            <label>From </label>
-                            <input type="date" class="form-control" name="" id="">
-                        </div>
-
-                        <div class="card-title col-2">
-                            <label>To </label>
-                            <input type="date" class="form-control" name="" id="">
-                        </div>
-
-                        <div class="card-title col-2">
-                            <label>Status </label>
-                            <select class="form-control" name="" id="">
-                                <option value="all">ALL</option>
-                                <option value="all">Scanned</option>
-                                <option value="all">Not Scanned</option>
-                            </select>
-                        </div>
-
-                        
-                    </div> --}}
-
-                    {{-- <div class="card-title col-2">
-                        <a class="btn btn-rounded btn-info" data-target="#exampleModal">
-                            Filter
-                            <span class="btn-icon-start text-info"><i
-                                    class="fa fa-filter color-info"></i>
-                            </span>
-                        </a>
-                    </div> --}}
-
                     <div class="card py-3 px-3">
                     <div class="settings-form">
                         <div class="table-responsive">
                             <h4>History</h4>
                             <table id="example2" class="table table-responsive-sm text-center">
                                 <thead>
-                                    {{-- <tr>
-                                        <th class="staff_thead_email">Asset Id </th>
-                                        <th class="staff_thead_no">Date</th>
-                                        <th class="staff_thead_name">Time</th>
-                                    </tr> --}}
                                 </thead>
                                 <tbody id="tbody_data">
 
@@ -104,69 +65,6 @@
         </div>
         
         <script>
-            // $('#scanned_start').click(function (e) { 
-            //     $(this).toggleClass("btn-info btn-danger");
-            //     if ($(this).hasClass("btn-danger")) {
-            //         $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-stop-circle color-danger"></i></span> Stop Scan Asset');
-
-            //         console.log("start")
-            //         let barcodestring = '';
-            //         document.addEventListener('keypress', function(event) {
-            //             console.log("Key pressed:", event.key);
-
-            //             if(event.key = ""){
-            //                 console.log("Scanned barcode:", barcodestring);
-            //                 barcodestring = ""; 
-            //             }else{
-            //                 barcodestring += event.key
-            //             }
-            //         });
-            //     } else {
-            //         $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
-            //         console.log("stop")
-            //     }
-            // });
-
-
-            // let barcodeString = ""; // Store scanned barcode
-            // let isScanning = false; // Track scanning state
-            // let keypressHandler = function (event) {
-            //     console.log("Key pressed:", event.key);
-               
-            //     // alert(event.key)
-            //     if (event.key === "Enter") { // If 'Enter' is pressed, log barcode
-            //         console.log("Scanned barcode:", barcodeString);
-            //         document.getElementById("test123").innerHTML = barcodeString
-            //         // alert(barcodeString)
-            //         barcodeString = ""; // Reset for next scan
-            //     } else {
-            //         barcodeString += event.key; // Append characters
-            //     }
-            // };
-
-            // $('#scanned_start').click(function (e) {
-            //     e.preventDefault(); // Prevent default action
-
-            //     $(this).toggleClass("btn-info btn-danger");
-
-            //     if ($(this).hasClass("btn-danger")) { // Start scanning
-            //         $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-stop-circle color-danger"></i></span> Stop Scan Asset');
-            //         console.log("Start scanning");
-
-            //         if (!isScanning) {
-            //             document.addEventListener('keyup', keypressHandler); // Attach keypress event
-            //             isScanning = true;
-            //         }
-            //     } else { // Stop scanning
-            //         $(this).html('<span class="btn-icon-start text-info"><i class="fa fa-barcode color-info"></i></span> Start Scan Asset');
-            //         console.log("Stop scanning");
-
-            //         document.removeEventListener('keyup', keypressHandler); // Remove keypress event
-            //         isScanning = false;
-            //     }
-            // });
-
-
             let isScanning = false;
     
             $("#scanned_start").click(function (e) {
@@ -261,6 +159,24 @@
                                                     `,
                                                     icon: "success"
                                                 });
+
+                                                let table = document.getElementById("example2").getElementsByTagName('tbody')[0];
+                                                let newRow = table.insertRow(0);
+                                                newRow.classList.add("new-row");
+                                                
+
+                                                let cell1 = newRow.insertCell(0);
+                                                let cell2 = newRow.insertCell(1);
+                                                let cell3 = newRow.insertCell(2);
+                                                
+                                                cell1.innerHTML= response1.message.asset_id
+                                                cell2.innerHTML= response1.message.scanned_date
+                                                cell3.innerHTML= response1.message.scanned_time
+                                                newRow.style.backgroundColor = "red";
+                                                setTimeout(() => {
+                                                    newRow.style.transition = "background-color 2s ease";
+                                                    newRow.style.backgroundColor = "transparent";
+                                                }, 500);
                                             }
                                         },
                                         error: function name(error) {
