@@ -438,8 +438,6 @@
                     document.getElementById("Barcode").src = "";
                     $('#divQRCode').empty();
                 }
-                
-                
             }
 
             function getDepartment(){

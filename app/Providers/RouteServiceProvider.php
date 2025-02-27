@@ -51,6 +51,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->prefix('AssetScanning')
                 ->group(base_path('routes/asset_scanned/asset_scanned.php'));
+
+            Route::middleware('web')
+                ->prefix('PrintBarcode')
+                ->group(base_path('routes/printing_code/print_code.php'));
         });
     }
 }
