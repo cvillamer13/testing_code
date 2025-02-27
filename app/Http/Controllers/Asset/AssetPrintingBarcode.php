@@ -64,4 +64,25 @@ class AssetPrintingBarcode extends Controller
             ], 400);
         }
     }
+
+
+    public function getFilterbyOne(Request $request){
+        try {
+            $id = $request->id_data;
+            $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])
+                ->find($id);
+                // ->where('isDelete',false)
+                // ->where('type_of_asset', session('type_asset'));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $asset_data
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
 }
