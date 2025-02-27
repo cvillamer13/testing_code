@@ -18,19 +18,15 @@ class EmployeeController extends Controller
         $role_id = session('role_id');
         $current_page = session('current_page');
 
-        $permissions = User_pages_permission::where('pages_id', $role_id)
-                                                ->where('roles_id', $role_id)
-                                                ->first();
-            
-            return $permissions; 
+        
+
+        $permissions = User_pages_permission::where('pages_id', $current_page)->where('roles_id', $role_id)->first();
+        return $permissions; 
     }
     
     public function view()
     {
         $permissions = $this->checkingpages();
-            // echo "<pre>";
-            // print_r($permissions->isView);
-            // exit;
 
         if($permissions->isView){
             $employees = Employee::all();

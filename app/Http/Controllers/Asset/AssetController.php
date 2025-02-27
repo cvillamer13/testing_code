@@ -20,7 +20,7 @@ class AssetController extends Controller
         $role_id = session('role_id');
         $current_page = session('current_page');
 
-        $permissions = User_pages_permission::where('pages_id', $role_id)
+        $permissions = User_pages_permission::where('pages_id', $current_page)
                                                 ->where('roles_id', $role_id)
                                                 ->first();
             
