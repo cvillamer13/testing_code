@@ -34,13 +34,17 @@
                                 <td>{{ $sup->contact_person }}</td>
                                 <td>{{ $sup->email }}</td>
                                 <td>{{ $sup->phone }}</td>
-                                <td>{{ $sup->adress }}</td>
+                                <td>{{ $sup->address }}</td>
                                 <td>
                                     <button type="button" class="badge badge-lg badge-info">
                                                                         
                                         <a data-toggle="modal" id="staff_id_new"
                                             data-target="#EditModal"
                                             data-name="{{ $sup->name }}"
+                                            data-contact_person="{{ $sup->contact_person }}"
+                                            data-email="{{ $sup->email }}"
+                                            data-phone="{{ $sup->phone }}"
+                                            data-address="{{ $sup->address }}"
                                             data-id="{{ $sup->id }}"><i class="la la-pencil"></i>
                                             Edit</a>
 
@@ -73,6 +77,30 @@
                                 </label>
                                 <input type="text" class="form-control" id="name" placeholder="Status Name" name="name" required>
                             </div>
+
+                            <div class="mb-3 col-md-12">
+                                <label for="recipient-name" class="col-form-label">Contact Person name<span class="text-red">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="cpn" placeholder="Contact person name" name="cpn" required>
+                            </div>
+    
+                            <div class="mb-3 col-md-12">
+                                <label for="recipient-name" class="col-form-label">Email<span class="text-red">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="email" placeholder="Email" name="email" required>
+                            </div>
+    
+                            <div class="mb-3 col-md-12">
+                                <label for="recipient-name" class="col-form-label">Phone<span class="text-red">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="phone" placeholder="Phone" name="phone" required>
+                            </div>
+    
+                            <div class="mb-3 col-md-12">
+                                <label for="recipient-name" class="col-form-label">Address<span class="text-red">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="address" placeholder="Address" name="address" required>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-outline-primary w-100" id="add_submit">Submit</button>
                         
@@ -102,6 +130,30 @@
                             </label>
                             <input type="text" class="form-control" id="name_edit" placeholder="Status Name" name="name_edit" required>
                         </div>
+
+                        <div class="mb-3 col-md-12">
+                            <label for="recipient-name" class="col-form-label">Contact Person name<span class="text-red">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="cpn_edit" placeholder="Contact person name" name="cpn_edit" required>
+                        </div>
+
+                        <div class="mb-3 col-md-12">
+                            <label for="recipient-name" class="col-form-label">Email<span class="text-red">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="email_edit" placeholder="Email" name="email_edit" required>
+                        </div>
+
+                        <div class="mb-3 col-md-12">
+                            <label for="recipient-name" class="col-form-label">Phone<span class="text-red">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="phone_edit" placeholder="Phone" name="phone_edit" required>
+                        </div>
+
+                        <div class="mb-3 col-md-12">
+                            <label for="recipient-name" class="col-form-label">Address<span class="text-red">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="address_edit" placeholder="Address" name="address_edit" required>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-outline-primary w-100" id="edit_submit">Update</button>
                     
@@ -120,17 +172,26 @@
             $(document).ready(function() {
                 $('#add_submit').click(function() {
                     var name = $('#name').val();
-                    var description = $('#description').val();
+                    var contact_person = $('#cpn').val();
+                    var email = $('#email').val();
+                    var phone = $('#phone').val();
+                    var address = $('#address').val();
+
                     let data_loading = `<div class="spinner-border text-primary" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>`;
+
                     $('#add_submit').html(data_loading);
                     $.ajax({
-                        url: '/AssetStatus/add',
+                        url: '/SupplierMain/add',
                         type: 'POST',
                         data: {
                             "_token": "{{ csrf_token() }}",
                             name: name,
+                            contact_person_data: contact_person,
+                            email_data: email,
+                            phone_data: phone,
+                            address_dat: address
                         },
                         success: function(data) {
                             toastr.success(data.message);
@@ -150,21 +211,38 @@
     $(document).on("click", "#staff_id_new", function () {
         var name = $(this).attr("data-name");
         var id = $(this).attr("data-id");
-        console.log(name, id);
+        var contact_person = $(this).attr("data-contact_person");
+        var email = $(this).attr("data-email");
+        var phone = $(this).attr("data-phone");
+        var address = $(this).attr("data-address");
         $('#name_edit').val(name);
+        $('#cpn_edit').val(contact_person);
+        $('#email_edit').val(email);
+        $('#phone_edit').val(phone);
+        $('#address_edit').val(address);
 
             $('#edit_submit').click(function() {
+
                 var name = $('#name_edit').val();
+                var cpn_edit = $('#cpn_edit').val();
+                var email_edit = $('#email_edit').val();
+                var phone_edit = $('#phone_edit').val();
+                var address_edit = $('#address_edit').val();
+
                 let data_loading = `<div class="spinner-border text-primary" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>`;
                 $('#edit_submit').html(data_loading);
                 $.ajax({
-                    url: '/AssetStatus/edit/' + id,
+                    url: '/SupplierMain/edit/' + id,
                     type: 'POST',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         name: name,
+                        contact_person_data: cpn_edit,
+                        email_data: email_edit,
+                        phone_data: phone_edit,
+                        address_dat: address_edit
                     },
                     success: function(data) {
                         toastr.success(data.message);
