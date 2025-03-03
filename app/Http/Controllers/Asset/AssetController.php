@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Asset;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User_pages_permission;
 use App\Models\Asset;
 use App\Models\Unit;
 use App\Models\Category;
@@ -16,21 +15,21 @@ use Illuminate\Support\Str;
 class AssetController extends Controller
 {
 
-    public function checkingpages(){
-        $role_id = session('role_id');
-        $current_page = session('current_page');
+    // public function checkingpages(){
+    //     $role_id = session('role_id');
+    //     $current_page = session('current_page');
 
-        $permissions = User_pages_permission::where('pages_id', $current_page)
-                                                ->where('roles_id', $role_id)
-                                                ->first();
+    //     $permissions = User_pages_permission::where('pages_id', $current_page)
+    //                                             ->where('roles_id', $role_id)
+    //                                             ->first();
             
-        return $permissions; 
-    }
+    //     return $permissions; 
+    // }
 
 
     public function view()
     {
-        $permissions = $this->checkingpages();
+        $permissions = checkingpages();
         if($permissions->isView){
             $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
             // echo "<pre>";
@@ -50,7 +49,7 @@ class AssetController extends Controller
     }
 
     public function add(){
-        $permissions = $this->checkingpages();
+        $permissions = checkingpages();
         if($permissions->isCreate){
             $unit = Unit::where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
             $category = Category::where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
@@ -162,7 +161,7 @@ class AssetController extends Controller
 
     public function edit(Request $request, $id){
         try {
-            $permissions = $this->checkingpages();
+            $permissions = checkingpages();
             if($permissions->isUpdate){
                 $unit = Unit::where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
                 $category = Category::where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();

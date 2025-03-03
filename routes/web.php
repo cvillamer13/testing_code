@@ -8,6 +8,9 @@ use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Department\DepartmentController;
 use App\Http\Controllers\Location\LocationController;
 use Illuminate\Support\Facades\Route;
+use App\Mail\MyTestEmail;
+use Illuminate\Support\Facades\Mail;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +32,31 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/testroute', function() {
+    $name = "Chritian testing";
 
+    // The email sending is done using the to method on the Mail facade
+    Mail::to('christian.villamer@jakagroup.com')->send(new MyTestEmail($name));
+});
+
+Route::get('/sendToMultiple', function() {
+    $emails = ['first@example.com', 'second@example.com', 'third@example.com'];
+    $name = "Funny Coder"; // Assuming you want to send the same content to all
+
+    Mail::to($emails)->send(new MyTestEmail($name));
+});
+
+Route::get('/sendWithCCandBCC', function() {
+    $mainRecipients = ['main1@example.com', 'main2@example.com'];
+    $ccRecipients = ['cc1@example.com', 'cc2@example.com'];
+    $bccRecipients = ['secret1@example.com', 'secret2@example.com'];
+    $name = "Funny Coder"; // Dynamic content
+
+    Mail::to($mainRecipients)
+        ->cc($ccRecipients)
+        ->bcc($bccRecipients)
+        ->send(new MyTestEmail($name));
+});
 
 Route::middleware('auth')->group(function () {
     //Profile of user

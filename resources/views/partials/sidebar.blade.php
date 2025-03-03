@@ -37,8 +37,8 @@
                         @endif
                     @endforeach
                 @endif
-
-                <!-- PRODUCTS -->
+                
+                {{-- <!-- PRODUCTS -->
                 <li class="has-menu">
                     <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -80,7 +80,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
                 
                 <li class="has-menu">
                     <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -127,6 +127,12 @@
                         <li class="text-nowrap">
                             <a href="/Location/view" class="ai-icon" aria-expanded="false">
                                 <i class="far fa-arrow-alt-circle-right"></i>Location
+                            </a>
+                        </li>
+
+                        <li class="text-nowrap">
+                            <a href="/Approvers/view" class="ai-icon" aria-expanded="false">
+                                <i class="far fa-arrow-alt-circle-right"></i>Approval Matrix
                             </a>
                         </li>
                     </ul>

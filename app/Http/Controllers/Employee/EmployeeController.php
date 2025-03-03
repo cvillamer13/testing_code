@@ -14,19 +14,10 @@ use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
 {   
-    public function checkingpages(){
-        $role_id = session('role_id');
-        $current_page = session('current_page');
-
-        
-
-        $permissions = User_pages_permission::where('pages_id', $current_page)->where('roles_id', $role_id)->first();
-        return $permissions; 
-    }
     
     public function view()
     {
-        $permissions = $this->checkingpages();
+        $permissions = checkingpages();
 
         if($permissions->isView){
             $employees = Employee::all();
@@ -41,7 +32,7 @@ class EmployeeController extends Controller
     {
 
         
-        $permissions = $this->checkingpages();
+        $permissions = checkingpages();
 
         if($permissions->isCreate){
             $position = Position::all();
@@ -138,7 +129,7 @@ class EmployeeController extends Controller
     public function edit(Request $request, $id){
         try {
 
-            $permissions = $this->checkingpages();
+            $permissions = checkingpages();
 
             if($permissions->isUpdate){
                 $employee = Employee::with(['gender', 'position', 'company', 'department'])->find($id);
