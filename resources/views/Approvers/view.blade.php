@@ -168,6 +168,35 @@
     }
 
 
+    function getDepartment_edit(id, i) {
+        var companyId = id
+        var departmentDropdown = $('#departmen_id'+i).closest('.approver-row').find('.department');
+        console.log(companyId)
+        if (companyId === "all") {
+            departmentDropdown.html('<option value="all">All</option>'); // Reset if "All" is selected
+            return;
+        }
+
+        $.ajax({
+            url: '/Location/getDepartment',
+            type: 'POST',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                company_id: companyId
+            },
+            success: function(response) {
+                departmentDropdown.html('<option value="all">All</option>'); // Reset
+                response.forEach(function(dept) {
+                    departmentDropdown.append(`<option value="${dept.id}">${dept.name}</option>`);
+                });
+            },
+            error: function() {
+                alert("Error fetching departments!");
+            }
+        });
+    }
+
+
 
     $(document).ready(function() {
     // Add new dropdown row
@@ -211,52 +240,65 @@ $(document).on("click", "#IT_Asset", function () {
                 console.log(response)
                 if(response.message.length > 0){
                     let datasrt = ``;
+
+                    var x = 0;
                 response.message.forEach((data)=>{
-
-                datasrt+= `<div class="row approver-row" id="data_row">`;
-                    datasrt+= `<div class="mb-3 col-md-3">`;
-                        datasrt+= `<label class="col-form-label">User<span class="text-red">*</span></label>`
-                        datasrt+= `        <select class="form-control" id="user_id" name="user_id[]">`
-                        datasrt+= `            @foreach ($user as $us )`
-                        datasrt+= `                <option value="{{ $us->id }}">{{ $us->name }}</option>`
-                        datasrt+= `            @endforeach`
-                        datasrt+= `        </select>`
-                    datasrt+= `</div>`;
+                    datasrt+= `<div class="row approver-row" id="data_row">`;
+                        datasrt+= `<div class="mb-3 col-md-3">`;
+                            datasrt+= `<label class="col-form-label">User<span class="text-red">*</span></label>`
+                            datasrt+= `        <select class="form-control" id="user_id" name="user_id[]">`
+                            datasrt+= `            @foreach ($user as $us )`
+                            var data_id_user = '{{ $us->id }}';
+                            if(data_id_user == data.user_id){
+                                    datasrt+= `<option value="{{ $us->id }}" selected>{{ $us->name }}</option>`;
+                            }else {
+                                datasrt+= `<option value="{{ $us->id }}">{{ $us->name }}</option>`;
+                            }
                         
-                    datasrt+= `<div class="mb-3 col-md-2">`;
-                        datasrt+= `    <label class="col-form-label">Company<span class="text-red">*</span></label>`;
-                        datasrt+= `    <select class="form-control company" name="company_id[]" onchange="getDepartment(this)">`;
-                        datasrt+= `        <option value="all">All</option>`;
-                        datasrt+= `        @foreach ($company as $com )`;
-                        datasrt+= `            <option value="{{ $com->id }}">{{ $com->name }}</option>`;
-                        datasrt+= `        @endforeach`;
-                        datasrt+= `    </select>`;
+                            datasrt+= `            @endforeach`
+                            datasrt+= `        </select>`
+                        datasrt+= `</div>`;
+                            
+                        datasrt+= `<div class="mb-3 col-md-2">`;
+                            datasrt+= `    <label class="col-form-label">Company<span class="text-red">*</span></label>`;
+                            datasrt+= `    <select class="form-control company" name="company_id[]" onchange="getDepartment(this)">`;
+                            datasrt+= `        <option value="all">All</option>`;
+                            datasrt+= `        @foreach ($company as $com )`;
+                            
+                            if('{{ $com->id }}' == data.company_id){
+                                datasrt+= `<option value="{{ $com->id }}" selected>{{ $com->name }}</option>`;
+                            }else{
+                                datasrt+= `<option value="{{ $com->id }}">{{ $com->name }}</option>`;
+                            }
+                            datasrt+= `        @endforeach`;
+                            datasrt+= `    </select>`;
+                        datasrt+= `</div>`;
+                        
+                        datasrt+= `<div class="mb-3 col-md-2">`;
+                            datasrt+= `    <label class="col-form-label">Department<span class="text-red">*</span></label>`;
+                            datasrt+= `    <select class="form-control department" name="departmen_id[]" id="departmen_id`+x+`">`;
+                            datasrt+= `        <option value="all">All</option>`;
+                            datasrt+= `    </select>`;
+                        datasrt+= `</div>`;
+
+                        datasrt+= `<div class="mb-3 col-md-3">`;
+                            datasrt+= `    <label class="col-form-label">Sequence of approvals<span class="text-red">*</span></label>`;
+                            datasrt+= `    <select class="form-control sequence" id="seq_num" name="seq_num[]">`;
+                            datasrt+= `        <option value="0" selected>1st Approver</option>`;
+                            datasrt+= `        <option value="FA">Final Approver</option>`;
+                            datasrt+= `    </select>`;
+                        datasrt+= `</div>`;
+
+                        datasrt+= `<div class="mb-3 col-md-2">`;
+                            datasrt+= `    <label class="col-form-label">Remove row</label>`;
+                            datasrt+= `    <button type="button" class="btn btn-danger remove-row">Remove</button>`;
+                        datasrt+= `</div>`;
                     datasrt+= `</div>`;
 
-                    datasrt+= `<div class="mb-3 col-md-2">`;
-                        datasrt+= `    <label class="col-form-label">Department<span class="text-red">*</span></label>`;
-                        datasrt+= `    <select class="form-control department" name="departmen_id[]" id="departmen_id">`;
-                        datasrt+= `        <option value="all">All</option>`;
-                        datasrt+= `    </select>`;
-                    datasrt+= `</div>`;
-
-                    datasrt+= `<div class="mb-3 col-md-3">`;
-                        datasrt+= `    <label class="col-form-label">Sequence of approvals<span class="text-red">*</span></label>`;
-                        datasrt+= `    <select class="form-control sequence" id="seq_num" name="seq_num[]">`;
-                        datasrt+= `        <option value="0" selected>1st Approver</option>`;
-                        datasrt+= `        <option value="FA">Final Approver</option>`;
-                        datasrt+= `    </select>`;
-                    datasrt+= `</div>`;
-
-                    datasrt+= `<div class="mb-3 col-md-2">`;
-                        datasrt+= `    <label class="col-form-label">Remove row</label>`;
-                        datasrt+= `    <button type="button" class="btn btn-danger remove-row">Remove</button>`;
-                    datasrt+= `</div>`;
-                datasrt+= `</div>`;
+                    getDepartment_edit(data.company_id,x);
+                    x++;
                 })
                 
-
-
                 document.getElementById("data_row").innerHTML =  datasrt;
             }
                 }

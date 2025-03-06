@@ -204,7 +204,7 @@ class EmployeeController extends Controller
 
             return redirect()->route('employee.view')->with('success', 'Employee '. $emp->emp_no .' updated successfully');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $th->getMessage());
         }
 
     }
