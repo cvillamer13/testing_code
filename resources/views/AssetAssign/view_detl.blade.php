@@ -302,19 +302,19 @@
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label" for="temporary">WIFI SSID</label>
-                                        <input type="text" class="form-control" id="company_data"  value="">
+                                        <input type="text" class="form-control" id="intwifi_ssid" name="intwifi_ssid" value="">
                                     </div>
 
                                     <div class="form-check">
                                         
                                         <label class="form-check-label" for="temporary">Shared Drive(s)</label>
-                                        <input type="text" class="form-control" id="company_data"  value="">
+                                        <input type="text" class="form-control" id="intshared_drive" name="intshared_drive"  value="">
                                     </div>
 
                                     <div class="form-check">
                                         
                                         <label class="form-check-label" for="temporary">Shared Printer(s)</label>
-                                        <input type="text" class="form-control" id="company_data"  value="">
+                                        <input type="text" class="form-control" id="intshared_print" name="intshared_print"   value="">
                                     </div>
                                 </div>
                             </div>
