@@ -293,11 +293,11 @@
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label"></label>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="temporary" name="deployment_type" value="temporary">
+                                        <input type="checkbox" class="form-check-input" id="is_intvoip" name="is_intvoip">
                                         <label class="form-check-label" for="temporary">VOIP ext</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="temporary" name="deployment_type" value="temporary">
+                                        <input type="checkbox" class="form-check-input" id="is_intpbx" name="is_intpbx">
                                         <label class="form-check-label" for="temporary">PBX ext</label>
                                     </div>
                                     <div class="form-check">
