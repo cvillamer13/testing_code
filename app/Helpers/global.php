@@ -2,7 +2,10 @@
 
 use App\Models\User_pages_permission;
 use App\Models\ReferenceNumber;
-
+use App\Models\ApproversMatrix;
+use App\Models\User;
+use App\Models\ApproversStatus;
+use App\Mail\MyTestEmail;
 
 if (!function_exists('checkingPages')) {
     function checkingPages()
@@ -37,4 +40,97 @@ if (!function_exists('generateRefNumber')) {
         // Construct the reference number
         return $ref->reference_number;
     }
+}
+
+function get_approvers($typeprocess){
+    $approvers = ApproversMatrix::where('type_of_process', $typeprocess)->orderBy('increment_num', 'asc')->get();
+    return $approvers;
+}
+
+function get_approvers_status($issuance_id, $user_id){
+    $approvers = ApproversStatus::where('data_id', $issuance_id)->where()->get();
+    return $approvers;
+}
+
+function get_current_approvers($id_data, $pages_id, $user_id){
+
+    $exists = ApproversStatus::where('data_id', $id_data)
+        ->where('pages_id', $pages_id)
+        ->where('user_id', $user_id)
+        ->exists();
+        // echo "<pre>";
+        // print_r($exists);
+    if($exists){
+        $approvers = ApproversStatus::where('data_id', $id_data)->where('pages_id', $pages_id)->where('user_id', $user_id)->first();
+        $approvers->isNew = "N";
+    }else{
+        $approvers = new ApproversStatus();
+        $approvers->data_id = $id_data;
+        $approvers->pages_id = $pages_id;
+        $approvers->user_id = $user_id;
+        $approvers->status = "NA";
+        $approvers->save();
+        $approvers->isNew = "Y";
+        
+    }
+    // echo "<pre>";
+    // print_r($approvers);
+    // exit;
+    return [
+        'status' => $approvers->status,
+        'status_id' => $approvers->id,
+        'isNew' => $approvers->isNew
+    ];
+    // return $approvers;
+
+}
+
+
+if (!function_exists('approvalIssuance')) {
+    function approvalIssuance($issuance_id, $typeprocess, $pages_id, $rev_num, $issueby, $assignee, $date_req, $date_need)
+    {
+        $approvers = get_approvers($typeprocess);
+        $approvers = $approvers->toArray();
+        $next_approver = "";
+        foreach ($approvers as $key => $value) {
+
+            $user_data = User::find($value["user_id"]);
+            $name = $user_data->name;
+            $email = $user_data->email;
+            $data = get_current_approvers($issuance_id, $pages_id, $value["user_id"]);
+            if($data["status"] === "NA" && $value["increment_num"] == 1 && $data["isNew"] === "Y"){
+            
+                $change1 = ApproversStatus::find($data["status_id"]);
+                $change1->status = "P";
+                $change1->save();
+                $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
+                Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need));
+                continue;
+            }else if($data["status"] === "NA" && $value["increment_num"] > 1 && $data["isNew"] === "N"){
+                $change1 = ApproversStatus::find($data["status_id"]);
+                if($change1->status  === "P"){
+                    break;
+                }else{
+                    $change1->status = "P";
+                    $change1->save();
+                    $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
+                    // $name = User::find($value["user_id"])->name;
+                    Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need));
+                    $next_approver =  $name;
+                    break;
+                }
+                
+            }else{
+                if($data["status"] === "A"){
+                    continue;
+                }
+            }
+
+            // echo $data["status"] . " <> " . $value["increment_num"] . " <> " . $value["user_id"] . "<br>";
+        }
+
+        return $next_approver;
+        
+    }
+
 }

@@ -5,25 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ApproversMatrix extends Model
+class ApproversStatus extends Model
 {
     use HasFactory;
-    protected $table = 'approvers_matrices';
+    protected $table = 'approvers_statuses';
     protected $fillable = [
+        'data_id',
+        'pages_id',
         'user_id',
-        'increment_num',
-        'company_id',
-        'department_id',
+        'status',
+        'remarks',
         'createdby',
         'updatedby',
         'deletedby',
         'isDelete',
-        'type_of_process'
+        'deleted_at',
     ];
-
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function pages()
+    {
+        return $this->belongsTo(Pages::class, 'pages_id', 'id');
+    }
+    
 }

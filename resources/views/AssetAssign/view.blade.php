@@ -31,11 +31,23 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($asset_issuance as $issu)
-                                        <tr>
-                                            <td> {{ $issu->rev_num }} </td>
-                                            <td> {{ $issu->rev_num }} </td>
-                                            <td> {{ $issu->id }} </td>
-                                        </tr>
+                                    <tr>
+                                        <td class="position-relative">
+                                            {{ $issu->rev_num }}
+                                            {{-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                Pending
+                                            </span> --}}
+                                        </td>
+                                        <td> 
+                                            <div class="alert alert-info" role="alert">
+                                                Pending to (next approver)
+                                            </div>
+                                        </td>
+                                        <td> 
+                                            <a class="btn btn-outline-info" href="/AssetAssign/detl/{{ $issu->id }}">View</a>
+                                        </td>
+                                    </tr>
+                                    
                                     @endforeach
                                 <tbody>
                                 

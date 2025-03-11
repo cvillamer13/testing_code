@@ -13,5 +13,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/detl/{id}', [AssetAssignController::class, 'store_detl']);
     Route::post('/getAsset', [AssetAssignController::class, 'getAsset']);
     Route::post('/getAssetById', [AssetAssignController::class, 'getAssetid']);
+    Route::delete('/getDelete', [AssetAssignController::class, 'getDelete']);
+    Route::post('/update_detl', [AssetAssignController::class, 'getUpdate']);
+    Route::post('/finalize', [AssetAssignController::class, 'to_finalize']);
+    Route::get('/view_rev/{rev_num}', [AssetAssignController::class, 'view_rev_approval']);
+    Route::post('/approvers', [AssetAssignController::class, 'to_approvers']);
     
 });

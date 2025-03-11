@@ -9,6 +9,9 @@ use App\Models\AssetIssuance;
 use App\Models\AssetIssuanceDetl;
 use App\Models\Employee;
 use App\Models\Asset;
+use App\Models\ApproversStatus;
+use App\Models\ApproversMatrix;
+use Illuminate\Support\Str;
 
 class AssetAssignController extends Controller
 {
@@ -51,7 +54,8 @@ class AssetAssignController extends Controller
         $permissions = checkingpages();
         if($permissions->isView){
             // $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
-            $asset_issuance = AssetIssuance::where('createdby', session('user_email'))->get();
+            // $asset_issuance = AssetIssuance::where('createdby', session('user_email'))->get();
+            $asset_issuance = AssetIssuance::all();
             return view('AssetAssign.view', [
                 'asset_issuance' => $asset_issuance,
             ]);
@@ -125,16 +129,18 @@ class AssetAssignController extends Controller
             //code...
             $permissions = checkingpages();
             if($permissions->isUpdate){
-                $asset_issuance = AssetIssuance::find($id);
+                $asset_issuance = AssetIssuance::with(['getLocation'])->find($id);
                 $employee_data = Employee::with(['gender', 'position', 'company', 'department'])->find($asset_issuance->emp_id);
-                $issuance_detl = AssetIssuanceDetl::with(['asset_details'])->where('issuance_main_id', $id)->get();
+                $issuance_detl = AssetIssuanceDetl::with(['asset_details'])->where('issuance_main_id', $id)->where('isDelete', false)->orderBy('created_at', 'asc')->get();
+                $issuance_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', session('current_page'))->get();
                 // echo "<pre>";
-                // print_r($issuance_detl);
+                // print_r($issuance_status[0]->user);
                 // exit;
             return view('AssetAssign.view_detl', [
                 'asset_issuance' => $asset_issuance,
                 'employee_data' => $employee_data,
-                'issuance_detl' => $issuance_detl
+                'issuance_detl' => $issuance_detl,
+                'issuance_status' => $issuance_status
             ]);
             }else{
                 return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
@@ -204,5 +210,191 @@ class AssetAssignController extends Controller
                 'message' => $th->getMessage()
             ], 400);
         }
+    }
+    
+    public function getDelete(Request $request){
+        try {
+            //code...
+            // print($request->detl_id);
+            // exit;
+            $asset_issuance_detl = AssetIssuanceDetl::find($request->detl_id);
+            $asset_issuance_detl->isDelete = true;
+            $asset_issuance_detl->deletedby = session('user_email');
+            $asset_issuance_detl->deleted_at = now();
+            $asset_issuance_detl->save();
+
+            // print($asset_issuance_detl);
+            // exit;
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Delete Successfully'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
+
+
+    public function getUpdate(Request $request){
+        try {
+            //code...
+            // echo "<pre>";
+            // print_r($request->all());
+            // exit;
+            $request->validate([
+                'issuance_detl_id' => 'required',
+            ]);
+            $asset_issuance_detl = AssetIssuanceDetl::find($request->issuance_detl_id);
+            //software
+            $asset_issuance_detl->os_patch_ver = $request->os_patch_version;
+            $asset_issuance_detl->isMSoffice = $request->is_ms == true ? 1 : 0;
+            $asset_issuance_detl->isHCS = $request->is_hcs == true ? 1 : 0;
+            $asset_issuance_detl->isNetSuite = $request->is_no == true ? 1 : 0;
+            $asset_issuance_detl->isAcrobat_a = $request->is_ada == true ? 1 : 0;
+            $asset_issuance_detl->isAcrobat_r = $request->is_acr == true ? 1 : 0;
+            $asset_issuance_detl->others = $request->other_text;
+            $asset_issuance_detl->peripherals = $request->pheri_1;
+            //internet
+            $asset_issuance_detl->int_isfull = $request->is_intfull == true ? 1 : 0;
+            $asset_issuance_detl->int_islimited = $request->is_intlimited == true ? 1 : 0;
+            $asset_issuance_detl->int_limited_detls = $request->intlimited_detl;
+            $asset_issuance_detl->int_isNone = $request->is_intnone == true ? 1 : 0;
+            $asset_issuance_detl->int_isvoip_ext = $request->is_intvoip == true ? 1 : 0;
+            $asset_issuance_detl->int_ispbx_ext = $request->is_intpbx == true ? 1 : 0;
+            $asset_issuance_detl->int_isvoip_ext_detls = $request->is_intvoip_detls; // NA design
+            $asset_issuance_detl->int_ispbx_ext_detls = $request->is_intpbx_detls;  // NA design
+
+            //network
+            $asset_issuance_detl->int_ip_assign = $request->intip_add;
+            $asset_issuance_detl->int_mac_address = $request->intmac_add;
+            $asset_issuance_detl->int_network_group = $request->intnet_group;
+            $asset_issuance_detl->int_wifi_ssid = $request->intwifi_ssid;
+            $asset_issuance_detl->int_subnet = $request->intsub_net;
+            // $asset_issuance_detl->int_detailsandnote = $request->is_netlimited_det;
+            $asset_issuance_detl->int_shared_drives = $request->intshared_drive;
+            $asset_issuance_detl->int_shared_printers = $request->intshared_print;
+
+            $asset_issuance_detl->updatedby = session('user_email');
+            $asset_issuance_detl->updated_at = now();
+            $asset_issuance_detl->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Update Successfully'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+
+        }
+    }
+
+
+    public function to_finalize(Request $request){
+        try {
+            //code...
+            $asset_issuance = AssetIssuance::find($request->id_issuance_main);
+            // echo "<pre>";
+            // print_r($asset_issuance);
+            // exit;
+            $asset_issuance->finalizedby = session('user_email');
+            $asset_issuance->finalize_at = now();
+            $asset_issuance->is_finalized = 1;
+            $asset_issuance->save();
+
+            if($asset_issuance->is_finalized){
+                $employee = Employee::find($asset_issuance->emp_id);
+                $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Finalize Successfully'
+                ], 200);
+            }
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
+
+
+    function view_rev_approval($rev_){
+        $asset_issuance = AssetIssuance::with(['details', 'getEmployee'])->where('rev_num', $rev_)->first();
+        return view('AssetAssign.view_detl', [
+            'asset_issuance' => $asset_issuance,
+            'employee_data' => $asset_issuance->getEmployee,
+            'issuance_detl' => $asset_issuance->details
+        ]);
+        // echo "<pre>";
+        // print_r($asset_issuance->details);
+        // exit;
+    }
+
+
+    function to_approvers(Request $request){
+        try {
+            //code...
+
+            // print_r($request->all());
+            // exit;
+            $asset_issuance = AssetIssuance::find($request->asset_iss_id);
+            
+            $employee = Employee::find($asset_issuance->emp_id);
+            // print_r($employee->first_name.' '.$employee->last_name);
+            // exit;
+            if ($request->status == "A") {
+                $approval = ApproversStatus::find($request->appr_id);
+                $approval->status = $request->status;
+                $approval->uid = Str::uuid(); //generate uuid
+                $approval->save();
+
+                $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
+                
+                return response()->json([
+                    'status' => 'success',
+                    'message' =>  $approver . ' Send to Approver Successfully'
+                ], 200);
+            
+            }else if($request->status == "R"){
+                $approval = ApproversStatus::find($request->appr_id);
+                $approval->status = $request->status;
+                $approval->uid = Str::uuid(); //generate uuid
+                $approval->save();
+
+                if($approval->status == "R"){
+                    $approval = ApproversStatus::where('data_id', $asset_issuance->id)
+                        ->where('pages_id', session('current_page'))
+                        ->where('status', 'NA')
+                        ->update([
+                            'status' => 'CNA',
+                            'uid' => Str::uuid()->toString() . "-CNA"
+                        ]);
+                    // $approval->status = "CNA";
+                    // $approval->uid = Str::uuid()."-CNA"; //generate uuid
+                    // $approval->save();
+
+                }
+                
+            }
+            // $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
+            //
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Send to Approver Successfully'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+
     }
 }

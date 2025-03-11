@@ -16,7 +16,7 @@ class MyTestEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private $name)
+    public function __construct(private $name, public $subject, public $rev_num, public $issueby, public $assignee, public $date_req, public $date_need)
     {
         //
     }
@@ -27,7 +27,8 @@ class MyTestEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'My Test Email',
+            subject: $this->subject,
+            
         );
     }
 
@@ -38,7 +39,14 @@ class MyTestEmail extends Mailable
     {
         return new Content(
             view: 'mail.test-email',
-            with: ['name' => $this->name],
+            with: [
+                'name' => $this->name,
+                'rev_num' => $this->rev_num,
+                'issueby' => $this->issueby,
+                'assignee' => $this->assignee,
+                'date_req' => $this->date_req,
+                'date_need' => $this->date_need,
+            ],
         );
     }
 

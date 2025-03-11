@@ -21,12 +21,17 @@ class AssetIssuance extends Model
         'apprver_references',
         'date_of_issuance',
         'ref_rss',
+        'location_id',
+        'is_finalized',
         'rev_num',
         'createdby',
         'updatedby',
         'deletedby',
         'isDelete',
         'deleted_at',
+        'is_finalized',
+        'finalizedby',
+        'finalized_at',
     ];
 
     protected $casts = [
@@ -36,5 +41,15 @@ class AssetIssuance extends Model
     public function details()
     {
         return $this->hasMany(AssetIssuanceDetl::class, 'issuance_main_id');
+    }
+
+    function getEmployee()
+    {
+        return $this->belongsTo(Employee::class, 'emp_id');
+    }
+    
+    public function getLocation()
+    {
+        return $this->belongsTo(Location::class, 'location_id');
     }
 }

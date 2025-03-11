@@ -89,7 +89,7 @@
                             <div class="mb-3 col-md-3">
                                 <label class="col-form-label">Sequence of approvals<span class="text-red">*</span></label>
                                 <select class="form-control sequence" id="seq_num" name="seq_num[]">
-                                    <option value="0" selected>1st Approver</option>
+                                    <option value="1" selected>1st Approver</option>
                                     <option value="FA">Final Approver</option>
                                 </select>
                             </div>
@@ -204,7 +204,7 @@
         var newRow = $(".approver-row").first().clone(); // Clone the first row
         var rowCount = $(".approver-row").length + 1;
         
-
+        console.log(rowCount)
         newRow.find(".sequence").html(`
             <option value="${rowCount}">${ordinal_suffix_of(rowCount)} Approver</option>
             <option value="FA">Final Approver</option>
