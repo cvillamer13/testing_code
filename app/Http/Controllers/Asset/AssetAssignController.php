@@ -88,9 +88,9 @@ class AssetAssignController extends Controller
 
             $permissions = checkingpages();
             if($permissions->isUpdate){
-                echo "<pre>";
-                print_r($request->all());
-                exit;
+                // echo "<pre>";
+                // print_r($request->all());
+                // exit;
                 $request->validate([
                     'emp_no' => 'required',
                     'reports_to' => 'required',
