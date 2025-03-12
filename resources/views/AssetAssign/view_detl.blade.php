@@ -338,6 +338,11 @@
                                                                     Rejected
                                                                 </div>
                                                                 @break
+                                                            @case('CNA')
+                                                                <div class="alert alert-warning" role="alert">
+                                                                    Cancelled because of last approver is rejected
+                                                                </div>
+                                                                @break
                                                             @default
                                                                 Unknown Status
                                                         @endswitch
@@ -1345,9 +1350,9 @@
                             "asset_iss_id": asset_iss_id
                         },
                         success: function (response) {
-                            // swal.close();
-                            // toastr.success(response.message);
-                            // location.reload();
+                            swal.close();
+                            toastr.success(response.message);
+                            location.reload();
                         },
                         error: function (error) {
                             console.log(error)

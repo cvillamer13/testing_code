@@ -88,11 +88,11 @@ class AssetAssignController extends Controller
 
             $permissions = checkingpages();
             if($permissions->isUpdate){
-                // echo "<pre>";
-                // print_r($request->all());
-                // exit;
+                echo "<pre>";
+                print_r($request->all());
+                exit;
                 $request->validate([
-                    'emp_id' => 'required',
+                    'emp_no' => 'required',
                     'reports_to' => 'required',
                 ]);
 
@@ -327,10 +327,12 @@ class AssetAssignController extends Controller
 
     function view_rev_approval($rev_){
         $asset_issuance = AssetIssuance::with(['details', 'getEmployee'])->where('rev_num', $rev_)->first();
+        $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', session('current_page'))->get();
         return view('AssetAssign.view_detl', [
             'asset_issuance' => $asset_issuance,
             'employee_data' => $asset_issuance->getEmployee,
-            'issuance_detl' => $asset_issuance->details
+            'issuance_detl' => $asset_issuance->details,
+            'issuance_status' => $issuance_status
         ]);
         // echo "<pre>";
         // print_r($asset_issuance->details);
