@@ -326,9 +326,9 @@ class AssetAssignController extends Controller
 
 
     function view_rev_approval($rev_){
-        echo "<pre>";
-        print_r(session()->all());
-        exit;
+        // echo "<pre>";
+        // print_r(session()->all());
+        // exit;
         $asset_issuance = AssetIssuance::with(['details', 'getEmployee'])->where('rev_num', $rev_)->first();
         $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', session('current_page'))->get();
         return view('AssetAssign.view_detl', [

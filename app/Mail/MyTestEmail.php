@@ -46,7 +46,7 @@ class MyTestEmail extends Mailable
                 'assignee' => $this->assignee,
                 'date_req' => $this->date_req,
                 'date_need' => $this->date_need,
-                'pages_id' => $this->pages_id,
+                'pages_id' => $this->pages_id
             ],
         );
     }
