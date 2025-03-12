@@ -115,7 +115,7 @@
                                                         </thead>
 
                                                         <tbody>
-
+                                                        
                                                             @foreach ($issuance_detl as $detl)
                                                                     @if ($asset_issuance->is_finalized)
                                                                         
@@ -153,6 +153,7 @@
                                                                         </td>
                                                                     </tr>
                                                                     @else
+                                                                    
                                                                     <tr>
                                                                         <td>{{ $detl->asset_details->asset_id }}</td>
                                                                         <td><span class="text-center">{{ $detl->asset_details->category_data->name }}</span></td>
@@ -186,14 +187,19 @@
                                                                             onclick="getdataall({{ $detl->id }}, {{ $detl->asset_details->id }})">Details</button>
                                                                             <button type="button" class="btn btn-outline-danger" onclick="getDelete({{ $detl->id  }})">Delete</button>
                                                                         </td>
+                                                                        
                                                                     </tr>
+                                                                
                                                                     @endif
                                                                 
                                                             @endforeach
+
+                                                            
                                                             
                                                         </tbody>
-
+                                                        
                                                     </table>
+                                                
                                                     @else
                                                     <table id="example3" class="table text-center">
                                                         <thead>
@@ -207,6 +213,10 @@
                                                         </thead>
 
                                                         <tbody>
+                                                            @php
+                                                            $x = 0;
+                                                        @endphp
+
 
                                                             @foreach ($issuance_detl as $detl)
                                                                     @if ($asset_issuance->is_finalized)
@@ -279,6 +289,9 @@
                                                                             <button type="button" class="btn btn-outline-danger" onclick="getDelete({{ $detl->id  }})">Delete</button>
                                                                         </td>
                                                                     </tr>
+                                                                    @php
+                                                                        $x++;
+                                                                    @endphp
                                                                     @endif
                                                                 
                                                             @endforeach
@@ -286,9 +299,11 @@
                                                         </tbody>
 
                                                     </table>
+                                                    <input type="hidden" id="last_count_data" value="{{ $x }}">
                                                     @endif
                                                     
                                                 </div>
+                                                
                                             </div>
                                             <hr>
                                         </div>
@@ -741,6 +756,10 @@
 
         <script>
 
+            jQuery.ajaxSetup({
+                async: false
+            });
+
             function save_data(){
                 Swal.showLoading();
                 var issuance_detl_id = document.getElementById("issuance_detl_id").value;
@@ -865,12 +884,40 @@
                         "issuance_main_id": main_id
                     },
                     success: function (response) {
+                        console.log(response)
                         var button = $('#data_save_'+i);
                         var button_remove = $('#data_remove_'+i);
-                        button.replaceWith(`<button type="button" class="btn btn-outline-primary viewDetails" data-details_id="`+ response.data.id+`" onclick="getdataall( `+i+`, `+asset_id+`)">Details</button>`);
+                        button.replaceWith(`<button type="button" class="btn btn-outline-primary viewDetails"
+                        data-details_id="`+ response.data.id+`"
+                        data-os_version="`+response.data.os_patch_ver +`"
+
+                        data-isMSoffice="`+response.data.os_patch_ver +`"
+                        data-isHCS="`+response.data.isHCS +`"
+                        data-isNetSuite="`+response.data.isNetSuite +`"
+                        data-isAcrobat_r="`+response.data.isAcrobat_r +`"
+                        data-isAcrobat_a="`+response.data.isAcrobat_a +`"
+                        data-others="`+response.data.others +`"
+                        data-pheripherals="`+response.data.peripherals +`"
+                        data-int_isfull="`+response.data.int_isfull +`"
+                        data-int_islimited="`+response.data.int_islimited +`"
+                        data-int_isNone="`+response.data.int_isNone +`"
+                        data-int_isvoip_ext="`+response.data.int_isvoip_ext +`"
+                        data-int_isvoip_ext_detls="`+response.data.int_isvoip_ext_detls +`"
+                        data-int_ispbx_ext="`+response.data.int_ispbx_ext +`"
+                        data-int_ispbx_ext_detls="`+response.data.int_ispbx_ext_detls +`"
+                        data-int_wifi_ssid="`+response.data.int_wifi_ssid +`"
+                        data-int_shared_drive="`+response.data.int_shared_drives +`"
+                        data-int_shared_printer="`+response.data.int_shared_printers +`"
+                        data-int_ip_assign="`+response.data.int_ip_assign +`"
+                        data-int_subnet="`+response.data.int_subnet +`"
+                        data-int_mac_add="`+response.data.int_mac_address +`"
+                        data-int_net_group="`+response.data.int_network_group +`"
+
+                        onclick="getdataall( `+response.data.id+`, `+asset_id+`)">Details</button>`);
                         button_remove.replaceWith(`<button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete(`+response.data.id+`)" >Delete</button>`);
                             // Add a new row to allow further inputs
-                        addNewRow1(i);
+                        // addNewRow1(i);
+                        // location.reload();
 
                         Swal.close();
                     }
@@ -944,7 +991,8 @@
 
 
             function addNewRow1(rowId) {
-                var table = $('#example3').DataTable();
+               
+                    var rowId = parseInt($('#last_count_data').val());
                     var rowCount = parseInt(rowId) // Get current row count
                     var newRowId = rowCount + 1; // Unique ID for new row
                     var newRow = `
@@ -960,18 +1008,19 @@
                         </tr>
                 `;
                 $('#example3 tbody').append(newRow);
+                $('#last_count_data').val(newRowId);
                 $('#data_' + newRowId).focus();
             }
 
 
 
             $(document).ready(function () {
-                var table = $('#example3').DataTable();
+                // var table = $('#example3').DataTable();
 
                 function addNewRow() {
-                    var rowCount = table.rows().count(); // Get current row count
+                    
+                    var rowCount = parseInt($('#last_count_data').val()); // Get current row count
                     var newRowId = rowCount + 1; // Unique ID for new row
-                    console.log("first", newRowId)
                     var newRow = `
                         <tr>
                             <td><input type="text" class="form-control" data-id="${newRowId}" id="data_${newRowId}" autocomplete="off" autocorrect="off" spellcheck="false"></td>
@@ -984,9 +1033,8 @@
                             </td>
                         </tr>
                     `;
-
-                // Append row to the LAST position of the table body
                     $('#example3 tbody').append(newRow);
+                    $('#last_count_data').val(newRowId)
                     $('#data_' + newRowId).focus();
                 }
 
@@ -1039,7 +1087,7 @@
                         var row = $(this).closest('tr'); // Get the row
                         var inputData = row.find('input').val(); // Get input value
                         var button = $(this); // Reference to the button
-                        console.log(inputData)
+                        // console.log(inputData)
                         if (inputData.trim() === "") {
                             alert("Please enter a value before saving.");
                             return;
@@ -1055,18 +1103,10 @@
                                 "asset_id": inputData
                             },
                             success: function (response) {
-                                // console.log("Data saved:", response);
-
-                                // // Change "Save" to "View Details"
-                                // button.replaceWith(`<button type="button" class="btn btn-outline-primary">Details</button>`);
-
-                                // // Add a new row to allow further inputs
-                                // addNewRow();
-
                                 if(response.status == "success"){
-                                    var rowCount2 = table.rows().count();
-                                    var intCurrent = rowCount2 + 1;
-                                    // console.log("inp",intCurrent)
+                                    var rowCount2 = parseInt($('#last_count_data').val());
+                                    var intCurrent = rowCount2;
+                                    console.log("inp",rowCount2 + 1)
                                         Swal.showLoading();
                                         if(response.data == null){
                                             Swal.close();
@@ -1084,6 +1124,7 @@
                                         document.getElementById("model_"+intCurrent).innerHTML = response.data.model_no
                                         document.getElementById("serial_"+intCurrent).innerHTML = response.data.serial_number
                                         getSave_detl(intCurrent, response.data.id);
+                                        addNewRow()
                                         
                                     }
                             },
@@ -1094,6 +1135,7 @@
 
                     // Handle "Remove" button click
                     $('#example3 tbody').on('click', '.removeRow', function () {
+                        var table = $('#example3').DataTable();
                         table.row($(this).closest('tr')).remove().draw(false);
                     });
 

@@ -197,10 +197,10 @@ class AssetAssignController extends Controller
             $asset_issuance_detl->created_at = now();
             $asset_issuance_detl->save();
             
-
+            $data = AssetIssuanceDetl::with(['asset_details'])->find($asset_issuance_detl->id);
             return response()->json([
                 'status' => 'success',
-                'data' => $asset_issuance_detl,
+                'data' => $data,
                 'message' => 'saving.'
             ], 200);
 
@@ -240,7 +240,7 @@ class AssetAssignController extends Controller
 
     public function getUpdate(Request $request){
         try {
-            //code...
+            
             // echo "<pre>";
             // print_r($request->all());
             // exit;
