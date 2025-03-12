@@ -34,7 +34,7 @@
                                                 </div>
                                                 <div class=" col-4">
                                                     <label class="form-label">Designation</label>
-                                                    <p class="form-control-plaintext" id="position_data">{{ $employee_data->position->position_name }}</p>
+                                                    <p class="form-control-plaintext" id="position_data">{{ $employee_data->position->position_name ?? "" }}</p>
                                                 </div>
                                             </div>
                                             
@@ -42,19 +42,19 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <label class="form-label">Business unit</label>
-                                                    <p class="form-control-plaintext" id="company_data"><b>{{ $employee_data->company->name }}</b></p>
+                                                    <p class="form-control-plaintext" id="company_data"><b>{{ $employee_data->company->name ?? ""  }}</b></p>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <label class="form-label">Department</label>
-                                                    <p class="form-control-plaintext" id="department_data"><b>{{ $employee_data->department->name }}</b></p>
+                                                    <p class="form-control-plaintext" id="department_data"><b>{{ $employee_data->department->name ?? ""  }}</b></p>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <label class="form-label">Reports To<span class="text-red">*</span></label>
-                                                    <p class="form-control-plaintext" id="reports_to"><b>{{ $asset_issuance->reports_to }}</b></p>
+                                                    <p class="form-control-plaintext" id="reports_to"><b>{{ $asset_issuance->reports_to ?? ""  }}</b></p>
                                                 </div>
                                                 <div class=" col-md-3">
                                                     <label class="form-label">Location<span class="text-red">*</span></label>
-                                                    <p class="form-control-plaintext" id="reports_to"><b>{{ $asset_issuance->getLocation->name }}</b></p>
+                                                    <p class="form-control-plaintext" id="reports_to"><b>{{ $asset_issuance->getLocation->name ?? ""  }}</b></p>
                                                 </div>
                                             </div>
                                             
@@ -71,11 +71,11 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <label class="form-label">From</label>
-                                                            <p class="form-control-plaintext"><b>{{ $asset_issuance->deployment_duration_from }}</b></p>
+                                                            <p class="form-control-plaintext"><b>{{ $asset_issuance->deployment_duration_from ?? ""  }}</b></p>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="form-label">To</label>
-                                                            <p class="form-control-plaintext"><b>{{ $asset_issuance->deployment_duration_to }}</b></p>
+                                                            <p class="form-control-plaintext"><b>{{ $asset_issuance->deployment_duration_to ?? ""  }}</b></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -83,16 +83,16 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <label class="form-label">Date Requested</label>
-                                                    <p class="form-control-plaintext"><b>{{ $asset_issuance->date_requested }}</b></p>
+                                                    <p class="form-control-plaintext"><b>{{ $asset_issuance->date_requested ?? ""  }}</b></p>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="form-label">Date Needed</label>
-                                                    <p class="form-control-plaintext"><b>{{ $asset_issuance->date_needed }}</b></p>
+                                                    <p class="form-control-plaintext"><b>{{ $asset_issuance->date_needed ?? ""  }}</b></p>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <label class="form-label">Ref. RSS Ticket Numbers</label>
-                                                    <p class="form-control-plaintext"><b>{{ $asset_issuance->ref_rss  }}</b></p>
+                                                    <p class="form-control-plaintext"><b>{{ $asset_issuance->ref_rss   }}</b></p>
                                                 </div>
 
                                                 <input type="hidden" name="issuance_id" id="issuance_id" value="{{ $asset_issuance->id }}">
