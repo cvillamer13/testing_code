@@ -12,6 +12,8 @@ use App\Models\Asset;
 use App\Models\ApproversStatus;
 use App\Models\ApproversMatrix;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+use App\Mail\Approvedissuance_Notif;
 
 class AssetAssignController extends Controller
 {
@@ -325,12 +327,14 @@ class AssetAssignController extends Controller
     }
 
 
-    function view_rev_approval($rev_){
-        // echo "<pre>";
-        // print_r(session()->all());
-        // exit;
+    function view_rev_approval($rev_, $page_id_data, $user_id){
+        $page_id = session('current_page');
+        if($page_id == ""){
+            $page_id = $page_id_data;
+            Session::put('current_page', $page_id);
+        }
         $asset_issuance = AssetIssuance::with(['details', 'getEmployee'])->where('rev_num', $rev_)->first();
-        $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', session('current_page'))->get();
+        $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', $page_id)->get();
         return view('AssetAssign.view_detl', [
             'asset_issuance' => $asset_issuance,
             'employee_data' => $asset_issuance->getEmployee,
@@ -362,6 +366,18 @@ class AssetAssignController extends Controller
 
                 $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
                 
+                $data_of_approvers = ApproversMatrix::where('user_id', $approval->user_id)->where('type_of_process', 3)->first();
+
+                if($data_of_approvers->increment_num == "FA"){
+                    $asset_issuance->approved_status = "A";
+                    $asset_issuance->approved_by = session('user_email');
+                    $asset_issuance->approved_at = now();
+                    $asset_issuance->uid = $approval->uid;
+                    $asset_issuance->save();
+                    Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id, $value["user_id"]));
+                    
+                }
+
                 return response()->json([
                     'status' => 'success',
                     'message' =>  $approver . ' Send to Approver Successfully'
@@ -381,9 +397,13 @@ class AssetAssignController extends Controller
                             'status' => 'CNA',
                             'uid' => Str::uuid()->toString() . "-CNA"
                         ]);
-                    // $approval->status = "CNA";
-                    // $approval->uid = Str::uuid()."-CNA"; //generate uuid
-                    // $approval->save();
+                        if($data_of_approvers->increment_num == "FA"){
+                            $asset_issuance->approved_status = "RE";
+                            $asset_issuance->approved_by = session('user_email');
+                            $asset_issuance->approved_at = now();
+                            $asset_issuance->uid = $approval->uid;
+                            $asset_issuance->save();
+                        }
 
                 }
                 
