@@ -318,9 +318,7 @@
                                                     <label for="employee_name" class="form-label"><b>{{  $data->user->name }}</b></label>
                                                     <br>
 
-                                                    @php
-                                                        $data->status
-                                                    @endphp
+                                                    <p>{{ $data->user->id }} <> {{ Auth::user()->id }} <> {{ $data->status }} </p>
                                                     @if ($data->user->id == Auth::user()->id && $data->status == 'P')
                                                         <div class="d-flex gap-1">
                                                             <button type="button" class="btn btn-outline-success flex-fill" id="btn_approved_data" data-id="{{ $data->id }}" data-user_id="{{ $data->user->id }}" data-status="A" data-asset_iss_id="{{ $asset_issuance->id }}">Approved</button>

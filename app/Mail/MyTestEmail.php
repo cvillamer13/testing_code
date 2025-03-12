@@ -16,7 +16,7 @@ class MyTestEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private $name, public $subject, public $rev_num, public $issueby, public $assignee, public $date_req, public $date_need)
+    public function __construct(private $name, public $subject, public $rev_num, public $issueby, public $assignee, public $date_req, public $date_need, public $pages_id)
     {
         //
     }
@@ -46,6 +46,7 @@ class MyTestEmail extends Mailable
                 'assignee' => $this->assignee,
                 'date_req' => $this->date_req,
                 'date_need' => $this->date_need,
+                'pages_id' => $this->pages_id,
             ],
         );
     }

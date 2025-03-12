@@ -21,7 +21,7 @@
                             <p>A new request requires your approval:</p>
                             <p><strong>Request Details:</strong></p>
                             <ul>
-                                <li><strong>Rev No:</strong> <a href="{{ url('/AssetAssign/view_rev/'. $rev_num ) }}" target="_blank">{{ $rev_num }}</a> </li>
+                                <li><strong>Rev No:</strong> <a href="{{ url('/AssetAssign/view_rev/'. $rev_num . '/' $pages_id ) }}" target="_blank">{{ $rev_num }}</a> </li>
                                 <li><strong>Assignee:</strong> {{ $assignee }}</li>
                                 <li><strong>Issued By:</strong> {{ $issueby }}</li>
                                 <li><strong>Date Requested:</strong> {{ \Carbon\Carbon::parse($date_req)->format('F j, Y') }}</li>
@@ -31,8 +31,8 @@
                             <table role="presentation" width="100%" align="center">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{ url('/AssetAssign/view_rev/'. $rev_num . '/A' ) }}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: #ffffff; text-decoration: none; border-radius: 5px; margin-right: 10px;">Approve Request</a>
-                                        <a href="{{ url('/AssetAssign/view_rev/'. $rev_num . '/D' ) }}" style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: #ffffff; text-decoration: none; border-radius: 5px;">Reject Request</a>
+                                        <a href="{{ url('/AssetAssign/view_rev/'. $rev_num . '/A' . '/' $pages_id  ) }}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: #ffffff; text-decoration: none; border-radius: 5px; margin-right: 10px;">Approve Request</a>
+                                        <a href="{{ url('/AssetAssign/view_rev/'. $rev_num . '/D' . '/' $pages_id  ) }}" style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: #ffffff; text-decoration: none; border-radius: 5px;">Reject Request</a>
                                     </td>
                                 </tr>
                             </table>

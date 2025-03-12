@@ -104,7 +104,7 @@ if (!function_exists('approvalIssuance')) {
                 $change1->status = "P";
                 $change1->save();
                 $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
-                Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need));
+                Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id));
                 continue;
             }else if($data["status"] === "NA" && $value["increment_num"] > 1 && $data["isNew"] === "N"){
                 $change1 = ApproversStatus::find($data["status_id"]);
@@ -115,7 +115,7 @@ if (!function_exists('approvalIssuance')) {
                     $change1->save();
                     $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
                     // $name = User::find($value["user_id"])->name;
-                    Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need));
+                    Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id));
                     $next_approver =  $name;
                     break;
                 }
