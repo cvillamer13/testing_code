@@ -143,8 +143,10 @@ class EmployeeController extends Controller
                 // $company = Company::all();
                 // $department = Department::all();
                 $position = Position::orderBy('position_name', 'asc')->get();
+
                 $company = Company::orderBy('name', 'asc')->get();
                 $department = Department::orderBy('name', 'asc')->get();
+
                 return view('Employee.edit', [
                     'position' => $position,
                     'gender' => $gender,
