@@ -138,10 +138,13 @@ class EmployeeController extends Controller
 
             if($permissions->isUpdate){
                 $employee = Employee::with(['gender', 'position', 'company', 'department'])->find($id);
-                $position = Position::all();
+                // $position = Position::all();
                 $gender = Gender::all();
-                $company = Company::all();
-                $department = Department::all();
+                // $company = Company::all();
+                // $department = Department::all();
+                $position = Position::orderBy('position_name', 'asc')->get();
+                $company = Company::orderBy('name', 'asc')->get();
+                $department = Department::orderBy('name', 'asc')->get();
                 return view('Employee.edit', [
                     'position' => $position,
                     'gender' => $gender,
