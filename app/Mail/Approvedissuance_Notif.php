@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\AssetIssuance;
 
 class Approvedissuance_Notif extends Mailable
 {
@@ -16,9 +17,10 @@ class Approvedissuance_Notif extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(public $issuance_id)
     {
-        //
+        $issuncance = AssetIssuance::with(['details', 'getEmployee', 'getLocation'])->find($issuance_id);
+        // $this
     }
 
     /**
@@ -37,7 +39,17 @@ class Approvedissuance_Notif extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.approved_issuance',
+            // with: [
+            //     'name' => $this->name,
+            //     'rev_num' => $this->rev_num,
+            //     'issueby' => $this->issueby,
+            //     'assignee' => $this->assignee,
+            //     'date_req' => $this->date_req,
+            //     'date_need' => $this->date_need,
+            //     'pages_id' => $this->pages_id,
+            //     'user_id' => $this->user_id,
+            // ],
         );
     }
 

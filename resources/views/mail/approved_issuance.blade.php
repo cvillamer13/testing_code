@@ -17,19 +17,20 @@
                     </tr>
                     <tr>
                         <td>
-                            <p>Dear {{ $name }},</p>
-                            <p>A your request is Approved:</p>
+                            <p>Dear TEST,</p>
+                            <p>The request has been approved, and you are required to create a gate pass.</p>
                             <p><strong>Request Details:</strong></p>
                             <ul>
-                                <li><strong>Rev No:</strong> <a href="{{ url('/AssetAssign/view_rev/'. $rev_num . '/'. $pages_id .'/'. $user_id ) }}" target="_blank">{{ $rev_num }}</a> </li>
-                                <li><strong>Assignee:</strong> {{ $assignee }}</li>
-                                <li><strong>Issued By:</strong> {{ $issueby }}</li>
-                                <li><strong>Date Requested:</strong> {{ \Carbon\Carbon::parse($date_req)->format('F j, Y') }}</li>
-                                <li><strong>Date Needed:</strong> {{ \Carbon\Carbon::parse($date_need)->format('F j, Y') }}</li>
+                                {{-- <li><strong>Rev No:</strong> <a href="{{ url('/AssetAssign/view_rev/'. $rev_num . '/'. $pages_id .'/'. $user_id ) }}" target="_blank">{{ $rev_num }}</a></li> --}}
+                                <li><strong>Assignee:</strong> lasd,asssd</li>
+                                <li><strong>Issued By:</strong> acasdxasd</li>
+                                <li><strong>Date Requested:</strong> sadxasdasx</li>
+                                <li><strong>Date Needed:</strong> asdasdasdasdas</li>
                             </ul>
-                            <p>Please review and take action using the button below:</p>
-                            <p>If you have any questions, please contact the requestor or support team.</p>
-                            <p style="text-align: center; font-size: 14px; color: #6c757d;">&copy; 2025 __COMPANY. All rights reserved.</p>
+                            <p>Please click the button below to create a gate pass:</p>
+                            <p style="text-align: center;">
+                                <a style="background-color: #1b4fd3; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Create Gate Pass</a>
+                            </p>
                         </td>
                     </tr>
                 </table>

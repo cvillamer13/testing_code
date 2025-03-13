@@ -20,6 +20,7 @@ class ApproversStatus extends Model
         'deletedby',
         'isDelete',
         'deleted_at',
+        'remarks'
     ];
 
     public function user()
@@ -31,5 +32,5 @@ class ApproversStatus extends Model
     {
         return $this->belongsTo(Pages::class, 'pages_id', 'id');
     }
-    
+
 }

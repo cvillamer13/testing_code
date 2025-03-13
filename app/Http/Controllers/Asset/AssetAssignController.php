@@ -13,6 +13,7 @@ use App\Models\ApproversStatus;
 use App\Models\ApproversMatrix;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\Approvedissuance_Notif;
 
 class AssetAssignController extends Controller
@@ -374,7 +375,7 @@ class AssetAssignController extends Controller
                     $asset_issuance->approved_at = now();
                     $asset_issuance->uid = $approval->uid;
                     $asset_issuance->save();
-                    Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id, $value["user_id"]));
+                    Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id));
                     
                 }
 

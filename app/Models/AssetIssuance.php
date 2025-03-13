@@ -32,6 +32,10 @@ class AssetIssuance extends Model
         'is_finalized',
         'finalizedby',
         'finalized_at',
+        'is_outside',
+        'approved_by',
+        'approved_at',
+        'uid',
     ];
 
     protected $casts = [

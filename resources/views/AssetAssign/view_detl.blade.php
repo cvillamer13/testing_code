@@ -316,6 +316,7 @@
                                                 @foreach ($issuance_status as $data)
                                                 <div class="mb-3 col-sm-4 text-center">
                                                     <label for="employee_name" class="form-label"><b>{{  $data->user->name }}</b></label>
+                                                    <p>uid: {{  $data->uid }}</p>
                                                     <br>
 
                                                     @if ($data->user->id == Auth::user()->id && $data->status == 'P')
