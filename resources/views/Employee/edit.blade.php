@@ -22,7 +22,7 @@
                                             <div class="row">
                                                 <div class="mb-3 col-md-3">
                                                     <label class="form-label">Employee number<span class="text-red">*</span></label>
-                                                    <input type4="text" class="form-control" name="emp_no" id="emp_no" value="{{ $employee->emp_no }}" readonly required>
+                                                    <input type4="text" class="form-control" name="emp_no" id="emp_no" value="{{ $employee->emp_no }}">
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">

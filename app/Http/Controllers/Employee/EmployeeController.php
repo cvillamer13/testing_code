@@ -163,6 +163,7 @@ class EmployeeController extends Controller
 
             $request->validate([
                 'f_name' => 'required',
+                'emp_no' => 'required',
                 'l_name' => 'required',
                 'gender_data' => 'required',
                 'email_data' => 'required',
@@ -173,6 +174,7 @@ class EmployeeController extends Controller
             ]);
 
             $emp = Employee::find($id);
+            $emp->emp_no = $request->emp_no;
             $emp->first_name = $request->f_name;
             $emp->middle_name = $request->m_name;
             $emp->last_name = $request->l_name;
