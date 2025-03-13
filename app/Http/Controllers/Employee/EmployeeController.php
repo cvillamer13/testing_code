@@ -20,7 +20,7 @@ class EmployeeController extends Controller
         $permissions = checkingpages();
 
         if($permissions->isView){
-            $employees = Employee::all();
+            $employees = Employee::where('isDelete', '0')->get();
             return view('Employee.view', ['employees' => $employees]);
         }else{
             return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
@@ -209,5 +209,19 @@ class EmployeeController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
 
+    }
+
+    public function delete_soft(Request $request, $id){
+        try {
+            $emp = Employee::find($id);
+            $emp->isDelete = true;
+            $emp->deletedby = session('user_email');
+            $emp->deleted_at = now();
+            $emp->save();
+            // $emp->delete();
+            return redirect()->route('employee.view')->with('success', 'Employee '. $emp->emp_no .' deleted successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 }

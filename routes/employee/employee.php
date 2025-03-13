@@ -10,4 +10,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/getEmployee', [EmployeeController::class, 'get_employee']);
     Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
     Route::post('/edit/{id}', [EmployeeController::class, 'update']);
+    Route::post('/delete/{id}', [EmployeeController::class, 'delete_soft']);
 });

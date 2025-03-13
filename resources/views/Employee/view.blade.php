@@ -29,7 +29,7 @@
                                         <th class="staff_thead_name">Full Name</th>
                                         <th class="staff_thead_email">Email </th>
                                         <th class="staff_thead_status">Status</th>
-                                        <th class="staff_thead_status">Action</th>
+                                        <th class="staff_thead_status" colspan="2">Action</th>
                                         <th class="staff_thead_status">Asset Assigned</th>
                                     </tr>
                                 </thead>
@@ -46,6 +46,17 @@
                                                 {{-- <span class="badge badge-lg badge-outline-danger">Resigned</span> --}}
                                             </td>
                                             <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $employee->id }}"><i class="la la-pencil"></i>Edit</a></td>
+                                            {{-- <td><a class="badge badge-lg badge-danger" id="staff_id_new" href="./delete/{{ $employee->id }}"><i class="las la-trash"></i>delete</a></td> --}}
+                                            <td>
+                                                <form action="./delete/{{ $employee->id}} " method="POST">
+                                                    @csrf
+                                                    {{-- @method('DELETE') --}}
+                                                    <button type="submit" class="badge badge-lg badge-danger">
+                                                        <i class="las la-trash"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            
                                             <td><a class="badge badge-lg badge-success" data-toggle="modal" data-target="#AssetAssigned" id="modal_assign" data-emp_id="{{ $employee->id }}"><i class="las la-eye"></i>view</a></td>
                                         </tr>
                                     @endforeach
