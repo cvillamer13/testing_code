@@ -48,7 +48,7 @@
                                             <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $employee->id }}"><i class="la la-pencil"></i>Edit</a></td>
                                             {{-- <td><a class="badge badge-lg badge-danger" id="staff_id_new" href="./delete/{{ $employee->id }}"><i class="las la-trash"></i>delete</a></td> --}}
                                             <td>
-                                                <form action="./delete/{{ $employee->id}} " method="POST">
+                                                <form action="./delete/{{ $employee->id}} " method="POST" onsubmit="return confirm('Are you sure you want to delete this employee?');">
                                                     @csrf
                                                     {{-- @method('DELETE') --}}
                                                     <button type="submit" class="badge badge-lg badge-danger">
