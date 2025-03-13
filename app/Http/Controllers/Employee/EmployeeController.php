@@ -35,10 +35,15 @@ class EmployeeController extends Controller
         $permissions = checkingpages();
 
         if($permissions->isCreate){
-            $position = Position::all();
+            // $position = Position::all();
+            // $company = Company::all();
+            // $department = Department::all();
+            // $position = Position::all()->groupBy('position_name', 'desc');
+            $position = Position::orderBy('position_name', 'asc')->get();
+            $company = Company::orderBy('name', 'asc')->get();
+            $department = Department::orderBy('name', 'asc')->get();
             $gender = Gender::all();
-            $company = Company::all();
-            $department = Department::all();
+           
             return view('Employee.add', [
                 'position' => $position,
                 'gender' => $gender,
