@@ -190,7 +190,7 @@ if (!function_exists('approvalGatepass')) {
                 }else{
                     $change1->status = "P";
                     $change1->save();
-                    $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
+                    // $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
                     // $name = User::find($value["user_id"])->name;
                     Mail::to("christian.villamer@jakagroup.com")->send(new ApprovalgatepassNotification($gatepass_id, $pages_id, $value["user_id"]));
                     $next_approver =  $name;

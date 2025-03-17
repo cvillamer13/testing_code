@@ -543,7 +543,7 @@
                             var id = document.getElementById("gatepass_id_data").value;
                             $.ajax({
                                 type: "POST",
-                                url: "/AssetAssign/approvers",
+                                url: "/Gatepass/approvers",
                                 data: {
                                     "_token": '{{ csrf_token() }}',
                                     "appr_id": appr_id,

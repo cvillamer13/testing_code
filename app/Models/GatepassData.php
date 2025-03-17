@@ -31,6 +31,9 @@ class GatepassData extends Model
         'isDelete',
         'finalizedby',
         'finalize_at',
-        'is_finalized'
+        'is_finalized',
+        'approved_status',
+        'approved_at',
+        'approved_by'
     ];
 }

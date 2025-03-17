@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Models\Location;
 use App\Models\ApproversStatus;
 use Illuminate\Support\Str;
+use App\Models\ApproversMatrix;
 
 class GatePassController extends Controller
 {
@@ -139,7 +140,7 @@ class GatePassController extends Controller
 
     function to_approvers(Request $request){
         try {
-            $gatepass_data = GatePassData::find($request->asset_iss_id);
+            $gatepass_data = GatePassData::find($request->gatepass_id);
             if ($request->status == "A") {
                 $approval = ApproversStatus::find($request->appr_id);
                 $approval->status = $request->status;
@@ -148,7 +149,7 @@ class GatePassController extends Controller
 
                 // $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
                 $approver = approvalGatepass($gatepass_data->id, 4, 14);
-                $data_of_approvers = ApproversMatrix::where('user_id', $approval->user_id)->where('type_of_process', 14)->first();
+                $data_of_approvers = ApproversMatrix::where('user_id', $approval->user_id)->where('type_of_process', 4)->first();
 
                 if($data_of_approvers->increment_num == "FA"){
                     $gatepass_data->approved_status = "A";
@@ -156,7 +157,8 @@ class GatePassController extends Controller
                     $gatepass_data->approved_at = now();
                     $gatepass_data->uid_final_approver = $approval->uid;
                     $gatepass_data->save();
-                    // Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id, $gatepass->id));
+                    // next this
+                    // Mail::to($gatepass_data->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id, $gatepass->id));
 
                     
 
