@@ -18,5 +18,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/finalize', [AssetAssignController::class, 'to_finalize']);
     Route::get('/view_rev/{rev_num}/{page_id}/{user_id}', [AssetAssignController::class, 'view_rev_approval']);
     Route::post('/approvers', [AssetAssignController::class, 'to_approvers']);
-    
+    Route::get('/issuance_pdf/{id}', [AssetAssignController::class, 'issuance_pdf']);
 });

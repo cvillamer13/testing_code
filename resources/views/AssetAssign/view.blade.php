@@ -40,12 +40,12 @@
                                             </span> --}}
                                         </td>
                                         <td> 
-                                            @if ($issu->status == 'A')
+                                            @if ($issu->approved_status == 'A')
                                                 <div class="alert alert-success" role="alert">
                                                     Approved
                                                 </div>
                                                 
-                                            @elseif($issu->status == 'R')
+                                            @elseif($issu->approved_status == 'R')
                                                 <div class="alert alert-danger" role="alert">
                                                     Rejected
                                                 </div>

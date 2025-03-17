@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-            {{ __('Employee Maintenance') }}
+            {{ __('Asset Issuance') }}
     </x-slot>
         <div class="container-fluid">
             <div class="row">
                 
                 <div class="col-xl-12">
                     <div class="card-header">
-                        <h4 class="card-title col-6">Add Employees</h4>
+                        <h4 class="card-title col-6">Add Issuance</h4>
                     </div>
                     <div class="card py-3 px-3">
                         <div class="card-body">

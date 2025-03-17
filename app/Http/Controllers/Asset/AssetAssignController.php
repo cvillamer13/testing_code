@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Approvedissuance_Notif;
+use App\Models\GatePassData;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AssetAssignController extends Controller
 {
@@ -375,8 +377,23 @@ class AssetAssignController extends Controller
                     $asset_issuance->approved_at = now();
                     $asset_issuance->uid = $approval->uid;
                     $asset_issuance->save();
-                    Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id));
+
+                    $gatepass = new GatePassData();
+                    $gatepass->uid = Str::uuid();
+                    $gatepass->data_id = $asset_issuance->id;
+                    $gatepass->module_from = "issuance";
+                    $gatepass->to_location = $asset_issuance->location_id;
+                    $gatepass->createdby = session('user_email');
+                    $gatepass->created_at = now();
+                    $gatepass->save();
+                    Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id, $gatepass->id));
+
                     
+
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Issuanace Approved Successfully the Issuance Requestor will be notify to create gatepass'
+                    ], 200);
                 }
 
                 return response()->json([
@@ -421,6 +438,14 @@ class AssetAssignController extends Controller
                 'message' => $th->getMessage()
             ], 400);
         }
+
+    }
+
+
+    function issuance_pdf($id){
+        // $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep', ['data' => $data]);
+        $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep');
+        return $pdf->setPaper('letter', 'portrait')->stream(); 
 
     }
 }

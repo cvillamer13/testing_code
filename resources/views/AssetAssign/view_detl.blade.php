@@ -12,10 +12,24 @@
                     <div class="card py-3 px-3">
                         <div class="card-body">
                             <div class="form-validation">
-                                @if ($asset_issuance->is_finalized)
+                                @if ($asset_issuance->is_finalized && $asset_issuance->approved_status == "P")
                                     <div class="alert alert-success text-center" role="alert">
                                         This issuance is already finalized.
                                     </div>
+                                @elseif ($asset_issuance->approved_status == "A")
+                                <div class="row">
+                                    <div class="card-title col-6">
+                                        <a type="button" class="btn btn-outline-success" href="/AssetAssign/issuance_pdf/{{ $asset_issuance->id }}"  target="_blank"><i class="las la-print"></i>Print Issuance</a>
+                                        <button type="button" class="btn btn-outline-primary"><i class="las la-print"></i>Print Gatepass</button>
+                                    </div>
+                                    {{-- <div class="card-title col-6 text-end">
+                                        <a class="btn btn-rounded btn-info" href="./add" data-target="#exampleModal">
+                                            Add Employee
+                                            <span class="btn-icon-start text-info"><i class="fa fa-plus color-info"></i>
+                                            </span>
+                                        </a>
+                                    </div> --}}
+                                </div>
                                 @endif
                                 {{-- <form class="needs-validation" action="{{ Route('AssetAssign.add') }}" method="post" enctype="multipart/form-data"> --}}
                                     @csrf
@@ -1365,7 +1379,7 @@
                 let user_id = $(this).attr("data-user_id");
                 let status = $(this).attr("data-status");
                 let asset_iss_id = $(this).attr("data-asset_iss_id");
-                
+                // Swal.showLoading();
 
                 Swal.fire({
                     title: "Do you want to approved issuance?",
@@ -1377,28 +1391,59 @@
                     denyButtonText: `Cancel`
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.showLoading();
-                    var id = document.getElementById("issuance_id").value;
-                    $.ajax({
-                        type: "POST",
-                        url: "/AssetAssign/approvers",
-                        data: {
-                            "_token": '{{ csrf_token() }}',
-                            "appr_id": appr_id,
-                            "user_id": user_id,
-                            "status": status,
-                            "asset_iss_id": asset_iss_id
-                        },
-                        success: function (response) {
-                            swal.close();
-                            toastr.success(response.message);
-                            location.reload();
-                        },
-                        error: function (error) {
-                            console.log(error)
-                            toastr.error("Error: " + error.responseJSON.message);
+                    // Swal.close();
+                    // Swal.showLoading();
+                    Swal.fire({
+                        title: "Processing...",
+                        text: "Please wait while the issuance is being approved.",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                            var id = document.getElementById("issuance_id").value;
+                            $.ajax({
+                                type: "POST",
+                                url: "/AssetAssign/approvers",
+                                data: {
+                                    "_token": '{{ csrf_token() }}',
+                                    "appr_id": appr_id,
+                                    "user_id": user_id,
+                                    "status": status,
+                                    "asset_iss_id": asset_iss_id
+                                },
+                                success: function (response) {
+                                    // Swal.close();
+                                    toastr.success(response.message);
+                                    location.reload();
+                                },
+                                error: function (error) {
+                                    console.log(error)
+                                    toastr.error("Error: " + error.responseJSON.message);
+                                }
+                            });
                         }
                     });
+                    
+                    // $.ajax({
+                    //     type: "POST",
+                    //     url: "/AssetAssign/approvers",
+                    //     data: {
+                    //         "_token": '{{ csrf_token() }}',
+                    //         "appr_id": appr_id,
+                    //         "user_id": user_id,
+                    //         "status": status,
+                    //         "asset_iss_id": asset_iss_id
+                    //     },
+                    //     success: function (response) {
+                    //         Swal.close();
+                    //         toastr.success(response.message);
+                    //         location.reload();
+                    //     },
+                    //     error: function (error) {
+                    //         console.log(error)
+                    //         toastr.error("Error: " + error.responseJSON.message);
+                    //     }
+                    // });
                     
                     // Swal.fire("Saved!", "", "success");
                     

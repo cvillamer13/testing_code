@@ -31,8 +31,13 @@
                                 <tbody>
                                     <tr>
                                         <td>IT Asset</td>
-                                        <td><a class="badge badge-lg badge-success" data-toggle="modal" data-target="#modal_assign" id="IT_Asset" data-type_process="3"><i class="las la-eye"></i>view</a></td>
+                                        <td><a class="badge badge-lg badge-success" data-toggle="modal" data-target="#modal_assign" id="IT_Asset" data-type_process="3" onclick="dataTypeOfprocees(3)"><i class="las la-eye"></i>view</a></td>
                                     </tr>
+                                    <tr>
+                                        <td>IT Gatepass</td>
+                                        <td><a class="badge badge-lg badge-success" data-toggle="modal" data-target="#modal_assign" id="IT_gatepass" data-type_process="4" onclick="dataTypeOfprocees(4)"><i class="las la-eye"></i>view</a></td>
+                                    </tr>
+
                                     <tr>
                                         <td>Fixed Asset</td>
                                         <td><a class="badge badge-lg badge-error" data-toggle="modal" data-target="#modal_assign" id="view_assign" data-asset_id="2" @disabled(true)><i class="las la-eye"></i>view</a></td>
@@ -57,6 +62,7 @@
             <div class="modal-body">
             <form action="/Approvers/add" method="post" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="process_id" id="process_id">
                 <div id="approver_container">
                     
                         <div class="row approver-row" id="data_row">
@@ -123,6 +129,10 @@
 
 
 <script>
+    function dataTypeOfprocees(id){
+        document.getElementById("process_id").value = id;
+    }
+// process_id
     function ordinal_suffix_of(i) {
         let j = i % 10,
             k = i % 100;
@@ -224,6 +234,94 @@
     });
 });
 
+
+$(document).on("click", "#IT_gatepass", function () {
+        var data_process = $(this).attr("data-type_process");
+
+        $.ajax({
+            type: "POST",
+            url: "/Approvers/getApprovers",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                process_id: data_process
+            },
+            success: function (response) {
+                console.log(response)
+                if(response.message.length > 0){
+                    let datasrt = ``;
+
+                    var x = 0;
+                response.message.forEach((data)=>{
+                    datasrt+= `<div class="row approver-row" id="data_row">`;
+                        datasrt+= `<div class="mb-3 col-md-3">`;
+                            datasrt+= `<label class="col-form-label">User<span class="text-red">*</span></label>`
+                            datasrt+= `        <select class="form-control" id="user_id" name="user_id[]">`
+                            datasrt+= `            @foreach ($user as $us )`
+                            var data_id_user = '{{ $us->id }}';
+                            if(data_id_user == data.user_id){
+                                    datasrt+= `<option value="{{ $us->id }}" selected>{{ $us->name }}</option>`;
+                            }else {
+                                datasrt+= `<option value="{{ $us->id }}">{{ $us->name }}</option>`;
+                            }
+                        
+                            datasrt+= `            @endforeach`
+                            datasrt+= `        </select>`
+                        datasrt+= `</div>`;
+                            
+                        datasrt+= `<div class="mb-3 col-md-2">`;
+                            datasrt+= `    <label class="col-form-label">Company<span class="text-red">*</span></label>`;
+                            datasrt+= `    <select class="form-control company" name="company_id[]" onchange="getDepartment(this)">`;
+                            datasrt+= `        <option value="all">All</option>`;
+                            datasrt+= `        @foreach ($company as $com )`;
+                            
+                            if('{{ $com->id }}' == data.company_id){
+                                datasrt+= `<option value="{{ $com->id }}" selected>{{ $com->name }}</option>`;
+                            }else{
+                                datasrt+= `<option value="{{ $com->id }}">{{ $com->name }}</option>`;
+                            }
+                            datasrt+= `        @endforeach`;
+                            datasrt+= `    </select>`;
+                        datasrt+= `</div>`;
+                        
+                        datasrt+= `<div class="mb-3 col-md-2">`;
+                            datasrt+= `    <label class="col-form-label">Department<span class="text-red">*</span></label>`;
+                            datasrt+= `    <select class="form-control department" name="departmen_id[]" id="departmen_id`+x+`">`;
+                            datasrt+= `        <option value="all">All</option>`;
+                            datasrt+= `    </select>`;
+                        datasrt+= `</div>`;
+
+                        datasrt+= `<div class="mb-3 col-md-3">`;
+                            datasrt+= `    <label class="col-form-label">Sequence of approvals<span class="text-red">*</span></label>`;
+                            datasrt+= `    <select class="form-control sequence" id="seq_num" name="seq_num[]">`;
+                            datasrt+= `        <option value="0" selected>1st Approver</option>`;
+                            datasrt+= `        <option value="FA">Final Approver</option>`;
+                            datasrt+= `    </select>`;
+                        datasrt+= `</div>`;
+
+                        datasrt+= `<div class="mb-3 col-md-2">`;
+                            datasrt+= `    <label class="col-form-label">Remove row</label>`;
+                            datasrt+= `    <button type="button" class="btn btn-danger remove-row">Remove</button>`;
+                        datasrt+= `</div>`;
+                    datasrt+= `</div>`;
+
+                    getDepartment_edit(data.company_id,x);
+                    x++;
+                })
+                
+                document.getElementById("data_row").innerHTML =  datasrt;
+            }
+                }
+                
+        });
+
+        // $(document).on("click", ".remove-row", function() {
+        //     console.log($(".approver-row").length)
+        //         if ($(".approver-row").length > 1) { // Ensure at least one row remains
+        //             $(this).closest(".approver-row").remove();
+        //         }
+        //     });
+        console.log(data_process)
+    });
 
 
 $(document).on("click", "#IT_Asset", function () {

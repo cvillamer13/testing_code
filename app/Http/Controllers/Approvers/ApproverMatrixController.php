@@ -31,6 +31,7 @@ class ApproverMatrixController extends Controller
         try {
             // echo "<pre>";
             // print_r($request->all());
+            // exit;
 
 
             for ($i=0; $i <= count($request->user_id)-1 ; $i++) { 
@@ -40,7 +41,7 @@ class ApproverMatrixController extends Controller
                 $app->increment_num = $request->seq_num[$i];
                 $app->company_id = $request->company_id[$i];
                 $app->department_id = $request->departmen_id[$i];
-                $app->type_of_process = 3;
+                $app->type_of_process = $request->process_id;
                 $app->createdby = session('user_email');
                 $app->updatedby = session('user_email');
                 $app->save();

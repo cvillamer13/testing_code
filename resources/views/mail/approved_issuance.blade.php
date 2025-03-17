@@ -17,19 +17,40 @@
                     </tr>
                     <tr>
                         <td>
-                            <p>Dear TEST,</p>
+                            <p>Dear {{ $issueby }},</p>
                             <p>The request has been approved, and you are required to create a gate pass.</p>
                             <p><strong>Request Details:</strong></p>
                             <ul>
                                 {{-- <li><strong>Rev No:</strong> <a href="{{ url('/AssetAssign/view_rev/'. $rev_num . '/'. $pages_id .'/'. $user_id ) }}" target="_blank">{{ $rev_num }}</a></li> --}}
-                                <li><strong>Assignee:</strong> lasd,asssd</li>
-                                <li><strong>Issued By:</strong> acasdxasd</li>
-                                <li><strong>Date Requested:</strong> sadxasdasx</li>
-                                <li><strong>Date Needed:</strong> asdasdasdasdas</li>
+                                <li><strong>Rev No:</strong> <a>{{ $rev_num }}</a></li>
+                                <li><strong>Assignee:</strong> {{ $assignee }}</li>
+                                {{-- <li><strong>Issued By:</strong> {{ $issueby }}</li> --}}
+                                <li><strong>Date Requested:</strong> {{ \Carbon\Carbon::parse($date_req)->format('F j, Y') }}</li>
+                                <li><strong>Date Needed:</strong> {{ \Carbon\Carbon::parse($date_need)->format('F j, Y') }}</li>
                             </ul>
                             <p>Please click the button below to create a gate pass:</p>
                             <p style="text-align: center;">
-                                <a style="background-color: #1b4fd3; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Create Gate Pass</a>
+                                {{-- <a style="background-color: hsl(123, 100%, 50%); color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;" href="{{ url("/Gatepass/data/".$gatepass_id) }}" target="_blank">Create Gate Pass</a> --}}
+                                <a href="{{ url('/Gatepass/data/'.$gatepass_id) }}" target="_blank"
+                                    style="
+                                        display: inline-flex;
+                                        align-items: center;
+                                        background-color: #28a745; /* Green color */
+                                        color: white;
+                                        padding: 12px 24px;
+                                        text-decoration: none;
+                                        border-radius: 8px;
+                                        font-size: 16px;
+                                        font-weight: bold;
+                                        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+                                        transition: all 0.3s ease-in-out;
+                                    "
+                                    onmouseover="this.style.backgroundColor='#218838'"
+                                    onmouseout="this.style.backgroundColor='#28a745'"
+                                    >
+                                    <i class="fas fa-door-open" style="margin-right: 8px;"></i> Create Gate Pass
+                                    </a>
+
                             </p>
                         </td>
                     </tr>

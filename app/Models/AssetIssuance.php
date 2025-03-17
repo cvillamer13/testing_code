@@ -47,6 +47,12 @@ class AssetIssuance extends Model
         return $this->hasMany(AssetIssuanceDetl::class, 'issuance_main_id');
     }
 
+    public function assetDetails()
+    {
+        return $this->hasManyThrough(Asset::class, AssetIssuanceDetl::class, 'issuance_main_id', 'id', 'id', 'asset_id');
+    }
+
+
     function getEmployee()
     {
         return $this->belongsTo(Employee::class, 'emp_id');

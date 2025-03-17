@@ -71,6 +71,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->prefix('Approvers')
                 ->group(base_path('routes/approval_matrix/approval_matrix.php'));
+
+            Route::middleware('web')
+                ->prefix('Gatepass')
+                ->group(base_path('routes/gatepass/gatepass.php'));
                 
         });
     }
