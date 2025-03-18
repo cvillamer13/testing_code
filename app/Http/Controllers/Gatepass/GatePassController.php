@@ -12,6 +12,9 @@ use App\Models\Location;
 use App\Models\ApproversStatus;
 use Illuminate\Support\Str;
 use App\Models\ApproversMatrix;
+use Illuminate\Support\Facades\Auth;
+use App\Mail\ReleaseGatePass;
+use Illuminate\Support\Facades\Mail;
 
 class GatePassController extends Controller
 {
@@ -34,6 +37,8 @@ class GatePassController extends Controller
                 $from_location = Location::with(['company','department'])->find($data->from_location);
                 $to_location = Location::with(['company','department'])->find($data->to_location);
                 $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->get();
+                $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', Auth::user()->id)->first();
+
                 // echo "<pre>";
                 // print_r($gatepasss_status);
                 // exit;
@@ -43,7 +48,9 @@ class GatePassController extends Controller
                     'companies' => $companies,
                     'from_location' => $from_location,
                     'to_location' => $to_location,
-                    'gatepasss_status' => $gatepasss_status
+                    'gatepasss_status' => $gatepasss_status,
+                    'status' => "P",
+                    'gatepasss_status_each' => $gatepasss_status_each,
                 ]);
             break;
             
@@ -59,6 +66,102 @@ class GatePassController extends Controller
         //     'data' => $data
         // ]);
     }
+
+    public function view_rev($id, $page_id, $user_id){
+        try {
+            // print_r($user_id);
+            // exit;
+            if (Auth::user()->id == $user_id) {
+                # code...
+                
+                $data = GatePassData::find($id);
+                $companies = Company::all();
+
+                switch ($data->module_from) {
+                    case 'issuance':
+                        $data_show = AssetIssuance::with(['details', 'getEmployee', 'getLocation', 'assetDetails'])->find($data->data_id);
+                        $from_location = Location::with(['company','department'])->find($data->from_location);
+                        $to_location = Location::with(['company','department'])->find($data->to_location);
+                        $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->get();
+                        $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', $user_id)->first();
+
+                        // echo "<pre>";
+                        // print_r($gatepasss_status);
+                        // exit;
+                        return view('Gatepass.gatepass_issuance', [
+                            'data_gatepass' => $data,
+                            'data_issuance' => $data_show,
+                            'companies' => $companies,
+                            'from_location' => $from_location,
+                            'to_location' => $to_location,
+                            'gatepasss_status' => $gatepasss_status,
+                            'status' => "P",
+                            'gatepasss_status_each' => $gatepasss_status_each,
+                        ]);
+                    break;
+                    
+                    default:
+                        $data = GatePassData::find($id);
+                    break;
+                } 
+
+
+            }else {
+                return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+
+    public function view_rev_approvers($id, $status, $page_id, $user_id){
+        try {
+            // print_r($user_id);
+            // exit;
+            if (Auth::user()->id == $user_id) {
+                # code...
+                
+                $data = GatePassData::find($id);
+                $companies = Company::all();
+
+                switch ($data->module_from) {
+                    case 'issuance':
+                        $data_show = AssetIssuance::with(['details', 'getEmployee', 'getLocation', 'assetDetails'])->find($data->data_id);
+                        $from_location = Location::with(['company','department'])->find($data->from_location);
+                        $to_location = Location::with(['company','department'])->find($data->to_location);
+                        $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->get();
+                        $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', $user_id)->first();
+                        // echo "<pre>";
+                        // print_r($gatepasss_status_each);
+                        // exit;
+                        return view('Gatepass.gatepass_issuance', [
+                            'data_gatepass' => $data,
+                            'data_issuance' => $data_show,
+                            'companies' => $companies,
+                            'from_location' => $from_location,
+                            'to_location' => $to_location,
+                            'gatepasss_status' => $gatepasss_status,
+                            'status' => $status,
+                            'gatepasss_status_each' => $gatepasss_status_each,
+                        ]);
+                    break;
+                    
+                    default:
+                        $data = GatePassData::find($id);
+                    break;
+                } 
+
+
+            }else {
+                return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    
 
     public function gatepass_add(Request $request,$id){
         try {
@@ -158,7 +261,7 @@ class GatePassController extends Controller
                     $gatepass_data->uid_final_approver = $approval->uid;
                     $gatepass_data->save();
                     // next this
-                    // Mail::to($gatepass_data->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id, $gatepass->id));
+                    Mail::to($gatepass_data->finalizedby)->send(new ReleaseGatePass($gatepass_data->id));
 
                     
 

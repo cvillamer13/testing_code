@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\GatepassData;
 use App\Models\AssetIssuance;
 use App\Models\User;
+use App\Models\Location;
 
 class ApprovalgatepassNotification extends Mailable
 {
@@ -21,15 +22,23 @@ class ApprovalgatepassNotification extends Mailable
     public $data;
     public $name;
     public $created_date;
+    public $gatepass_id_dta;
+    public $location_from_data;
+    public $location_to_data;
     // public $pages_id;
     public function __construct(public $gatepass_id, public $pages_id, public $user_id)
     {
         $gatepass_data = GatepassData::find($gatepass_id);
+        $this->gatepass_id_dta = $gatepass_id;
         $this->subject = "Approval Request for Gate Pass No: " . $gatepass_data->gatepass_no;
         $this->gatepass_no = $gatepass_data->gatepass_no;
         $this->created_date = $gatepass_data->created_at;
         $user_data = User::find($user_id);
         $this->name = $user_data->name;
+        $from_location = Location::with(['company','department'])->find($gatepass_data->from_location);
+        $to_location = Location::with(['company','department'])->find($gatepass_data->to_location);
+        $this->location_from_data = $from_location;
+        $this->location_to_data = $to_location;
         switch ($gatepass_data->module_from) {
             case 'issuance':
                 $data_used = AssetIssuance::with(['details', 'assetDetails', 'getLocation'])->find($gatepass_data->data_id);
@@ -67,6 +76,9 @@ class ApprovalgatepassNotification extends Mailable
                 'data' => $this->data,
                 'name' => $this->name,
                 'created_date' => $this->created_date,
+                'gatepass_id_dta' => $this->gatepass_id_dta,
+                'from_location' => $this->location_from_data,
+                'to_location' => $this->location_to_data
             ],
         );
     }

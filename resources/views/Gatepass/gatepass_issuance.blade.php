@@ -371,7 +371,7 @@
                         </div>
                     </form>
                     
-                    
+                    <input type="hidden" name="staus_data_link" id="staus_data_link" value="{{ $status }}">
                 </div>
             </div>
         </div>
@@ -427,8 +427,116 @@
                 });
             }
 
+
+            function gt_autoApproved(){
+                const staus_data_link = document.getElementById("staus_data_link").value;
+                if(staus_data_link == "A" && "{{ $gatepasss_status_each->status }}" == "P"){
+                    Swal.fire({
+                        title: "Do you want to approved gatepass?",
+                        text: "Once approved, you will not be able to make changes and send the gatepass to the next approvers",
+                        icon: "warning",
+                        allowOutsideClick: false,
+                        // allowEscapeKey: false,
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: "Aprroved",
+                        denyButtonText: `Cancel`
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Processing...",
+                                text: "Please wait while the gatepass is being approved.",
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                    var gatepass_id = document.getElementById("gatepass_id_data").value;
+                                    var user_id = "{{ Auth::user()->id }}";
+                                    var status = "A";
+                                    var appr_id = "{{ $gatepasss_status_each->id }}"
+                                    console.log("data",appr_id)
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Gatepass/approvers",
+                                        data: {
+                                            "_token": '{{ csrf_token() }}',
+                                            "appr_id": appr_id,
+                                            "user_id": user_id,
+                                            "status": status,
+                                            "gatepass_id": gatepass_id
+                                        },
+                                        success: function (response) {
+                                            // Swal.close();
+                                            toastr.success(response.message);
+                                            location.reload();
+                                        },
+                                        error: function (error) {
+                                            console.log(error)
+                                            toastr.error("Error: " + error.responseJSON.message);
+                                        }
+                                    });
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            Swal.fire("Changes are not saved", "", "info");
+                        }
+                    });
+                } else if(staus_data_link == "R" && "{{ $gatepasss_status_each->status }}" == "P"){
+                    Swal.fire({
+                        title: "Do you want to Reject gatepass?",
+                        text: "Once reject, you will not be able to make changes.",
+                        icon: "error",
+                        allowOutsideClick: false,
+                        // allowEscapeKey: false,
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: "Reject",
+                        denyButtonText: `Cancel`
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Processing...",
+                                text: "Please wait while the gatepass is being reject.",
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                    var gatepass_id = document.getElementById("gatepass_id_data").value;
+                                    var user_id = "{{ Auth::user()->id }}";
+                                    var status = "R";
+                                    var appr_id = "{{ $gatepasss_status_each->id }}"
+                                    console.log("data",appr_id)
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Gatepass/approvers",
+                                        data: {
+                                            "_token": '{{ csrf_token() }}',
+                                            "appr_id": appr_id,
+                                            "user_id": user_id,
+                                            "status": status,
+                                            "gatepass_id": gatepass_id
+                                        },
+                                        success: function (response) {
+                                            // Swal.close();
+                                            toastr.success(response.message);
+                                            location.reload();
+                                        },
+                                        error: function (error) {
+                                            console.log(error)
+                                            toastr.error("Error: " + error.responseJSON.message);
+                                        }
+                                    });
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            Swal.fire("Changes are not saved", "", "info");
+                        }
+                    });
+                }
+            }
+
             $(document).ready(function() {
-                
+                gt_autoApproved();
                 $('#from_company').on('change', function() {
                     getDepartment('from_company', 'from_department');
                 })

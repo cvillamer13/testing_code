@@ -181,7 +181,7 @@ if (!function_exists('approvalGatepass')) {
                 $change1 = ApproversStatus::find($data["status_id"]);
                 $change1->status = "P";
                 $change1->save();
-                Mail::to("christian.villamer@jakagroup.com")->send(new ApprovalgatepassNotification($gatepass_id, $pages_id, $value["user_id"]));
+                Mail::to($email)->send(new ApprovalgatepassNotification($gatepass_id, $pages_id, $value["user_id"]));
                 continue;
             }else if($data["status"] === "NA" && $value["increment_num"] > 1 && $data["isNew"] === "N"){
                 $change1 = ApproversStatus::find($data["status_id"]);
@@ -192,7 +192,7 @@ if (!function_exists('approvalGatepass')) {
                     $change1->save();
                     // $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
                     // $name = User::find($value["user_id"])->name;
-                    Mail::to("christian.villamer@jakagroup.com")->send(new ApprovalgatepassNotification($gatepass_id, $pages_id, $value["user_id"]));
+                    Mail::to($email)->send(new ApprovalgatepassNotification($gatepass_id, $pages_id, $value["user_id"]));
                     $next_approver =  $name;
                     break;
                 }

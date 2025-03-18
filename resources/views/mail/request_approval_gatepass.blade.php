@@ -21,11 +21,39 @@
                             <p>A new request requires your approval:</p>
                             <p><strong>Request Details:</strong></p>
                             <ul>
-                                <li><strong>Gatepass No:</strong> <a href="{{ url('/Gatepass/view_rev/'. $gate_pass_no . '/'. $pages_id .'/'. $user_id ) }}" target="_blank">{{ $gate_pass_no }}</a> </li>
+                                <li><strong>Gatepass No:</strong> <a href="{{ url('/Gatepass/view_rev/'. $gatepass_id_dta . '/'. $pages_id .'/'. $user_id ) }}" target="_blank">{{ $gate_pass_no }}</a> </li>
                                 {{-- <li><strong>Requested Date:</strong> {{ $created_date }}</li> --}}
                                 <li><strong>Requested Date:</strong> {{ \Carbon\Carbon::parse($created_date)->format('F j, Y') }}</li>
 
                             </ul>
+                            <table width="100%" style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; text-align: center;" border="1">
+                                <thead>
+                                    <tr style="background-color: #343a40; color: white;">
+                                        <td colspan="3">From</td>
+                                        <td colspan="3">To</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Company</td>
+                                        <td>Department</td>
+                                        <td>Location</td>
+                                        <td>Company</td>
+                                        <td>Department</td>
+                                        <td>Location</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{ $from_location->company->name }}</td>
+                                        <td>{{ $from_location->department->name }}</td>
+                                        <td>{{ $from_location->name }}</td>
+                                        <td>{{ $to_location->company->name }}</td>
+                                        <td>{{ $to_location->department->name }}</td>
+                                        <td>{{ $to_location->name }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr>
                             <table role="presentation" width="100%" style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px; text-align: center;">
                                 <thead>
                                     <tr style="background-color: #343a40; color: white;">
@@ -49,8 +77,8 @@
                             <table role="presentation" width="100%" align="center">
                                 <tr>
                                     <td align="center">
-                                        <a href="{{ url('/Gatepass/view_rev/'. $gate_pass_no . '/A' . '/'. $pages_id  .'/'. $user_id ) }}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: #ffffff; text-decoration: none; border-radius: 5px; margin-right: 10px;">Approve Request</a>
-                                        <a href="{{ url('/Gatepass/view_rev/'. $gate_pass_no . '/D' . '/'. $pages_id  .'/'. $user_id ) }}" style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: #ffffff; text-decoration: none; border-radius: 5px;">Reject Request</a>
+                                        <a href="{{ url('/Gatepass/view_rev_approvers/'. $gatepass_id_dta . '/A' . '/'. $pages_id  .'/'. $user_id ) }}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: #ffffff; text-decoration: none; border-radius: 5px; margin-right: 10px;">Approve Request</a>
+                                        <a href="{{ url('/Gatepass/view_rev_approvers/'. $gatepass_id_dta . '/D' . '/'. $pages_id  .'/'. $user_id ) }}" style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: #ffffff; text-decoration: none; border-radius: 5px;">Reject Request</a>
                                     </td>
                                 </tr>
                             </table>
