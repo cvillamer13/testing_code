@@ -1412,7 +1412,7 @@
                                     "asset_iss_id": asset_iss_id
                                 },
                                 success: function (response) {
-                                    // Swal.close();
+                                    
                                     toastr.success(response.message);
                                     location.reload();
                                 },

@@ -367,7 +367,7 @@ class AssetAssignController extends Controller
                 $approval->uid = Str::uuid(); //generate uuid
                 $approval->save();
 
-                $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
+                // $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
                 
                 $data_of_approvers = ApproversMatrix::where('user_id', $approval->user_id)->where('type_of_process', 3)->first();
 
@@ -389,11 +389,12 @@ class AssetAssignController extends Controller
                     Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id, $gatepass->id));
 
                     
-
+                    // print_r($asset_issuance);
+                    // exit;
                     return response()->json([
                         'status' => 'success',
                         'message' => 'Issuanace Approved Successfully the Issuance Requestor will be notify to create gatepass'
-                    ], 200);
+                    ], 400);
                 }
 
                 return response()->json([
@@ -433,10 +434,17 @@ class AssetAssignController extends Controller
                 'message' => 'Send to Approver Successfully'
             ], 200);
         } catch (\Throwable $th) {
+            // return response()->json([
+            //     'status' => 'error',
+            //     'message' => $th->getMessage()
+            // ], 400);
             return response()->json([
                 'status' => 'error',
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine()
             ], 400);
+            
         }
 
     }
