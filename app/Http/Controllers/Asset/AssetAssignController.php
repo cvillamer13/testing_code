@@ -11,11 +11,12 @@ use App\Models\Employee;
 use App\Models\Asset;
 use App\Models\ApproversStatus;
 use App\Models\ApproversMatrix;
+use App\Models\GatePassData;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Approvedissuance_Notif;
-use App\Models\GatePassData;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class AssetAssignController extends Controller
