@@ -395,7 +395,7 @@ class AssetAssignController extends Controller
                     return response()->json([
                         'status' => 'success',
                         'message' => 'Issuanace Approved Successfully the Issuance Requestor will be notify to create gatepass'
-                    ], 400);
+                    ], 200);
                 }
 
                 return response()->json([
