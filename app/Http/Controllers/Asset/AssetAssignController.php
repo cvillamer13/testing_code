@@ -11,7 +11,7 @@ use App\Models\Employee;
 use App\Models\Asset;
 use App\Models\ApproversStatus;
 use App\Models\ApproversMatrix;
-use App\Models\GatePassData;
+use App\Models\GatepassData;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
@@ -379,7 +379,7 @@ class AssetAssignController extends Controller
                     $asset_issuance->uid = $approval->uid;
                     $asset_issuance->save();
 
-                    $gatepass = new GatePassData();
+                    $gatepass = new GatepassData();
                     $gatepass->uid = Str::uuid();
                     $gatepass->data_id = $asset_issuance->id;
                     $gatepass->module_from = "issuance";

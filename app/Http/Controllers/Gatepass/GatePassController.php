@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Gatepass;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AssetIssuance; 
-use App\Models\GatePassData;
+use App\Models\GatepassData;
 use App\Models\Company;
 use Carbon\Carbon;
 use App\Models\Location;
@@ -25,7 +25,7 @@ class GatePassController extends Controller
 
     public function gatepass_view($id)
     {
-        $data = GatePassData::find($id);
+        $data = GatepassData::find($id);
         $companies = Company::all();
         // if($data->module_from == "issuance") {
         //     $data_show = AssetIssuance::with(['details', 'getEmployee', 'getLocation'])->find($data->data_id);
@@ -55,7 +55,7 @@ class GatePassController extends Controller
             break;
             
             default:
-                $data = GatePassData::find($id);
+                $data = GatepassData::find($id);
             break;
         }
         
@@ -74,7 +74,7 @@ class GatePassController extends Controller
             if (Auth::user()->id == $user_id) {
                 # code...
                 
-                $data = GatePassData::find($id);
+                $data = GatepassData::find($id);
                 $companies = Company::all();
 
                 switch ($data->module_from) {
@@ -101,7 +101,7 @@ class GatePassController extends Controller
                     break;
                     
                     default:
-                        $data = GatePassData::find($id);
+                        $data = GatepassData::find($id);
                     break;
                 } 
 
@@ -122,7 +122,7 @@ class GatePassController extends Controller
             if (Auth::user()->id == $user_id) {
                 # code...
                 
-                $data = GatePassData::find($id);
+                $data = GatepassData::find($id);
                 $companies = Company::all();
 
                 switch ($data->module_from) {
@@ -148,7 +148,7 @@ class GatePassController extends Controller
                     break;
                     
                     default:
-                        $data = GatePassData::find($id);
+                        $data = GatepassData::find($id);
                     break;
                 } 
 
@@ -166,12 +166,12 @@ class GatePassController extends Controller
     public function gatepass_add(Request $request,$id){
         try {
             $today = now()->toDateString();
-            $gatepass = GatePassData::find($id);
+            $gatepass = GatepassData::find($id);
             switch ($gatepass->module_from) {
                 case 'issuance':
                     $itgp = generateGatepassNumber();
                     $data_show = AssetIssuance::with(['details', 'getEmployee', 'getLocation', 'assetDetails'])->find($gatepass->data_id);
-                    $gatepass = GatePassData::find($id);
+                    $gatepass = GatepassData::find($id);
                     $gatepass->isRequest = 1;
                     $gatepass->gatepass_no = $itgp;
                     $gatepass->from_location = $request->from_location;
@@ -201,7 +201,7 @@ class GatePassController extends Controller
                 break;
                 
                 default:
-                    $data = GatePassData::find($id);
+                    $data = GatepassData::find($id);
                 break;
             }
             
@@ -214,7 +214,7 @@ class GatePassController extends Controller
     public function to_finalize(Request $request){
         try {
             //code...
-            $asset_gatepass = GatePassData::find($request->gatepass_id);
+            $asset_gatepass = GatepassData::find($request->gatepass_id);
             // echo "<pre>";
             // print_r($asset_gatepass);
             // exit;
@@ -243,7 +243,7 @@ class GatePassController extends Controller
 
     function to_approvers(Request $request){
         try {
-            $gatepass_data = GatePassData::find($request->gatepass_id);
+            $gatepass_data = GatepassData::find($request->gatepass_id);
             if ($request->status == "A") {
                 $approval = ApproversStatus::find($request->appr_id);
                 $approval->status = $request->status;
