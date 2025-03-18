@@ -175,6 +175,7 @@ class GatePassController extends Controller
                     $gatepass->isRequest = 1;
                     $gatepass->gatepass_no = $itgp;
                     $gatepass->from_location = $request->from_location;
+                    $gatepass->to_location = $request->to_location;
                     $gatepass->purpose = $request->purpose_text;
                     $gatepass->date_issued = $today;
                     $gatepass->approvers_ref = 4;
