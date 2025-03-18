@@ -177,7 +177,10 @@
                                                     <select class="form-select" id="from_company" name="from_company" required>
                                                         <option value="" selected disabled>Select Company</option>
                                                         @foreach ($companies as $comp)
-                                                            @if ($comp->id == $from_location->company->id)
+                                                        @php 
+                                                            $companyId = $from_location ? $from_location->company->id : null;
+                                                        @endphp
+                                                            @if ($comp->id == $companyId)
                                                                 <option value="{{  $comp->id }}" selected> {{ $comp->name }}</option>
                                                             @else
                                                                 <option value="{{  $comp->id }}"> {{ $comp->name }}</option>
@@ -430,7 +433,10 @@
 
             function gt_autoApproved(){
                 const staus_data_link = document.getElementById("staus_data_link").value;
-                if(staus_data_link == "A" && "{{ $gatepasss_status_each->status }}" == "P"){
+                @php
+                    $status = $gatepasss_status_each ? $gatepasss_status_each->status  : null;
+                @endphp
+                if(staus_data_link == "A" && "{{ $status }}" == "P"){
                     Swal.fire({
                         title: "Do you want to approved gatepass?",
                         text: "Once approved, you will not be able to make changes and send the gatepass to the next approvers",
@@ -451,9 +457,12 @@
                                 didOpen: () => {
                                     Swal.showLoading();
                                     var gatepass_id = document.getElementById("gatepass_id_data").value;
+                                    @php
+                                        $id_data = $gatepasss_status_each ? $gatepasss_status_each->id  : null;
+                                    @endphp
                                     var user_id = "{{ Auth::user()->id }}";
                                     var status = "A";
-                                    var appr_id = "{{ $gatepasss_status_each->id }}"
+                                    var appr_id = "{{ $id_data  }}"
                                     console.log("data",appr_id)
                                     $.ajax({
                                         type: "POST",
@@ -481,7 +490,7 @@
                             Swal.fire("Changes are not saved", "", "info");
                         }
                     });
-                } else if(staus_data_link == "R" && "{{ $gatepasss_status_each->status }}" == "P"){
+                } else if(staus_data_link == "R" && "{{ $status }}" == "P"){
                     Swal.fire({
                         title: "Do you want to Reject gatepass?",
                         text: "Once reject, you will not be able to make changes.",
@@ -502,9 +511,12 @@
                                 didOpen: () => {
                                     Swal.showLoading();
                                     var gatepass_id = document.getElementById("gatepass_id_data").value;
+                                    @php
+                                        $id_data = $gatepasss_status_each ? $gatepasss_status_each->id  : null;
+                                    @endphp
                                     var user_id = "{{ Auth::user()->id }}";
                                     var status = "R";
-                                    var appr_id = "{{ $gatepasss_status_each->id }}"
+                                    var appr_id = "{{ $id_data }}"
                                     console.log("data",appr_id)
                                     $.ajax({
                                         type: "POST",
@@ -536,7 +548,10 @@
             }
 
             $(document).ready(function() {
-                gt_autoApproved();
+                if("{{$data_gatepass->is_finalized}}"){
+                    gt_autoApproved(); 
+                }
+                // gt_autoApproved();
                 $('#from_company').on('change', function() {
                     getDepartment('from_company', 'from_department');
                 })
