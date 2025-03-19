@@ -49,6 +49,10 @@
                                                 <div class="alert alert-danger" role="alert">
                                                     Rejected
                                                 </div>
+                                            @elseif($issu->approved_status == 'RE')
+                                                <div class="alert alert-danger" role="alert">
+                                                    Revised
+                                                </div>
                                             @else
                                                 <div class="alert alert-info" role="alert">
                                                     Pending

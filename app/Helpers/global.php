@@ -112,49 +112,114 @@ function get_current_approvers($id_data, $pages_id, $user_id){
 
 
 if (!function_exists('approvalIssuance')) {
-    function approvalIssuance($issuance_id, $typeprocess, $pages_id, $rev_num, $issueby, $assignee, $date_req, $date_need)
+    function approvalIssuance($issuance_id, $typeprocess, $pages_id, $rev_num, $issueby, $assignee, $date_req, $date_need, $the_status)
     {
-        $approvers = get_approvers($typeprocess);
-        $approvers = $approvers->toArray();
-        $next_approver = "";
-        foreach ($approvers as $key => $value) {
 
-            $user_data = User::find($value["user_id"]);
-            $name = $user_data->name;
-            $email = $user_data->email;
-            $data = get_current_approvers($issuance_id, $pages_id, $value["user_id"]);
-            if($data["status"] === "NA" && $value["increment_num"] == 1 && $data["isNew"] === "Y"){
-            
-                $change1 = ApproversStatus::find($data["status_id"]);
-                $change1->status = "P";
-                $change1->save();
-                $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
-                Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id, $value["user_id"]));
-                continue;
-            }else if($data["status"] === "NA" && $value["increment_num"] > 1 && $data["isNew"] === "N"){
-                $change1 = ApproversStatus::find($data["status_id"]);
-                if($change1->status  === "P"){
-                    break;
-                }else{
-                    $change1->status = "P";
-                    $change1->save();
-                    $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
-                    // $name = User::find($value["user_id"])->name;
-                    Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id, $value["user_id"]));
-                    $next_approver =  $name;
-                    break;
-                }
+        if($the_status == "RE"){
+            $approvers = get_approvers($typeprocess);
+            $approvers = $approvers->toArray();
+            $next_approver = "";
+            foreach ($approvers as $key => $value) {
                 
-            }else{
-                if($data["status"] === "A"){
-                    continue;
+                $data1 = get_current_approvers($issuance_id, $pages_id, $value["user_id"]);
+                $change1 = ApproversStatus::find($data1["status_id"]);
+                if ($change1) {
+                    $change1->status = "NA"; // Reset status
+                    $change1->uid = ""; // Reset status
+                    $change1->remarks = ""; // Reset status
+                    $change1->save();
                 }
             }
 
-            // echo $data["status"] . " <> " . $value["increment_num"] . " <> " . $value["user_id"] . "<br>";
-        }
 
-        return $next_approver;
+            $next_approver = "";
+            foreach ($approvers as $key => $value) {
+
+                $user_data = User::find($value["user_id"]);
+                $name = $user_data->name;
+                $email = $user_data->email;
+                // $email = "christian.villamer@jakagroup.com";
+                $data = get_current_approvers($issuance_id, $pages_id, $value["user_id"]);
+                if($data["status"] === "NA" && $value["increment_num"] == 1 && ($data["isNew"] === "Y" || $data["isNew"] === "N")){
+                
+                    $change1 = ApproversStatus::find($data["status_id"]);
+                    $change1->status = "P";
+                    $change1->save();
+                    $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
+                    Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id, $value["user_id"]));
+                    break;
+                }else if($data["status"] === "NA" && $value["increment_num"] > 1 && $data["isNew"] === "N"){
+                    $change1 = ApproversStatus::find($data["status_id"]);
+                    if($change1->status  === "P"){
+                        break;
+                    }else{
+                        $change1->status = "P";
+                        $change1->save();
+                        $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
+                        // $name = User::find($value["user_id"])->name;
+                        Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id, $value["user_id"]));
+                        $next_approver =  $name;
+                        break;
+                    }
+                    
+                }else{
+                    if($data["status"] === "A"){
+                        continue;
+                    }
+                }
+
+                // echo $data["status"] . " <> " . $value["increment_num"] . " <> " . $value["user_id"] . "<br>";
+            }
+            return $next_approver;
+            // echo "<pre>";
+            // print_r($approvers);
+            // exit;
+
+        }else{
+            $approvers = get_approvers($typeprocess);
+            $approvers = $approvers->toArray();
+            $next_approver = "";
+            foreach ($approvers as $key => $value) {
+
+                $user_data = User::find($value["user_id"]);
+                $name = $user_data->name;
+                $email = $user_data->email;
+                // $email = "christian.villamer@jakagroup.com";
+                $data = get_current_approvers($issuance_id, $pages_id, $value["user_id"]);
+                if($data["status"] === "NA" && $value["increment_num"] == 1 && $data["isNew"] === "Y"){
+                
+                    $change1 = ApproversStatus::find($data["status_id"]);
+                    $change1->status = "P";
+                    $change1->save();
+                    $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
+                    Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id, $value["user_id"]));
+                    continue;
+                }else if($data["status"] === "NA" && $value["increment_num"] > 1 && $data["isNew"] === "N"){
+                    $change1 = ApproversStatus::find($data["status_id"]);
+                    if($change1->status  === "P"){
+                        break;
+                    }else{
+                        $change1->status = "P";
+                        $change1->save();
+                        $subject = "Approval Request for Issuance of Asset - Rev :" . $rev_num;
+                        // $name = User::find($value["user_id"])->name;
+                        Mail::to($email)->send(new MyTestEmail($name, $subject, $rev_num, $issueby, $assignee, $date_req, $date_need, $pages_id, $value["user_id"]));
+                        $next_approver =  $name;
+                        break;
+                    }
+                    
+                }else{
+                    if($data["status"] === "A"){
+                        continue;
+                    }
+                }
+
+                // echo $data["status"] . " <> " . $value["increment_num"] . " <> " . $value["user_id"] . "<br>";
+            }
+
+            return $next_approver;
+        }
+        
         
     }
 

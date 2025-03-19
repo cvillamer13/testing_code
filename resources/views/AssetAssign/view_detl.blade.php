@@ -116,7 +116,7 @@
                                                 <hr>
                                                 <h5 class="card-title">Hardware Information</h5>
                                                 <div class="table-responsive">
-                                                    @if ($asset_issuance->is_finalized)
+                                                    @if ($asset_issuance->is_finalized || $asset_issuance->issued_by != session('user_email'))
                                                     <table id="example2" class="table text-center">
                                                         <thead>
                                                             <tr>
@@ -321,7 +321,7 @@
                                             </div>
                                             <hr>
                                         </div>
-                                        @if (!$asset_issuance->is_finalized)
+                                        @if (!$asset_issuance->is_finalized && $asset_issuance->issued_by == session('user_email'))
                                             <button class="btn btn-primary mt-4 w-100" type="submit" onclick="final_data()">Finalize</button>
                                         @else
                                         <div class="row">
@@ -330,7 +330,14 @@
                                                 @foreach ($issuance_status as $data)
                                                 <div class="mb-3 col-sm-4 text-center">
                                                     <label for="employee_name" class="form-label"><b>{{  $data->user->name }}</b></label>
-                                                    <p>uid: {{  $data->uid }}</p>
+                                                    @if (!is_null($data->uid) > 0)
+                                                        <p>uid: {{  $data->uid }}</p>
+                                                    @endif
+
+                                                    @if (!is_null($data->remarks) > 0)
+                                                        <p>Reason: {{  $data->remarks }}</p>
+                                                    @endif
+                                                    {{-- <p>uid: {{  $data->uid }}</p> --}}
                                                     <br>
 
                                                     @if ($data->user->id == Auth::user()->id && $data->status == 'P')
@@ -1383,7 +1390,7 @@
 
                 Swal.fire({
                     title: "Do you want to approved issuance?",
-                    text: "Once approved, you will not be able to make changes and send the issuance to the next approvers",
+                    html: "Once approved, you will not be able to make changes and send the issuance to the next approvers",
                     icon: "warning",
                     showDenyButton: true,
                     showCancelButton: false,
@@ -1463,7 +1470,7 @@
 
                 Swal.fire({
                     title: "Do you want to Disaprroved issuance?",
-                    text: "Once Disaprroved, you will not be able to make changes.",
+                    html: "Once Disaprroved, you will not be able to make changes. <br> <textarea class='form-control' name='reason_data' id='reason_data' placeholder='Reason'></textarea>",
                     icon: "error",
                     showDenyButton: true,
                     showCancelButton: false,
@@ -1473,6 +1480,7 @@
                 if (result.isConfirmed) {
                     Swal.showLoading();
                     var id = document.getElementById("issuance_id").value;
+                    var reason_data = document.getElementById("reason_data").value;
                     $.ajax({
                         type: "POST",
                         url: "/AssetAssign/approvers",
@@ -1481,7 +1489,8 @@
                             "appr_id": appr_id,
                             "user_id": user_id,
                             "status": status,
-                            "asset_iss_id": asset_iss_id
+                            "asset_iss_id": asset_iss_id,
+                            "reason_data": reason_data
                         },
                         success: function (response) {
                             swal.close();

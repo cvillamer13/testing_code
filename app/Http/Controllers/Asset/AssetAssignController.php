@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Approvedissuance_Notif;
+use App\Mail\Revisedissuance_Notif;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -138,10 +139,8 @@ class AssetAssignController extends Controller
                 $asset_issuance = AssetIssuance::with(['getLocation'])->find($id);
                 $employee_data = Employee::with(['gender', 'position', 'company', 'department'])->find($asset_issuance->emp_id);
                 $issuance_detl = AssetIssuanceDetl::with(['asset_details'])->where('issuance_main_id', $id)->where('isDelete', false)->orderBy('created_at', 'asc')->get();
-                $issuance_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', session('current_page'))->get();
-                // echo "<pre>";
-                // print_r($issuance_status[0]->user);
-                // exit;
+                $issuance_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 8)->get();
+                
             return view('AssetAssign.view_detl', [
                 'asset_issuance' => $asset_issuance,
                 'employee_data' => $employee_data,
@@ -313,9 +312,19 @@ class AssetAssignController extends Controller
             $asset_issuance->is_finalized = 1;
             $asset_issuance->save();
 
-            if($asset_issuance->is_finalized){
+            if($asset_issuance->is_finalized && $asset_issuance->approved_status == "RE"){
                 $employee = Employee::find($asset_issuance->emp_id);
-                $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
+                $approver = approvalIssuance($asset_issuance->id, 3, 8, $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed, $asset_issuance->approved_status);
+                $asset_issuance->approved_status = "P";
+                $asset_issuance->save();
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Finalize Successfully'
+                ], 200);
+            }else{
+                $employee = Employee::find($asset_issuance->emp_id);
+                $approver = approvalIssuance($asset_issuance->id, 3, 8, $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed, $asset_issuance->approved_status);
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Finalize Successfully'
@@ -368,7 +377,7 @@ class AssetAssignController extends Controller
                 $approval->uid = Str::uuid(); //generate uuid
                 $approval->save();
 
-                // $approver = approvalIssuance($asset_issuance->id, 3, session('current_page'), $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed);
+                $approver = approvalIssuance($asset_issuance->id, 3, 8, $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed, $asset_issuance->approved_status);
                 
                 $data_of_approvers = ApproversMatrix::where('user_id', $approval->user_id)->where('type_of_process', 3)->first();
 
@@ -410,19 +419,53 @@ class AssetAssignController extends Controller
                 $approval->save();
 
                 if($approval->status == "R"){
-                    $approval = ApproversStatus::where('data_id', $asset_issuance->id)
-                        ->where('pages_id', session('current_page'))
-                        ->where('status', 'NA')
-                        ->update([
-                            'status' => 'CNA',
-                            'uid' => Str::uuid()->toString() . "-CNA"
-                        ]);
+                    $approval_2 = ApproversStatus::find($request->appr_id);
+                    $data_of_approvers = ApproversMatrix::where('user_id', $approval_2->user_id)->where('type_of_process', 3)->first();
+                    
+                    // Mail::to($asset_issuance->issued_by)->send(new Revisedissuance_Notif($asset_issuance->id));
                         if($data_of_approvers->increment_num == "FA"){
+                            $approval = ApproversStatus::find($request->appr_id);
+                            $approval->status = $request->status;
+                            $approval->remarks = $request->reason_data;
+                            $approval->uid = Str::uuid();
+                            $approval->save();
+                            Mail::to($asset_issuance->issued_by)->send(new Revisedissuance_Notif($asset_issuance->id, $approval->id));
+                            $approval3 = ApproversStatus::where('data_id', $asset_issuance->id)
+                                ->where('pages_id', session('current_page'))
+                                ->where('status', 'NA')
+                                ->update([
+                                    'status' => 'CNA',
+                                    'uid' => Str::uuid()->toString() . "-CNA"
+                                ]);
+
                             $asset_issuance->approved_status = "RE";
+                            $asset_issuance->is_finalized = 0;
                             $asset_issuance->approved_by = session('user_email');
                             $asset_issuance->approved_at = now();
                             $asset_issuance->uid = $approval->uid;
                             $asset_issuance->save();
+                        }else{
+                            $approval = ApproversStatus::find($request->appr_id);
+                            $approval->status = $request->status;
+                            $approval->remarks = $request->reason_data;
+                            $approval->uid = Str::uuid();
+                            $approval->save();
+                            Mail::to($asset_issuance->issued_by)->send(new Revisedissuance_Notif($asset_issuance->id, $approval->id));
+                            $approval3 = ApproversStatus::where('data_id', $asset_issuance->id)
+                                ->where('pages_id', session('current_page'))
+                                ->where('status', 'NA')
+                                ->update([
+                                    'status' => 'CNA',
+                                    'uid' => Str::uuid()->toString() . "-CNA"
+                                ]);
+
+                            
+                                $asset_issuance->approved_status = "RE";
+                                $asset_issuance->is_finalized = 0;
+                                $asset_issuance->approved_by = session('user_email');
+                                $asset_issuance->approved_at = now();
+                                $asset_issuance->uid = $approval->uid;
+                                $asset_issuance->save();
                         }
 
                 }
