@@ -20,7 +20,11 @@ class GatePassController extends Controller
 {
     public function view()
     {
-        return view('gatepass.view');
+        $data_gatepass = GatepassData::where('isRequest', true)->get();
+
+        return view('gatepass.view',[
+            'data' => $data_gatepass
+        ]);
     }
 
     public function gatepass_view($id)
@@ -40,7 +44,7 @@ class GatePassController extends Controller
                 $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', Auth::user()->id)->first();
 
                 // echo "<pre>";
-                // print_r($gatepasss_status);
+                // print_r($data);
                 // exit;
                 return view('Gatepass.gatepass_issuance', [
                     'data_gatepass' => $data,
@@ -174,8 +178,6 @@ class GatePassController extends Controller
                     $gatepass = GatepassData::find($id);
                     $gatepass->isRequest = 1;
                     $gatepass->gatepass_no = $itgp;
-                    $gatepass->from_location = $request->from_location;
-                    $gatepass->to_location = $request->to_location;
                     $gatepass->purpose = $request->purpose_text;
                     $gatepass->date_issued = $today;
                     $gatepass->approvers_ref = 4;

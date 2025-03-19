@@ -56,7 +56,7 @@
                                                 <div class="mb-3 col-md-3">
                                                     <label class="form-label">Location<span class="text-red">*</span></label>
                                                     {{-- <input type="text" class="form-control" id="location_id" name="location_id"  value=""> --}}
-                                                    <select class="form-control" id="location_id" name="location_id">
+                                                    <select class="form-control" id="location_id" name="location_id" required>
                                                     </select>
                                                 </div>
                                             </div>

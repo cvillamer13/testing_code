@@ -21,88 +21,6 @@
                         @csrf
                         <input type="hidden" name="gatepass_id_data" id="gatepass_id_data" value="{{ $data_gatepass->id }}">
                         <div class="card py-3 px-3">
-                            {{-- <div class="row">
-                                <label for="rev_no" class="form-label"><strong>Property Location</strong></label>
-                                <div class="col-md-6  text-center border border-primary">
-                                    <label for="rev_no" class="form-label"><strong>From</strong></label>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Company</label>
-                                                @if ($data_gatepass->isRequest)
-                                                    <label for="rev_no" class="form-label">{{ $from_location->company->name }}</label>
-                                                @else
-                                                    <select class="form-select" id="from_company" name="from_company" required>
-                                                        <option value="" selected disabled>Select Company</option>
-                                                        @foreach ($companies as $comp)
-                                                            @if ($comp->id == $from_location->company->id)
-                                                                <option value="{{  $comp->id }}" selected> {{ $comp->name }}</option>
-                                                            @else
-                                                                <option value="{{  $comp->id }}"> {{ $comp->name }}</option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                @endif
-                                                
-                                            </div>
-                                        </div>
-    
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Department</label>
-                                                <select class="form-select" id="from_department" name="from_department" required>
-                                                </select>
-                                            </div>
-                                        </div>
-    
-    
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Location</label>
-                                                <select class="form-select" id="from_location" name="from_location" required>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-    
-                                <div class="col-md-6  text-center border border-primary">
-                                    <label for="rev_no" class="form-label"><strong>To</strong></label>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Company</label>
-                                                <select class="form-select" id="to_company" name="to_company" required>
-                                                    <option value="" selected disabled>Select Company</option>
-                                                    @foreach ($companies as $comp)
-                                                        <option value="{{  $comp->id }}"> {{ $comp->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-    
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Department</label>
-                                                <select class="form-select" id="to_department" name="to_department" required>
-                                                </select>
-                                            </div>
-                                        </div>
-    
-    
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Location</label>
-                                                <select class="form-select" id="to_location" name="to_location" required>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div> --}}
-                            @if ($data_gatepass->isRequest)
                             <div class="row">
                                 <label for="rev_no" class="form-label"><strong>Property Location</strong></label>
                                 <div class="col-md-6  text-center border border-primary">
@@ -162,92 +80,7 @@
                                     
                                 </div>
                             </div>
-                            @else
-                            <div class="row">
-                                <label for="rev_no" class="form-label"><strong>Property Location</strong></label>
-                                <div class="col-md-6  text-center border border-primary">
-                                    <label for="rev_no" class="form-label"><strong>From</strong></label>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Company</label>
-                                                @if ($data_gatepass->isRequest)
-                                                    <label for="rev_no" class="form-label">{{ $from_location->company->name }}</label>
-                                                @else
-                                                    <select class="form-select" id="from_company" name="from_company" required>
-                                                        <option value="" selected disabled>Select Company</option>
-                                                        @foreach ($companies as $comp)
-                                                        @php 
-                                                            $companyId = $from_location ? $from_location->company->id : null;
-                                                        @endphp
-                                                            @if ($comp->id == $companyId)
-                                                                <option value="{{  $comp->id }}" selected> {{ $comp->name }}</option>
-                                                            @else
-                                                                <option value="{{  $comp->id }}"> {{ $comp->name }}</option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                @endif
-                                                
-                                            </div>
-                                        </div>
-    
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Department</label>
-                                                <select class="form-select" id="from_department" name="from_department" required>
-                                                </select>
-                                            </div>
-                                        </div>
-    
-    
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Location</label>
-                                                <select class="form-select" id="from_location" name="from_location" required>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-    
-                                <div class="col-md-6  text-center border border-primary">
-                                    <label for="rev_no" class="form-label"><strong>To</strong></label>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Company</label>
-                                                <select class="form-select" id="to_company" name="to_company" required>
-                                                    <option value="" selected disabled>Select Company</option>
-                                                    @foreach ($companies as $comp)
-                                                        <option value="{{  $comp->id }}"> {{ $comp->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-    
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Department</label>
-                                                <select class="form-select" id="to_department" name="to_department" required>
-                                                </select>
-                                            </div>
-                                        </div>
-    
-    
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label for="rev_no" class="form-label">Location</label>
-                                                <select class="form-select" id="to_location" name="to_location" required>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            @endif
+                        
                             <hr>
                             <label for="rev_no" class="form-label">
                                 <strong style="color: red;">Note:</strong> This section will be automatically filled when you click <b>Create Gate Pass</b>.
@@ -294,7 +127,7 @@
                             </table>
                             <hr>
                             <h4 class="card-title col-6">Purpose</h4>
-                            <textarea name="purpose_text" id="purpose_text" class="form-control" cols="15" rows="5" placeholder="" readonly>{{ $data_gatepass->purpose }}</textarea>
+                            <textarea name="purpose_text" id="purpose_text" class="form-control" cols="15" rows="5" placeholder="" {{ $data_gatepass->isRequest ? 'readonly' : "" }}>{{ $data_gatepass->purpose }}</textarea>
                             @if ($data_gatepass->isRequest)
                                 @if ($data_gatepass->is_finalized)
                                 <div class="row">

@@ -112,6 +112,7 @@ class AssetAssignController extends Controller
                 $asset_main->deployment_duration_to = $request->duration_to;
                 $asset_main->date_requested = $request->date_requested;
                 $asset_main->date_needed = $request->date_need;
+                $asset_main->location_id = $request->location_id;
                 $asset_main->issued_by = session('user_email');
                 $asset_main->apprver_references = 3;
                 $asset_main->ref_rss = $request->rss_num;
@@ -392,6 +393,7 @@ class AssetAssignController extends Controller
                     $gatepass->uid = Str::uuid();
                     $gatepass->data_id = $asset_issuance->id;
                     $gatepass->module_from = "issuance";
+                    $gatepass->from_location = "2801";
                     $gatepass->to_location = $asset_issuance->location_id;
                     $gatepass->createdby = session('user_email');
                     $gatepass->created_at = now();
