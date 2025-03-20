@@ -28,18 +28,17 @@
                                         <th class="staff_thead_name">Issued by</th>
                                         <th class="staff_thead_status">Status</th>
                                         <th class="staff_thead_status">Action</th>
+                                        <th class="staff_thead_status">Print</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($data as $dat)
                                         <tr>
-                                            <td><</td>
                                             <td>{{ $dat->gatepass_no }}</td>
-                                            <td>{{ $ass->iss }}</td>
-                                            <td>{{ $ass->status }}</td>
-                                            <td>{{ $ass->asset_status_data->status ?? 'N/A' }}</td>
-                                            <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $ass->id }}"><i class="la la-pencil"></i>View</a></td>
-                                            <td><a class="badge badge-lg badge-success" data-toggle="modal" data-target="#modal_assign" id="view_assign" data-asset_id="{{ $ass->id }}"><i class="las la-eye"></i>view</a></td>
+                                            <td>{{ $dat->finalizedby }}</td>
+                                            <td>{{ $dat->approved_status == "A" ? "APPROVED" : "PENDING" }}</td>
+                                            <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./data/{{ $dat->id }}"><i class="la la-pencil"></i>View</a></td>
+                                            <td><a class="badge badge-lg badge-warning" href="/Gatepass/gatepass_report/{{ $dat->id }}" target="_blank"><i class="las la-eye"></i>Print</a></td>
                                         </tr>
                                     @endforeach
                             </table>

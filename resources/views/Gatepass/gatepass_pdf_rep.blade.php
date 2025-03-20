@@ -258,8 +258,20 @@
   <table width="100%" style="margin-top: 20px;">
     <tr>
         <td align="center"><strong>REQ. BY:</strong><br> <u>{{ $data->finalizedby }}</u></td>
-        @foreach ($gatepasss_status as $status)
-        <td align="center"><strong>NOTED BY:</strong><br> {{ $status->user->name }}</td>
+        @foreach ($gatepasss_status as $index => $status)
+            @switch($index)
+                @case(0)
+                    <td align="center"><strong>NOTED BY:</strong><br> <u>{{ $status->user->name}}</u><br>{{ $status->uid }}</td>
+                @break
+
+                @case(1)
+                    <td align="center"><strong>RECOMMENDED BY:</strong><br> <u>{{ $status->user->name }}</u><br>{{ $status->uid }}</td>
+                @break
+            
+                @default
+                    <td align="center"><strong>APROVED BY:</strong><br> <u>{{ $status->user->name}}</u><br>{{ $status->uid }}</td>
+            @endswitch
+            
         @endforeach
         {{-- <td align="center"><strong>NOTED BY:</strong><br> ___________________________</td>
         <td align="center"><strong>RECOMMENDED BY:</strong><br> ___________________________</td>
@@ -269,9 +281,9 @@
 
 <table width="100%" style="margin-top: 20px;">
     <tr>
-        <td align="center"><strong>INSPECTED BY:</strong><br> ___________________________</td>
-        <td align="center"><strong>TIME:</strong><br> ___________________________</td>
-        <td align="center"><strong>RECEIVED BY:</strong><br> ___________________________</td>
+        <td align="center"><strong>INSPECTED BY:</strong><br> {{ $data->inspected_by }}</td>
+        <td align="center"><strong>TIME:</strong><br> {{ $data->inspected_date }}</td>
+        <td align="center"><strong>RECEIVED BY:</strong><br> {{ $data->recieved  }}</td>
     </tr>
 </table>
 

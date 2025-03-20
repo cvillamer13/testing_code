@@ -8,9 +8,11 @@
                 <div class="col-xl-12">
                     <div class="card-header">
                         <h4 class="card-title col-6">Creation of Gatepass</h4>
-                        <div class="card-title col-6 text-end">
-
-                        </div>
+                        @if ($data_gatepass->approved_status == "A")
+                            <div class="card-title col-6 text-end">
+                                <a href="/Gatepass/gatepass_report/{{ $data_gatepass->id }}" target="_blank" class="btn btn-warning"><i class="las la-print"></i>Print Gatepass</a>
+                            </div>
+                        @endif
                     </div>
                     @if ($data_gatepass->isRequest)
                     <form  method="POST" action="./to_finalize/{{ $data_gatepass->id }}" enctype="multipart/form-data">

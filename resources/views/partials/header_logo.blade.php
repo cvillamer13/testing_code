@@ -6,7 +6,7 @@
 
         <h2 class="brand-title" width="101.5px" height="29.5px">
             <span class="svg-logo-text-path" fill-rule="evenodd"  stroke="rgb(0, 0, 0)" stroke-width="1px" stroke-linecap="butt" stroke-linejoin="miter" fill="rgb(64, 24, 157)">
-                ERP System
+                AMS
             </span>
         </h2>
     </a>
