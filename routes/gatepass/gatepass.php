@@ -11,4 +11,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/approvers', [GatePassController::class, 'to_approvers']);
     Route::get('/view_rev/{id}/{page_id}/{user_id}', [GatePassController::class, 'view_rev']);
     Route::get('/view_rev_approvers/{id}/{status}/{page_id}/{user_id}', [GatePassController::class, 'view_rev_approvers']);
+    Route::get('/gatepass_report/{id}', [GatePassController::class, 'gatepass_pdf']);
 });

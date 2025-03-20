@@ -15,6 +15,14 @@ use App\Models\ApproversMatrix;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\ReleaseGatePass;
 use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Writer\ValidationException;
+
 
 class GatePassController extends Controller
 {
@@ -186,21 +194,6 @@ class GatePassController extends Controller
                     $gatepass->updated_at = now();
                     $gatepass->save();
                     return redirect('/Gatepass/data/'.$gatepass->id)->with('success', $gatepass->gatepass_no.' Add Successfully');
-                    // $gatepass->to_location = 1;
-                    // $gatepass->gatepass_no = $itgp;
-                    // echo "<pre>";
-                    // print_r($data_show->details[0]);
-                    // exit;
-
-                    // return view('Gatepass.gatepass_issuance', [
-                    //     'data_gatepass' => $data,
-                    //     'data_issuance' => $data_show,
-                    //     'companies' => $companies
-                    // ]);
-
-                    // echo "<pre>";
-                    // print_r($gatepass);
-                    // exit;
                 break;
                 
                 default:
@@ -316,6 +309,50 @@ class GatePassController extends Controller
                 'message' => $th->getMessage()
             ], 400);
         }
+
+    }
+
+
+    function gatepass_pdf($id){
+        // $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep', ['data' => $data]);
+        // echo url('images/logos.png'); exit;
+        $data = GatepassData::find($id);
+        $from_location = Location::with(['company','department'])->find($data->from_location);
+        $to_location = Location::with(['company','department'])->find($data->to_location);
+       
+
+
+        switch ($data->module_from) {
+            case 'issuance':
+                $data_show = AssetIssuance::with(['details', 'getEmployee', 'getLocation', 'assetDetails'])->find($data->data_id);
+                $from_location = Location::with(['company','department'])->find($data->from_location);
+                $to_location = Location::with(['company','department'])->find($data->to_location);
+                $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->get();
+                $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', Auth::user()->id)->first();
+                // $qrCode = base64_encode(QrCode::format('png')->size(200)->generate($data->id));
+                $qrCode = QrCode::create($data->id)
+                            ->setEncoding(new Encoding('UTF-8'))
+                            ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
+                            ->setSize(200)
+                            ->setMargin(10);
+                $writer = new PngWriter();
+                $result = $writer->write($qrCode);
+                $qrCodeBase64 = 'data:image/png;base64,' . base64_encode($result->getString());
+
+
+
+                // echo "<pre>";
+                // print_r($qrCodeBase64);
+                // exit;
+                $pdf = Pdf::loadView('Gatepass.gatepass_pdf_rep', ['data' => $data, 'from_location' => $from_location, 'to_location' => $to_location, 'data_show' => $data_show, 'gatepasss_status' => $gatepasss_status, 'qrCode' => $qrCodeBase64 ]);
+                return $pdf->setPaper('letter', 'landscape')->stream(); 
+            break;
+            
+            default:
+                $data = GatepassData::find($id);
+            break;
+        }
+        
 
     }
 }
