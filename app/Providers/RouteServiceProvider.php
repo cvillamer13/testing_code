@@ -79,6 +79,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->prefix('GatepassScan')
                 ->group(base_path('routes/gatepass_scan/gatepass_scan.php'));
+
+            Route::middleware('web')
+                ->prefix('AssetTransfer')
+                ->group(base_path('routes/asset_transfer/asset_transfer.php'));
                 
         });
     }

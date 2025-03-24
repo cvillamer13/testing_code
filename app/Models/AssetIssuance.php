@@ -44,12 +44,14 @@ class AssetIssuance extends Model
 
     public function details()
     {
-        return $this->hasMany(AssetIssuanceDetl::class, 'issuance_main_id');
+        return $this->hasMany(AssetIssuanceDetl::class, 'issuance_main_id')
+            ->where('isDelete', false);
     }
 
     public function assetDetails()
     {
-        return $this->hasManyThrough(Asset::class, AssetIssuanceDetl::class, 'issuance_main_id', 'id', 'id', 'asset_id');
+        return $this->hasManyThrough(Asset::class, AssetIssuanceDetl::class, 'issuance_main_id', 'id', 'id', 'asset_id')->where('asset_issuance_detl.isDelete', false);
+            
     }
 
 

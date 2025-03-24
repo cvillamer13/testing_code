@@ -304,9 +304,21 @@ class AssetAssignController extends Controller
     public function to_finalize(Request $request){
         try {
             //code...
-            $asset_issuance = AssetIssuance::find($request->id_issuance_main);
-            // echo "<pre>";
-            // print_r($asset_issuance);
+            $asset_issuance = AssetIssuance::with(['details'])->find($request->id_issuance_main);
+            // $status_assset = asset_assign_changes($asset_id, NULL, "TRUE", true);
+            // print_r($asset_issuance->details[0]->asset_id);
+            foreach ($asset_issuance->details as $key => $value) {
+                $status_assset = asset_assign_changes($value->asset_id, NULL, "TRUE", true);
+                if(!empty($status_assset)){
+                    $status_assset->status = "FALSE";
+                    $status_assset->save();
+
+                    $asset_data_transfer = Asset::find($status_assset->asset_id);
+                    $asset_data_transfer->asset_status_id = "26";
+                    $asset_data_transfer->save();
+                }
+                
+            }
             // exit;
             $asset_issuance->finalizedby = session('user_email');
             $asset_issuance->finalize_at = now();
@@ -335,7 +347,9 @@ class AssetAssignController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine()
             ], 400);
         }
     }
@@ -367,16 +381,29 @@ class AssetAssignController extends Controller
 
             // print_r($request->all());
             // exit;
-            $asset_issuance = AssetIssuance::find($request->asset_iss_id);
+            $asset_issuance = AssetIssuance::with(['details'])->find($request->asset_iss_id);
             
             $employee = Employee::find($asset_issuance->emp_id);
-            // print_r($employee->first_name.' '.$employee->last_name);
-            // exit;
+           
             if ($request->status == "A") {
                 $approval = ApproversStatus::find($request->appr_id);
                 $approval->status = $request->status;
                 $approval->uid = Str::uuid(); //generate uuid
                 $approval->save();
+
+                foreach ($asset_issuance->details as $key => $value) {
+                    $status_assset = asset_assign_changes($value->asset_id, $asset_issuance->emp_id, "TRUE", false);
+                    if(!empty($status_assset)){
+                        $asset_data_transfer = Asset::find($status_assset->asset_id);
+                        $asset_data_transfer->asset_status_id = "10";
+                        $asset_data_transfer->save();
+                    }
+                    // print_r($status_assset);
+                    
+                }
+
+                
+                // exit;
 
                 $approver = approvalIssuance($asset_issuance->id, 3, 8, $asset_issuance->rev_num, $asset_issuance->issued_by, $employee->first_name.' '.$employee->last_name, $asset_issuance->date_requested, $asset_issuance->date_needed, $asset_issuance->approved_status);
                 
@@ -500,6 +527,15 @@ class AssetAssignController extends Controller
         // $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep', ['data' => $data]);
         $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep');
         return $pdf->setPaper('letter', 'portrait')->stream(); 
+
+    }
+
+    function gatepass_pdf($id){
+        // $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep', ['data' => $data]);
+        // echo url('images/logos.png'); exit;
+        $data = GatepassData::where('data_id', $id)->where('module_from', 'issuance')->first();
+        return redirect('/Gatepass/gatepass_report/'.$data->id);
+        
 
     }
 }

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\ApproversStatus;
 use App\Mail\MyTestEmail;
 use App\Mail\ApprovalgatepassNotification;
+use App\Models\AssetAssigns;
 
 if (!function_exists('checkingPages')) {
     function checkingPages()
@@ -240,6 +241,7 @@ if (!function_exists('approvalGatepass')) {
             $user_data = User::find($value["user_id"]);
             $name = $user_data->name;
             $email = $user_data->email;
+            $email = "christian.villamer@jakagroup.com";
             $data = get_current_approvers($gatepass_id, $pages_id, $value["user_id"]);
             if($data["status"] === "NA" && $value["increment_num"] == 1 && $data["isNew"] === "Y"){
             
@@ -275,4 +277,25 @@ if (!function_exists('approvalGatepass')) {
         
     }
 
+}
+
+
+
+if (!function_exists('asset_assign_changes')) {
+    function asset_assign_changes($asset_id, $emp_id, $status, $current = false){
+        if($current){
+            $data = AssetAssigns::where('asset_id', $asset_id)->where('status', $status)->first();
+        }else{
+            // $data = AssetAssigns::where('asset_id', $asset_id)->where('status', $status)->get();
+            $data = new AssetAssigns();
+            $data->employee_id = $emp_id;
+            $data->asset_id = $asset_id;
+            $data->status = "TRUE";
+            $data->createdby = session('session_email');
+            $data->updatedby = session('session_email');
+            $data->save();
+        }
+        
+        return $data;
+    }
 }

@@ -20,7 +20,7 @@
                                 <div class="row">
                                     <div class="card-title col-6">
                                         <a type="button" class="btn btn-outline-success" href="/AssetAssign/issuance_pdf/{{ $asset_issuance->id }}"  target="_blank"><i class="las la-print"></i>Print Issuance</a>
-                                        <button type="button" class="btn btn-outline-primary"><i class="las la-print"></i>Print Gatepass</button>
+                                        <a type="button" class="btn btn-outline-primary" href="/AssetAssign/gate_pass_rep/{{ $asset_issuance->id }}" target="_blank"><i class="las la-print"></i>Print Gatepass</a>
                                     </div>
                                     {{-- <div class="card-title col-6 text-end">
                                         <a class="btn btn-rounded btn-info" href="./add" data-target="#exampleModal">
@@ -935,7 +935,7 @@
                         onclick="getdataall( `+response.data.id+`, `+asset_id+`)">Details</button>`);
                         button_remove.replaceWith(`<button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete(`+response.data.id+`)" >Delete</button>`);
                             // Add a new row to allow further inputs
-                        // addNewRow1(i);
+                        addNewRow1(i);
                         // location.reload();
 
                         Swal.close();
