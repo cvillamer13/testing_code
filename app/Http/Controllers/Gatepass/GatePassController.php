@@ -30,7 +30,7 @@ class GatePassController extends Controller
     {
         $data_gatepass = GatepassData::where('isRequest', true)->get();
 
-        return view('gatepass.view',[
+        return view('Gatepass.view',[
             'data' => $data_gatepass
         ]);
     }
