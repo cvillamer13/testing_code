@@ -362,7 +362,9 @@ class AssetAssignController extends Controller
             Session::put('current_page', $page_id);
         }
         $asset_issuance = AssetIssuance::with(['details', 'getEmployee'])->where('rev_num', $rev_)->first();
-        $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', $page_id)->get();
+        $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', $page_id_data)->get();
+        // print_r( $issuance_status);
+        // exit;
         return view('AssetAssign.view_detl', [
             'asset_issuance' => $asset_issuance,
             'employee_data' => $asset_issuance->getEmployee,
