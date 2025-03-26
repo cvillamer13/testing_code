@@ -45,6 +45,8 @@ class AssetIssuanceDetl extends Model
         'deletedby',
         'isDelete',
         'deleted_at',
+        'status',
+        'issuance_no_transfer'
     ];
 
     protected $casts = [
