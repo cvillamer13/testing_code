@@ -183,9 +183,10 @@
 
     function getCheckVal(){
         var data_val = document.getElementsByName("data_ischeck");
+        console.log(data_val)
         let val = [];
-        for (let index = 0; index <= data_ischeck.length-1; index++) {
-            const element = data_ischeck[index];
+        for (let index = 0; index <= data_val.length-1; index++) {
+            const element = data_val[index];
             if(element.checked){
                 val.push(element.value)
                 
