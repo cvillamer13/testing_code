@@ -153,6 +153,7 @@
                                     <input type="hidden" name="selected_transfer" id="selected_transfer" value="">
                                     @if ($data_view->is_finalized)
                                     <div class="row">
+                                        <hr>
                                         <h5 class="card-title">Approvers</h5>
                                         
                                             @foreach ($issuance_status as $data)

@@ -10,6 +10,7 @@ use App\Mail\MyTestEmail;
 use App\Mail\ApprovalgatepassNotification;
 use App\Mail\AssetTransferNotification;
 use App\Models\AssetAssigns;
+use App\Models\AssetReturnReference;
 
 if (!function_exists('checkingPages')) {
     function checkingPages()
@@ -68,6 +69,33 @@ if (!function_exists('generateGatepassNumber')) {
         return $ref->reference_number;
     }
 }
+
+
+
+if (!function_exists('generateAssetReturnsNumber')) {
+    function generateAssetReturnsNumber()
+    {
+        // Find the last inserted reference number
+        $lastReference = AssetReturnReference::latest('id')->first();
+
+        // Extract numeric part and increment
+        $nextNumber = $lastReference ? ((int) str_replace('ITRT-', '', $lastReference->reference_number) + 1) : 1;
+
+        // Format to 7-digit number
+        $formattedNumber = str_pad($nextNumber, 7, '0', STR_PAD_LEFT);
+
+        // Create new reference number
+        $ref = AssetReturnReference::create([
+            'reference_number' => "ITRT-{$formattedNumber}",
+            'createdby' => session('user_email')
+        ]);
+
+        return $ref->reference_number;
+    }
+}
+
+
+
 
 function get_approvers($typeprocess){
     $approvers = ApproversMatrix::where('type_of_process', $typeprocess)->orderBy('increment_num', 'asc')->get();

@@ -24,16 +24,49 @@
                                 <table id="example" class="table table-responsive-sm text-center">
                                     <thead>
                                         <tr>
-                                            <th class="staff_thead_no">Gatepass No</th>
-                                            <th class="staff_thead_name">Inspected By</th>
-                                            <th class="staff_thead_name">Time</th>
-                                            <th class="staff_thead_name">Recieved By</th>
-                                            <th class="staff_thead_status">Status</th>
+                                            <th class="staff_thead_no">Issuance No.</th>
+                                            <th class="staff_thead_name">Request By</th>
+                                            <th class="staff_thead_name">Status</th>
+                                            <th class="staff_thead_name">Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
+                                        @foreach ($data as $dat)
+                                            <tr>
+                                                <td>{{ $dat->from_issuance }}</td>
+                                                <td>{{ $dat->requested_by }}</td>
+                                                <td>
+                                                    @switch($dat->approved_status)
+                                                        @case("A")
+                                                            <div class="alert alert-success" role="alert">
+                                                                Approved
+                                                            </div>
+                                                        @break
 
+                                                        @case("P")
+                                                            <div class="alert alert-warning" role="alert">
+                                                                Pending
+                                                            </div>
+                                                        @break
+
+                                                        @case("R")
+                                                            <div class="alert alert-danger" role="alert">
+                                                                Rejected
+                                                            </div>
+                                                        @break
+                                                    
+                                                        @default
+                                                            
+                                                    @endswitch
+                                                    
+                                                    
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-outline-info" href="/AssetTransfer/finalize/{{ $dat->id }}">View</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                     
                                 </table>

@@ -22,9 +22,9 @@ class AssetTransferController extends Controller
     public function view(){
         try {
 
-            
+            $data = AssetTransfer::all();
             return view('AssetTransfer.view', [
-               
+                'data' => $data
             ]);
         } catch (\Throwable $th) {
             return response()->json([
