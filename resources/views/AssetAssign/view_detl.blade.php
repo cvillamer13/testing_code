@@ -1010,7 +1010,6 @@
 
 
             function addNewRow1(rowId) {
-               
                     var rowId = parseInt($('#last_count_data').val());
                     var rowCount = parseInt(rowId) // Get current row count
                     var newRowId = rowCount + 1; // Unique ID for new row

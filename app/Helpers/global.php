@@ -11,6 +11,7 @@ use App\Mail\ApprovalgatepassNotification;
 use App\Mail\AssetTransferNotification;
 use App\Models\AssetAssigns;
 use App\Models\AssetReturnReference;
+use App\Models\AssetBorrowedRef;
 
 if (!function_exists('checkingPages')) {
     function checkingPages()
@@ -71,6 +72,28 @@ if (!function_exists('generateGatepassNumber')) {
 }
 
 
+
+if (!function_exists('generateAssetReturnsNumber')) {
+    function generateAssetReturnsNumber()
+    {
+        // Find the last inserted reference number
+        $lastReference = AssetReturnReference::latest('id')->first();
+
+        // Extract numeric part and increment
+        $nextNumber = $lastReference ? ((int) str_replace('ITRT-', '', $lastReference->reference_number) + 1) : 1;
+
+        // Format to 7-digit number
+        $formattedNumber = str_pad($nextNumber, 7, '0', STR_PAD_LEFT);
+
+        // Create new reference number
+        $ref = AssetReturnReference::create([
+            'reference_number' => "ITRT-{$formattedNumber}",
+            'createdby' => session('user_email')
+        ]);
+
+        return $ref->reference_number;
+    }
+}
 
 if (!function_exists('generateAssetReturnsNumber')) {
     function generateAssetReturnsNumber()
@@ -454,4 +477,42 @@ if (!function_exists('approvalAssetTransfer')) {
         
     }
 
+}
+
+
+
+
+
+if (!function_exists('generate_asset_borrowed_ref')) {
+    function generate_asset_borrowed_ref()
+    {
+        $year = date('Y'); // Get the current year
+
+        // Find the last reference number for the current year
+        $lastReference = AssetBorrowedRef::where('reference_number', 'LIKE', "{$year}-MIS-AIT-%")
+            ->latest('id')
+            ->first();
+
+        // Extract numeric part and increment
+        if ($lastReference) {
+            $lastNumber = (int) substr($lastReference->reference_number, -4); // Get last 4 digits
+            $nextNumber = $lastNumber + 1;
+        } else {
+            $nextNumber = 1; // Start from 0001 if no previous record in the year
+        }
+
+        // Format number to 4-digit
+        $formattedNumber = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+        // Generate reference number
+        $referenceNumber = "{$year}-MIS-AIT-{$formattedNumber}";
+
+        // Create new record with the reference number
+        $ref = AssetBorrowedRef::create([
+            'reference_number' => $referenceNumber,
+            'createdby' => session('user_email'),
+        ]);
+
+        return $ref->reference_number;
+    }
 }
