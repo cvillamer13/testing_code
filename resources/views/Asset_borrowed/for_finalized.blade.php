@@ -141,9 +141,14 @@
                                                             <td>{{ $assetdetl->asset_details->asset_id }}</td>
                                                             <td>{{ $assetdetl->asset_details->asset_description }}</td>
                                                             <td>{{ $assetdetl->asset_details->serial_number }}</td>
+                                                        
                                                             <td>
-                                                                <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }})">Details</button>
-                                                                <button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete({{ $assetdetl->id }})" >Delete</button>
+                                                                @if ($data->is_finalized)
+                                                                    <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }}, false)">Details</button>
+                                                                @else
+                                                                    <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }})">Details</button>
+                                                                    <button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete({{ $assetdetl->id }})" >Delete</button>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                             
@@ -309,7 +314,7 @@
                         }
                     });
             }
-            function showSwal(id) {
+            function showSwal(id, data_stat = true) {
                 Swal.showLoading();
                 $.ajax({
                     type: "POST",
@@ -330,6 +335,7 @@
                                 <textarea class="form-control" id="swal-input-text">${response.data.comments ?? "" }</textarea>
                             `,
                             showCancelButton: true,
+                            showConfirmButton: data_stat,
                             confirmButtonText: 'Submit',
                             preConfirm: () => {
                                 const text = document.getElementById('swal-input-text').value;
@@ -672,6 +678,58 @@
                             });
                         }
                     });
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+                });
+                
+            });
+
+
+            $(document).on("click", "#btn_reject_data", function () {
+                let appr_id = $(this).attr("data-id");
+                let user_id = $(this).attr("data-user_id");
+                let status = $(this).attr("data-status");
+                let asset_iss_id = $(this).attr("data-asset_iss_id");
+                
+
+                Swal.fire({
+                    title: "Do you want to borrowed request?",
+                    html: "Once Disaprroved, you will not be able to make changes. <br> <textarea class='form-control' name='reason_data' id='reason_data' placeholder='Reason'></textarea>",
+                    icon: "error",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Disaprroved",
+                    denyButtonText: `Cancel`
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    // var id = document.getElementById("issuance_id").value;
+                    var reason_data = document.getElementById("reason_data").value;
+                    $.ajax({
+                        type: "POST",
+                        url: "/BorrowedAsset/approvers",
+                        data: {
+                            "_token": '{{ csrf_token() }}',
+                            "appr_id": appr_id,
+                            "user_id": user_id,
+                            "status": status,
+                            "asset_iss_id": asset_iss_id,
+                            "reason_data": reason_data
+                        },
+                        success: function (response) {
+                            swal.close();
+                            toastr.success(response.message);
+                            location.reload();
+                        },
+                        error: function (error) {
+                            console.log(error)
+                            toastr.error("Error: " + error.responseJSON.message);
+                        }
+                    });
+                    
+                    // Swal.fire("Saved!", "", "success");
+                    
                 } else if (result.isDenied) {
                     Swal.fire("Changes are not saved", "", "info");
                 }
