@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Models\ApproversMatrix;
 use App\Models\GatepassData;
 use App\Mail\Approvedissuance_Notif;
+use App\Mail\RevisedBorrowed;
 use Illuminate\Support\Facades\Mail;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
@@ -204,7 +205,7 @@ class BorrowedAssetController extends Controller
             $other_detl->finalize_at = now();
             $other_detl->save();
             if ($other_detl->is_finalized) {
-                $f_approver = approvalBorrowedAsset($other_detl->id, 3, 11, $other_detl->status);
+                $f_approver = approvalBorrowedAsset($other_detl->id, 3, 11, $other_detl->approved_status);
                 return response()->json([
                     'status' => 'success',
                     'message' => $other_detl->ref_num . ' Finalized! ' . $f_approver . " Notified."
@@ -288,7 +289,7 @@ class BorrowedAssetController extends Controller
                             $approval->remarks = $request->reason_data;
                             $approval->uid = Str::uuid();
                             $approval->save();
-                            Mail::to($asset_issuance->issued_by)->send(new Revisedissuance_Notif($asset_issuance->id, $approval->id));
+                            Mail::to($asset_issuance->requested_by)->send(new RevisedBorrowed($asset_issuance->id, $approval->id));
                             $approval3 = ApproversStatus::where('data_id', $asset_issuance->id)
                                 ->where('pages_id', session('current_page'))
                                 ->where('status', 'NA')
@@ -309,9 +310,9 @@ class BorrowedAssetController extends Controller
                             $approval->remarks = $request->reason_data;
                             $approval->uid = Str::uuid();
                             $approval->save();
-                            Mail::to($asset_issuance->issued_by)->send(new Revisedissuance_Notif($asset_issuance->id, $approval->id));
+                            Mail::to($asset_issuance->requested_by)->send(new RevisedBorrowed($asset_issuance->id, $approval->id));
                             $approval3 = ApproversStatus::where('data_id', $asset_issuance->id)
-                                ->where('pages_id', session('current_page'))
+                                ->where('pages_id', 11)
                                 ->where('status', 'NA')
                                 ->update([
                                     'status' => 'CNA',
@@ -370,5 +371,24 @@ class BorrowedAssetController extends Controller
                 $qrCodeBase64 = 'data:image/png;base64,' . base64_encode($result->getString());
         $pdf = Pdf::loadView('Asset_borrowed.borrowed_pdf_rep', [ 'data_show' => $data, 'gatepasss_status' => $gatepasss_status, 'qrCode' => $qrCodeBase64, 'requested' => $requested ]);
         return $pdf->setPaper('A3', 'landscape')->stream(); 
+    }
+
+    function auto_approved($id, $status, $page_id, $user_id){
+        try {
+            $data = AssetBorrowed::with(['getEmployee', 'getLocation_from', 'details'])->find($id);
+            $borrowed = AssetBorrowed::with(['getEmployee', 'getLocation_from', 'details'])->find($id);
+            $borrowed_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 11)->get();
+            // echo "<pre>";
+            // print_r($borrowed);
+            // exit;
+            return view('Asset_borrowed.for_finalized_email', [
+                'data' => $data,
+                'borrowed_status' =>  $borrowed_status,
+                'borrowed' => $borrowed,
+                'status' =>  $status
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }

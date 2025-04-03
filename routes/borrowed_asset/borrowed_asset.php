@@ -16,5 +16,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/approvers', [BorrowedAssetController::class, 'to_approvers']);
     Route::get('/gate_passchecker/{id}', [BorrowedAssetController::class, 'gate_passchecker']);
     Route::get('/pdf_report/{id}', [BorrowedAssetController::class, 'borrowed_pdf']);
+    Route::get('/approve/{id}/{status}/{page_id}/{user_id}', [BorrowedAssetController::class, 'auto_approved']);
 });
 
