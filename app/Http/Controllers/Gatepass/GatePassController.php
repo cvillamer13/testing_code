@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Gatepass;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\AssetIssuance; 
+use App\Models\AssetIssuance;
+use App\Models\AssetBorrowed; 
 use App\Models\GatepassData;
 use App\Models\Company;
 use Carbon\Carbon;
@@ -65,6 +66,28 @@ class GatePassController extends Controller
                     'gatepasss_status_each' => $gatepasss_status_each,
                 ]);
             break;
+
+            case 'borrowed':
+                $data_show = AssetBorrowed::with(['details', 'getEmployee', 'getLocation_from', 'getLocation_to'])->find($data->data_id);
+                $from_location = Location::with(['company','department'])->find($data->from_location);
+                $to_location = Location::with(['company','department'])->find($data->to_location);
+                $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->get();
+                $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', Auth::user()->id)->first();
+
+                // echo "<pre>";
+                // print_r($data);
+                // exit;
+                return view('Gatepass.gatepass_borrowed', [
+                    'data_gatepass' => $data,
+                    'data_issuance' => $data_show,
+                    'companies' => $companies,
+                    'from_location' => $from_location,
+                    'to_location' => $to_location,
+                    'gatepasss_status' => $gatepasss_status,
+                    'status' => "P",
+                    'gatepasss_status_each' => $gatepasss_status_each,
+                ]);
+            break;
             
             default:
                 $data = GatepassData::find($id);
@@ -101,6 +124,28 @@ class GatePassController extends Controller
                         // print_r($gatepasss_status);
                         // exit;
                         return view('Gatepass.gatepass_issuance', [
+                            'data_gatepass' => $data,
+                            'data_issuance' => $data_show,
+                            'companies' => $companies,
+                            'from_location' => $from_location,
+                            'to_location' => $to_location,
+                            'gatepasss_status' => $gatepasss_status,
+                            'status' => "P",
+                            'gatepasss_status_each' => $gatepasss_status_each,
+                        ]);
+                    break;
+
+                    case 'borrowed':
+                        $data_show = AssetBorrowed::with(['details', 'getEmployee', 'getLocation_from', 'getLocation_to'])->find($data->data_id);
+                        $from_location = Location::with(['company','department'])->find($data->from_location);
+                        $to_location = Location::with(['company','department'])->find($data->to_location);
+                        $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->get();
+                        $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', Auth::user()->id)->first();
+        
+                        // echo "<pre>";
+                        // print_r($data);
+                        // exit;
+                        return view('Gatepass.gatepass_borrowed', [
                             'data_gatepass' => $data,
                             'data_issuance' => $data_show,
                             'companies' => $companies,
@@ -159,6 +204,28 @@ class GatePassController extends Controller
                         ]);
                     break;
                     
+                    case 'borrowed':
+                        $data_show = AssetBorrowed::with(['details', 'getEmployee', 'getLocation_from', 'getLocation_to'])->find($data->data_id);
+                        $from_location = Location::with(['company','department'])->find($data->from_location);
+                        $to_location = Location::with(['company','department'])->find($data->to_location);
+                        $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->get();
+                        $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', Auth::user()->id)->first();
+        
+                        // echo "<pre>";
+                        // print_r($data);
+                        // exit;
+                        return view('Gatepass.gatepass_borrowed', [
+                            'data_gatepass' => $data,
+                            'data_issuance' => $data_show,
+                            'companies' => $companies,
+                            'from_location' => $from_location,
+                            'to_location' => $to_location,
+                            'gatepasss_status' => $gatepasss_status,
+                            'status' => "P",
+                            'gatepasss_status_each' => $gatepasss_status_each,
+                        ]);
+                    break;
+
                     default:
                         $data = GatepassData::find($id);
                     break;
@@ -183,6 +250,21 @@ class GatePassController extends Controller
                 case 'issuance':
                     $itgp = generateGatepassNumber();
                     $data_show = AssetIssuance::with(['details', 'getEmployee', 'getLocation', 'assetDetails'])->find($gatepass->data_id);
+                    $gatepass = GatepassData::find($id);
+                    $gatepass->isRequest = 1;
+                    $gatepass->gatepass_no = $itgp;
+                    $gatepass->purpose = $request->purpose_text;
+                    $gatepass->date_issued = $today;
+                    $gatepass->approvers_ref = 4;
+                    $gatepass->status = "P";
+                    $gatepass->updatedby = session('user_email');
+                    $gatepass->updated_at = now();
+                    $gatepass->save();
+                    return redirect('/Gatepass/data/'.$gatepass->id)->with('success', $gatepass->gatepass_no.' Add Successfully');
+                break;
+
+                case 'borrowed':
+                    $itgp = generateGatepassNumber();
                     $gatepass = GatepassData::find($id);
                     $gatepass->isRequest = 1;
                     $gatepass->gatepass_no = $itgp;

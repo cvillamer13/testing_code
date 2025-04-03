@@ -18,5 +18,12 @@ class AssetBorrowedDetl extends Model
         'updatedby',
         'deletedby',
         'isDelete',
+        'deleted_at',
+        'borrowed_main_id'
     ];
+
+    public function asset_details(){
+        return $this->belongsTo(Asset::class, 'asset_id');
+    }
+    
 }

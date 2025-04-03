@@ -427,7 +427,7 @@ class AssetAssignController extends Controller
                     $gatepass->createdby = session('user_email');
                     $gatepass->created_at = now();
                     $gatepass->save();
-                    Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id, $gatepass->id));
+                    Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id, $gatepass->id, "issuance"));
 
                     
                     // print_r($asset_issuance);

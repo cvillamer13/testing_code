@@ -9,6 +9,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/add', [BorrowedAssetController::class, 'store']);
     Route::get('/for_finalize/{id}', [BorrowedAssetController::class, 'for_finalize'])->name('BorrowedAsset.for_finalize');
     Route::post('/add_detl', [BorrowedAssetController::class, 'store_detl']);
+    Route::post('/saveOtherDetl', [BorrowedAssetController::class, 'store_otherdetl']);
+    Route::post('/getData_detl', [BorrowedAssetController::class, 'get_data_detl']);
+    Route::delete('/getDeleteDetl', [BorrowedAssetController::class, 'delete_detl']);
+    Route::post('/finalized', [BorrowedAssetController::class, 'finalized']);
+    Route::post('/approvers', [BorrowedAssetController::class, 'to_approvers']);
+    
     
 });
 

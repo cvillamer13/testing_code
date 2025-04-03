@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Issuance Notification</title>
+    <title>Approvers Notification</title>
 </head>
 <body style="background-color: #f8f9fa; font-family: Arial, sans-serif; margin: 0; padding: 0;">
     <table role="presentation" style="width: 100%; background-color: #f8f9fa; padding: 20px;">

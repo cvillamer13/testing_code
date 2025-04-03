@@ -105,21 +105,41 @@
 
                                             <hr>
                                             <h5 class="card-title">Equipment List</h5>
-                                                <table class="table text-center" id="data_selected">
+                                                @php
+                                                    if($data->is_finalized){
+                                                        $view_table="data_notselected";
+                                                    }else{
+                                                        $view_table="data_selected";
+                                                    }
+                                                @endphp
+                                                <table class="table text-center" id="{{ $view_table }}">
                                                     <thead>
                                                         <tr>
                                                             <th>Asset Tag</th>
                                                             <th>Asset Description</th>
                                                             <th>Serial No</th>
-                                                            <th>Comment</th>
-                                                            <th>Date to return</th>
-                                                            <th></th>
+                                                            {{-- <th>Comment</th>
+                                                            <th>Date to return</th> --}}
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @php
                                                             $x = 0;
                                                         @endphp
+
+                                                        @foreach ($data->details as $assetdetl)
+                                                        <tr>
+                                                            <td>{{ $assetdetl->asset_details->asset_id }}</td>
+                                                            <td>{{ $assetdetl->asset_details->asset_description }}</td>
+                                                            <td>{{ $assetdetl->asset_details->serial_number }}</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }})">Details</button>
+                                                                <button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete({{ $assetdetl->id }})" >Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                            
+                                                        @endforeach
                                                         
                                                         <input type="hidden" id="last_count_data" value="{{ $x }}">
                                                     </tbody>
@@ -128,7 +148,79 @@
                                             </div>
                                         </div>
                                         <input type="hidden" name="borrowed_id" id="borrowed_id" value="{{ $data->id }}">
-                                        <button class="btn btn-primary mt-4 w-100" type="submit">Finalize</button>
+                                        @if ($data->is_finalized)
+                                        <div class="row">
+                                            <h5 class="card-title">Approvers</h5>
+                                            <hr>
+                                            @foreach ($borrowed_status as $data)
+                                            <div class="mb-3 col-sm-4 text-center">
+                                                <label for="employee_name" class="form-label"><b>{{  $data->user->name }}</b></label>
+                                                @if (!is_null($data->uid) > 0)
+                                                    <p>uid: {{  $data->uid }}</p>
+                                                @endif
+
+                                                @if (!is_null($data->remarks) > 0)
+                                                    <p>Reason: {{  $data->remarks }}</p>
+                                                @endif
+                                                {{-- <p>uid: {{  $data->uid }}</p> --}}
+                                                <br>
+
+                                                @if ($data->user->id == Auth::user()->id && $data->status == 'P')
+                                                    <div class="d-flex gap-1">
+                                                        <button type="button" class="btn btn-outline-success flex-fill" id="btn_approved_data" 
+                                                        data-id="{{ $data->id }}" 
+                                                        data-user_id="{{ $data->user->id }}" 
+                                                        data-status="A" 
+                                                        data-asset_iss_id="{{ $borrowed->id }}
+                                                        ">Approved</button>
+                                                        <button type="button" class="btn btn-outline-danger flex-fill" id="btn_reject_data" data-id="{{ $data->id }}" data-user_id="{{ $data->user->id }}" data-status="R" data-asset_iss_id="{{ $borrowed->id }}">Reject</button>
+                                                        
+                                                    </div>
+                                                    
+                                                @else
+
+                                                <label for="employee_name" class="form-label">
+                                                        
+                                                    @switch($data->status)
+                                                        @case('P')
+                                                            <div class="alert alert-info" role="alert">
+                                                                Pending
+                                                            </div>
+                                                            @break
+                                                        @case('NA')
+                                                            <div class="alert alert-primary" role="alert">
+                                                                Waiting for Approval
+                                                            </div>
+                                                            @break
+                                                        @case('A')
+                                                            <div class="alert alert-success" role="alert">
+                                                                Approved
+                                                            </div>
+                                                            @break
+                                                        @case('R')
+                                                            <div class="alert alert-danger" role="alert">
+                                                                Rejected
+                                                            </div>
+                                                            @break
+                                                        @case('CNA')
+                                                            <div class="alert alert-warning" role="alert">
+                                                                Cancelled because of last approver is rejected
+                                                            </div>
+                                                            @break
+                                                        @default
+                                                            Unknown Status
+                                                    @endswitch
+                                                
+                                                </label>
+                                                    
+                                                @endif
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        @else
+                                            <button class="btn btn-primary mt-4 w-100" type="button" onclick="final_data()">Finalize</button>
+                                        @endif
+                                        
                                 {{-- </form> --}}
                             </div>
                         </div>
@@ -209,16 +301,108 @@
                         }
                     });
             }
+            function showSwal(id) {
+                Swal.showLoading();
+                $.ajax({
+                    type: "POST",
+                    url: "/BorrowedAsset/getData_detl",
+                    data: {
+                        "_token": '{{ csrf_token() }}',
+                        "detl_id": id
+                    },
+                    success: function (response) {
+                        if(response.status == "success"){
+                            Swal.fire({
+                            title: 'Enter Details',
+                            html: `
+                                <label class="form-label">Date to return</label>
+                                <input type="date" class="form-control" id="swal-input-date" value="${response.data.date ?? "" }" >
+
+                                <label class="form-label">Comments</label>
+                                <textarea class="form-control" id="swal-input-text">${response.data.comments ?? "" }</textarea>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Submit',
+                            preConfirm: () => {
+                                const text = document.getElementById('swal-input-text').value;
+                                const date = document.getElementById('swal-input-date').value;
+                                
+                                if (!text || !date) {
+                                    Swal.showValidationMessage('Both fields are required!');
+                                }
+
+                                return { text, date };
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/BorrowedAsset/saveOtherDetl",
+                                    data: {
+                                        "_token": '{{ csrf_token() }}',
+                                        "comment": result.value.text,
+                                        "date_of_return":result.value.date,
+                                        "detl_id": id
+                                    },
+                                    success: function (response) {
+                                        if(response.status == "success"){
+                                            toastr.success("Other Details Saved");
+                                            Swal.close();
+                                            location.reload();
+                                        }
+                                    },
+                                    error: function (error) {
+                                        // console.log(error)
+                                        Swal.close();
+                                        toastr.error("Error: " + error.responseJSON.message);
+                                    }
+                                });
+                            }
+                        });
+                                }
+                            },
+                            error: function (error) {
+                                // console.log(error)
+                                Swal.close();
+                                toastr.error("Error: " + error.responseJSON.message);
+                            }
+                        });
+                
+            }
+
+            function getDelete(id){
+                Swal.showLoading();
+                $.ajax({
+                    type: "DELETE",
+                    url: "/BorrowedAsset/getDeleteDetl",
+                    data: {
+                        "_token": '{{ csrf_token() }}',
+                        "detl_id": id
+                    },
+                    success: function (response) {
+                        if(response.status == "success"){
+                            toastr.success("Asset Deleted");
+                            Swal.close();
+                            location.reload();
+                        }
+                    },
+                    error: function (error) {
+                        // console.log(error)
+                        Swal.close();
+                        toastr.error("Error: " + error.responseJSON.message);
+                    }
+                });
+            }
 
             function addNewRow1(rowId) {
                     var rowId = parseInt($('#last_count_data').val());
                     var rowCount = parseInt(rowId) // Get current row count
                     var newRowId = rowCount + 1; // Unique ID for new row
+                    // console.log('addNewRow1', newRowId);
                     var newRow = `
                         <tr>
                             <td><input type="text" class="form-control" data-id="${newRowId}" id="data_${newRowId}" autocomplete="off" autocorrect="off" spellcheck="false"></td>
-                            <td><span class="text-center" id="category_${newRowId}"></span></td>
-                            <td><span class="text-center" id="model_${newRowId}"></span></td>
+                            <td><span class="text-center" id="asset_description${newRowId}"></span></td>
                             <td><span class="text-center" id="serial_${newRowId}"></span></td>
                             <td>
                                 <button type="button" id="data_save_${newRowId}" class="btn btn-outline-success saveRow">Save</button>
@@ -226,7 +410,7 @@
                             </td>
                         </tr>
                 `;
-                $('#example3 tbody').append(newRow);
+                $('#data_selected tbody').append(newRow);
                 $('#last_count_data').val(newRowId);
                 $('#data_' + newRowId).focus();
             }
@@ -235,7 +419,7 @@
                 var main_id = document.getElementById("borrowed_id").value;
                 $.ajax({
                     type: "POST",
-                    url: "/BorrowedAsset/add_detl/"+main_id,
+                    url: "/BorrowedAsset/add_detl/",
                     data: {
                         "_token": '{{ csrf_token() }}',
                         "asset_id": asset_id,
@@ -244,10 +428,10 @@
                         "borrowed_id": main_id
                     },
                     success: function (response) {
-                        console.log(response)
+                        // console.log(response)
                         var button = $('#data_save_'+i);
                         var button_remove = $('#data_remove_'+i);
-                        button.replaceWith(``);
+                        button.replaceWith(`<button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal(`+response.data.id+`)">Details</button>`);
                         button_remove.replaceWith(`<button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete(`+response.data.id+`)" >Delete</button>`);
                             // Add a new row to allow further inputs
                         addNewRow1(i);
@@ -256,6 +440,46 @@
                         Swal.close();
                     }
                 });
+            }
+
+            function final_data(){
+                Swal.fire({
+                    title: "Do you want to finalized the Borrowed Asset?",
+                    text: "Once finalized, you will not be able to make changes and the request will send for approval",
+                    icon: "warning",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Finalize",
+                    denyButtonText: `Cancel`
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    var main_id = document.getElementById("borrowed_id").value;
+                    $.ajax({
+                        type: "POST",
+                        url: "/BorrowedAsset/finalized",
+                        data: {
+                            "_token": '{{ csrf_token() }}',
+                            "borrowed_id": main_id
+                        },
+                        success: function (response) {
+                            swal.close();
+                            toastr.success(response.message);
+                            location.reload();
+                        },
+                        error: function (error) {
+                            console.log(error)
+                            toastr.error("Error: " + error.responseJSON.message);
+                        }
+                    });
+                    
+                    // Swal.fire("Saved!", "", "success");
+                    
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+                });
+
             }
 
 
@@ -271,8 +495,6 @@
                             <td><input type="text" class="form-control" data-id="${newRowId}" id="data_${newRowId}" autocomplete="off" autocorrect="off" spellcheck="false"></td>
                             <td><span class="text-center" id="asset_description${newRowId}"></span></td>
                             <td><span class="text-center" id="serial_${newRowId}"></span></td>
-                            <td><input type="text" class="form-control" id="comment_${newRowId}"></td>
-                            <td><input type="date" class="form-control" id="date_return_${newRowId}"></td>
                             <td>
                                 <button type="button" id="data_save_${newRowId}" class="btn btn-outline-success saveRow">Save</button>
                                 <button type="button" id="data_remove_${newRowId}" class="btn btn-outline-danger removeRow">Remove</button>
@@ -293,34 +515,39 @@
 
                             console.log("Scanned Barcode:", barcodeValue, "Row ID:", rowId);
 
+                            Swal.showLoading();
                             $.ajax({
-                                type: "POST",
-                                url: "/AssetAssign/getAsset",
-                                data: {
+                                url: '/AssetAssign/getAsset', // Replace with your actual API endpoint
+                                method: 'POST',
+                                data: { 
                                     "_token": '{{ csrf_token() }}',
                                     "asset_id": barcodeValue
                                 },
                                 success: function (response) {
                                     if(response.status == "success"){
-                                        Swal.showLoading();
-                                        if(response.data == null){
-                                            Swal.close();
-                                            Swal.fire({
-                                                title: "Asset not Found",
-                                                icon: "error"
-                                            });
-                                            document.getElementById("data_"+rowId).value = "";
+                                        var rowCount2 = parseInt($('#last_count_data').val());
+                                        var intCurrent = rowCount2;
+                                        // console.log("start",rowCount2)
+                                            Swal.showLoading();
+                                            if(response.data == null){
+                                                Swal.close();
+                                                Swal.fire({
+                                                    title: "Asset not Found",
+                                                    icon: "error"
+                                                });
+                                                document.getElementById("data_"+intCurrent).value = "";
+                                            }
+                                            
+                                            var text_data = $('#data_'+intCurrent);
+                                            text_data.replaceWith(`<span class="text-center" id="data_${intCurrent}">`+response.data.asset_id+`</span>`);
+                                            document.getElementById("asset_description"+intCurrent).innerHTML = response.data.asset_description
+                                            document.getElementById("serial_"+intCurrent).innerHTML = response.data.serial_number
+                                            getSave_detl(intCurrent, response.data.id);
+                                            // addNewRow()
+                                            
                                         }
-                                        
-                                        var text_data = $('#data_'+rowId);
-                                        text_data.replaceWith(`<span class="text-center" id="data_${rowId}">`+response.data.asset_id+`</span>`);
-                                        // document.getElementById("data_"+rowId).value = response.data.asset_id
-                                        document.getElementById("category_"+rowId).innerHTML = response.data.category_data.name
-                                        document.getElementById("model_"+rowId).innerHTML = response.data.model_no
-                                        document.getElementById("serial_"+rowId).innerHTML = response.data.serial_number
-                                        getSave_detl(rowId, response.data.id);
-                                        
-                                    }
+                                },
+                                error: function (error) {
                                 }
                             });
                             $(this).closest('tr').next().find('input').focus();
@@ -352,7 +579,7 @@
                                 if(response.status == "success"){
                                     var rowCount2 = parseInt($('#last_count_data').val());
                                     var intCurrent = rowCount2;
-                                    console.log("inp",rowCount2 + 1)
+                                    // console.log("start",rowCount2)
                                         Swal.showLoading();
                                         if(response.data == null){
                                             Swal.close();
@@ -365,12 +592,10 @@
                                         
                                         var text_data = $('#data_'+intCurrent);
                                         text_data.replaceWith(`<span class="text-center" id="data_${intCurrent}">`+response.data.asset_id+`</span>`);
-                                        // document.getElementById("data_"+rowId).value = response.data.asset_id
-                                        // document.getElementById("category_"+intCurrent).innerHTML = response.data.category_data.name
                                         document.getElementById("asset_description"+intCurrent).innerHTML = response.data.asset_description
                                         document.getElementById("serial_"+intCurrent).innerHTML = response.data.serial_number
                                         getSave_detl(intCurrent, response.data.id);
-                                        addNewRow()
+                                        // addNewRow()
                                         
                                     }
                             },
@@ -388,6 +613,62 @@
                     // Initial row
                     addNewRow();
                     
+            });
+
+
+            $(document).on("click", "#btn_approved_data", function () {
+                let appr_id = $(this).attr("data-id");
+                let user_id = $(this).attr("data-user_id");
+                let status = $(this).attr("data-status");
+                let asset_iss_id = $(this).attr("data-asset_iss_id");
+                // Swal.showLoading();
+
+                Swal.fire({
+                    title: "Do you want to approved issuance?",
+                    html: "Once approved, you will not be able to make changes and send the issuance to the next approvers",
+                    icon: "warning",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Aprroved",
+                    denyButtonText: `Cancel`
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    // Swal.close();
+                    // Swal.showLoading();
+                    Swal.fire({
+                        title: "Processing...",
+                        text: "Please wait while the issuance is being approved.",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                            $.ajax({
+                                type: "POST",
+                                url: "/BorrowedAsset/approvers",
+                                data: {
+                                    "_token": '{{ csrf_token() }}',
+                                    "appr_id": appr_id,
+                                    "user_id": user_id,
+                                    "status": status,
+                                    "asset_iss_id": asset_iss_id
+                                },
+                                success: function (response) {
+                                    
+                                    toastr.success(response.message);
+                                    location.reload();
+                                },
+                                error: function (error) {
+                                    console.log(error)
+                                    toastr.error("Error: " + error.responseJSON.message);
+                                }
+                            });
+                        }
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+                });
+                
             });
 
         </script>

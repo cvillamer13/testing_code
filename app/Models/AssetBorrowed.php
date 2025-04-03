@@ -27,8 +27,17 @@ class AssetBorrowed extends Model
         'is_finalized',
         'finalizedby',
         'finalize_at',
+        'approved_status',
+        'approved_by',
+        'approved_at',
     ];
 
+
+    public function details(){
+        return $this->hasMany(AssetBorrowedDetl::class, 'borrowed_main_id')
+            ->where('isDelete', false);
+    }
+    
     public function getEmployee(){
         return $this->belongsTo(Employee::class, 'emp_id');
     }

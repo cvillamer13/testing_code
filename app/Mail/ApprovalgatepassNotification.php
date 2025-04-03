@@ -12,6 +12,7 @@ use App\Models\GatepassData;
 use App\Models\AssetIssuance;
 use App\Models\User;
 use App\Models\Location;
+use App\Models\AssetBorrowed;
 
 class ApprovalgatepassNotification extends Mailable
 {
@@ -25,6 +26,7 @@ class ApprovalgatepassNotification extends Mailable
     public $gatepass_id_dta;
     public $location_from_data;
     public $location_to_data;
+    public $data_process;
     // public $pages_id;
     public function __construct(public $gatepass_id, public $pages_id, public $user_id)
     {
@@ -39,12 +41,15 @@ class ApprovalgatepassNotification extends Mailable
         $to_location = Location::with(['company','department'])->find($gatepass_data->to_location);
         $this->location_from_data = $from_location;
         $this->location_to_data = $to_location;
+        $this->data_process = $gatepass_data->module_from;
         switch ($gatepass_data->module_from) {
             case 'issuance':
                 $data_used = AssetIssuance::with(['details', 'assetDetails', 'getLocation'])->find($gatepass_data->data_id);
-                // echo "<pre>";
-                // print_r($data->assetDetails);
-                // exit;
+                $this->data = $data_used;
+            break;
+
+            case 'borrowed':
+                $data_used = AssetBorrowed::with(['details', 'getEmployee', 'getLocation_from', 'getLocation_to'])->find($gatepass_data->data_id);
                 $this->data = $data_used;
             break;
         }
@@ -67,20 +72,47 @@ class ApprovalgatepassNotification extends Mailable
      */
     public function content(): Content
     {
-        return new Content(
-            view: 'mail.request_approval_gatepass',
-            with: [
-                'gate_pass_no' => $this->gatepass_no,
-                'pages_id' => $this->pages_id,
-                'user_id' => $this->user_id,
-                'data' => $this->data,
-                'name' => $this->name,
-                'created_date' => $this->created_date,
-                'gatepass_id_dta' => $this->gatepass_id_dta,
-                'from_location' => $this->location_from_data,
-                'to_location' => $this->location_to_data
-            ],
-        );
+
+        switch ($this->data_process) {
+            case 'issuance':
+                return new Content(
+                    view: 'mail.request_approval_gatepass',
+                    with: [
+                        'gate_pass_no' => $this->gatepass_no,
+                        'pages_id' => $this->pages_id,
+                        'user_id' => $this->user_id,
+                        'data' => $this->data,
+                        'name' => $this->name,
+                        'created_date' => $this->created_date,
+                        'gatepass_id_dta' => $this->gatepass_id_dta,
+                        'from_location' => $this->location_from_data,
+                        'to_location' => $this->location_to_data
+                    ],
+                );
+            break;
+
+            case 'borrowed':
+                return new Content(
+                    view: 'mail.request_approval_gatepass_borrowed',
+                    with: [
+                        'gate_pass_no' => $this->gatepass_no,
+                        'pages_id' => $this->pages_id,
+                        'user_id' => $this->user_id,
+                        'data' => $this->data,
+                        'name' => $this->name,
+                        'created_date' => $this->created_date,
+                        'gatepass_id_dta' => $this->gatepass_id_dta,
+                        'from_location' => $this->location_from_data,
+                        'to_location' => $this->location_to_data
+                    ],
+                );
+            break;
+            
+            default:
+            # code...
+            break;
+        }
+        
     }
 
     /**

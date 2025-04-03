@@ -10,6 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\AssetIssuance;
 use App\Models\User;
+use App\Models\AssetBorrowed;
 
 class Approvedissuance_Notif extends Mailable
 {
@@ -27,20 +28,43 @@ class Approvedissuance_Notif extends Mailable
     public $subject;
     // private $issuance_id;
 
-    public function __construct(public $issuance_id, public $gatepass_id)
+    public function __construct(public $issuance_id, public $gatepass_id, public $data_process)
     {
-        $issuncance = AssetIssuance::with(['details', 'getEmployee', 'getLocation'])->find($issuance_id);
+        switch ($data_process) {
+            case 'issuance':
+                $issuncance = AssetIssuance::with(['details', 'getEmployee', 'getLocation'])->find($issuance_id);
+                $users = User::where('email', $issuncance->issued_by)->first(); 
+                $this->assignee = $issuncance->getEmployee->first_name . ' ' . $issuncance->getEmployee->last_name;
+                $this->rev_num = $issuncance->rev_num;
+                $this->issueby = $users->name;
+                $this->date_req = $issuncance->date_req;
+                $this->date_need = $issuncance->date_need;
+                $this->subject = "Issuance Request is Approved Rev. No. " . $this->rev_num; 
+                $this->issuance_id = $issuance_id;
+                $this->gatepass_id = $gatepass_id;
+                # code...
+                break;
+
+            case 'borrowed':
+                $issuncance = AssetBorrowed::with(['details'])->find($issuance_id);
+                $users = User::where('email', $issuncance->requested_by)->first(); 
+                $this->assignee = $issuncance->getEmployee->first_name . ' ' . $issuncance->getEmployee->last_name;
+                $this->rev_num = $issuncance->ref_num;
+                $this->issueby = $users->name;
+                $this->date_req = $issuncance->requested_at;
+                $this->date_need = $issuncance->deployed_at;
+                $this->subject = "Borrowed Asset Request is Approved Document No. " . $this->rev_num; 
+                $this->issuance_id = $issuance_id;
+                $this->gatepass_id = $gatepass_id;
+                # code...
+                break;
+                
+            
+            default:
+                # code...
+                break;
+        }
         
-        $users = User::where('email', $issuncance->issued_by)->first(); 
-        // dd($users);
-        $this->assignee = $issuncance->getEmployee->first_name . ' ' . $issuncance->getEmployee->last_name;
-        $this->rev_num = $issuncance->rev_num;
-        $this->issueby = $users->name;
-        $this->date_req = $issuncance->date_req;
-        $this->date_need = $issuncance->date_need;
-        $this->subject = "Issuance Request is Approved Rev. No. " . $this->rev_num; 
-        $this->issuance_id = $issuance_id;
-        $this->gatepass_id = $gatepass_id;
         // $this
     }
 
