@@ -31,7 +31,37 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   
+                                    @foreach ($data as $da)
+                                        <tr>
+                                            <td>{{ $da->ref_num }}</td>
+                                            <td>
+                                                @if ($da->status== 'A')
+                                                    <div class="alert alert-success" role="alert">
+                                                        Approved
+                                                    </div>
+                                                    
+                                                @elseif($da->status == 'R')
+                                                    <div class="alert alert-danger" role="alert">
+                                                        Rejected
+                                                    </div>
+                                                @elseif($da->status == 'RE')
+                                                    <div class="alert alert-danger" role="alert">
+                                                        Revised
+                                                    </div>
+                                                @else
+                                                    <div class="alert alert-info" role="alert">
+                                                        Pending
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-info" href="/BorrowedAsset/for_finalize/{{ $da->id }}">View</a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-warning" href="/BorrowedAsset/gate_passchecker/{{ $da->id }}" target="_blank">View</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 <tbody>
                                 
                             </table>

@@ -19,7 +19,9 @@ use Illuminate\Support\Facades\Mail;
 class BorrowedAssetController extends Controller
 {
     function view(){
+        $data = AssetBorrowed::all();
         return view('Asset_borrowed.view', [
+            'data' => $data
         ]);
     }
 
@@ -335,5 +337,14 @@ class BorrowedAssetController extends Controller
             
         }
 
+    }
+
+    function gate_passchecker($id){
+        try {
+            $data = GatepassData::where('data_id', $id)->where('module_from', 'borrowed')->first();
+            return redirect('/Gatepass/gatepass_report/'.$data->id)->with('success', 'Borrowed Add Successfully');
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }

@@ -429,6 +429,31 @@ class GatePassController extends Controller
                 $pdf = Pdf::loadView('Gatepass.gatepass_pdf_rep', ['data' => $data, 'from_location' => $from_location, 'to_location' => $to_location, 'data_show' => $data_show, 'gatepasss_status' => $gatepasss_status, 'qrCode' => $qrCodeBase64 ]);
                 return $pdf->setPaper('letter', 'landscape')->stream(); 
             break;
+
+            case 'borrowed':
+                $data_show = AssetBorrowed::with(['details', 'getEmployee'])->find($data->data_id);
+                $from_location = Location::with(['company','department'])->find($data->from_location);
+                $to_location = Location::with(['company','department'])->find($data->to_location);
+                $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->get();
+                $gatepasss_status_each = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 14)->where('user_id', Auth::user()->id)->first();
+                // $qrCode = base64_encode(QrCode::format('png')->size(200)->generate($data->id));
+                $qrCode = QrCode::create($data->id)
+                            ->setEncoding(new Encoding('UTF-8'))
+                            ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
+                            ->setSize(200)
+                            ->setMargin(10);
+                $writer = new PngWriter();
+                $result = $writer->write($qrCode);
+                $qrCodeBase64 = 'data:image/png;base64,' . base64_encode($result->getString());
+
+
+
+                // echo "<pre>";
+                // print_r($qrCodeBase64);
+                // exit;
+                $pdf = Pdf::loadView('Gatepass.gatepass_pdf_borrowed_rep', ['data' => $data, 'from_location' => $from_location, 'to_location' => $to_location, 'data_show' => $data_show, 'gatepasss_status' => $gatepasss_status, 'qrCode' => $qrCodeBase64 ]);
+                return $pdf->setPaper('letter', 'landscape')->stream(); 
+            break;
             
             default:
                 $data = GatepassData::find($id);
@@ -437,4 +462,7 @@ class GatePassController extends Controller
         
 
     }
+
+
+    
 }

@@ -14,7 +14,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/getDeleteDetl', [BorrowedAssetController::class, 'delete_detl']);
     Route::post('/finalized', [BorrowedAssetController::class, 'finalized']);
     Route::post('/approvers', [BorrowedAssetController::class, 'to_approvers']);
-    
+    Route::get('/gate_passchecker/{id}', [BorrowedAssetController::class, 'gate_passchecker']);
     
 });
 
