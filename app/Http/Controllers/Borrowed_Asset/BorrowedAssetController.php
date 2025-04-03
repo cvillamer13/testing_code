@@ -15,6 +15,13 @@ use App\Models\ApproversMatrix;
 use App\Models\GatepassData;
 use App\Mail\Approvedissuance_Notif;
 use Illuminate\Support\Facades\Mail;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Writer\ValidationException;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BorrowedAssetController extends Controller
 {
@@ -346,5 +353,22 @@ class BorrowedAssetController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
+    }
+
+
+    function borrowed_pdf($id){
+        $data = AssetBorrowed::with(['getEmployee', 'getLocation_from', 'details', 'getLocation_to'])->find($id);
+        $requested = Employee::where('email', $data->requested_by)->first();
+        $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 11)->get();
+        $qrCode = QrCode::create($data->id)
+                            ->setEncoding(new Encoding('UTF-8'))
+                            ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
+                            ->setSize(200)
+                            ->setMargin(10);
+                $writer = new PngWriter();
+                $result = $writer->write($qrCode);
+                $qrCodeBase64 = 'data:image/png;base64,' . base64_encode($result->getString());
+        $pdf = Pdf::loadView('Asset_borrowed.borrowed_pdf_rep', [ 'data_show' => $data, 'gatepasss_status' => $gatepasss_status, 'qrCode' => $qrCodeBase64, 'requested' => $requested ]);
+        return $pdf->setPaper('A3', 'landscape')->stream(); 
     }
 }

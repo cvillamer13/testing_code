@@ -15,6 +15,14 @@
                                 {{-- <form class="needs-validation" action="/BorrowedAsset/for_finalize/{{ $data->id }}" method="post" enctype="multipart/form-data"> --}}
                                     @csrf
                                     <h5 class="card-title">{{ $data->ref_num }}</h5>
+                                    @if ($data->status == "A")
+                                        <div class="row">
+                                            <div class="card-title col-6">
+                                                <a type="button" class="btn btn-outline-success" href="/BorrowedAsset/pdf_report/{{ $data->id }}"  target="_blank"><i class="las la-print"></i>Print Transmittal Form</a>
+                                                <a type="button" class="btn btn-outline-primary" href="/BorrowedAsset/gate_passchecker/{{ $data->id }}" target="_blank"><i class="las la-print"></i>Print Gatepass</a>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <hr>
                                     <div class="row">
                                         <div class="col-xl-12">
