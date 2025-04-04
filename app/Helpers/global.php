@@ -13,6 +13,8 @@ use App\Mail\AssetTransferNotification;
 use App\Models\AssetAssigns;
 use App\Models\AssetReturnReference;
 use App\Models\AssetBorrowedRef;
+use App\Models\AssetDisposalRef;
+use App\Mail\AssetDsiposalApprovalReq;
 
 if (!function_exists('checkingPages')) {
     function checkingPages()
@@ -607,6 +609,138 @@ if (!function_exists('approvalBorrowedAsset')) {
                         $change1->status = "P";
                         $change1->save();
                         Mail::to($email)->send(new BorrowedNotif($borrowed_id, $pages_id, $value["user_id"]));
+                        $next_approver =  $name;
+                        break;
+                    }
+                    
+                }else{
+                    if($data["status"] === "A"){
+                        continue;
+                    }
+                }
+
+                // echo $data["status"] . " <> " . $value["increment_num"] . " <> " . $value["user_id"] . "<br>";
+            }
+
+            return $next_approver;
+        }
+        
+        
+    }
+
+}
+
+
+if (!function_exists('generateAssetDisposalNumber')) {
+    function generateAssetDisposalNumber()
+    {
+        // Find the last inserted reference number
+        $lastReference = AssetDisposalRef::latest('id')->first();
+
+        // Extract numeric part and increment
+        $nextNumber = $lastReference ? ((int) str_replace('DIS-', '', $lastReference->reference_number) + 1) : 1;
+
+        // Format to 7-digit number
+        $formattedNumber = str_pad($nextNumber, 7, '0', STR_PAD_LEFT);
+
+        // Create new reference number
+        $ref = AssetDisposalRef::create([
+            'reference_number' => "DIS-{$formattedNumber}",
+            'createdby' => session('user_email')
+        ]);
+
+        return $ref->reference_number;
+    }
+}
+
+
+if (!function_exists('approvalAssetDisposalAsset')) {
+    function approvalAssetDisposalAsset($borrowed_id, $typeprocess, $pages_id, $the_status)
+    {
+
+        if($the_status == "RE"){
+            $approvers = get_approvers($typeprocess);
+            $approvers = $approvers->toArray();
+            $next_approver = "";
+            foreach ($approvers as $key => $value) {
+                
+                $data1 = get_current_approvers($borrowed_id, $pages_id, $value["user_id"]);
+                $change1 = ApproversStatus::find($data1["status_id"]);
+                if ($change1) {
+                    $change1->status = "NA"; // Reset status
+                    $change1->uid = ""; // Reset status
+                    $change1->remarks = ""; // Reset status
+                    $change1->save();
+                }
+            }
+
+
+            $next_approver = "";
+            foreach ($approvers as $key => $value) {
+
+                $user_data = User::find($value["user_id"]);
+                $name = $user_data->name;
+                $email = $user_data->email;
+                $email = "christian.villamer@jakagroup.com";
+                $data = get_current_approvers($borrowed_id, $pages_id, $value["user_id"]);
+                if($data["status"] === "NA" && $value["increment_num"] == 1 && ($data["isNew"] === "Y" || $data["isNew"] === "N")){
+                
+                    $change1 = ApproversStatus::find($data["status_id"]);
+                    $change1->status = "P";
+                    $change1->save();
+                    Mail::to($email)->send(new AssetDsiposalApprovalReq($borrowed_id, $pages_id, $value["user_id"]));
+                    break;
+                }else if($data["status"] === "NA" && $value["increment_num"] > 1 && $data["isNew"] === "N"){
+                    $change1 = ApproversStatus::find($data["status_id"]);
+                    if($change1->status  === "P"){
+                        break;
+                    }else{
+                        $change1->status = "P";
+                        $change1->save();
+                        Mail::to($email)->send(new AssetDsiposalApprovalReq($borrowed_id, $pages_id, $value["user_id"]));
+                        $next_approver =  $name;
+                        break;
+                    }
+                    
+                }else{
+                    if($data["status"] === "A"){
+                        continue;
+                    }
+                }
+
+                // echo $data["status"] . " <> " . $value["increment_num"] . " <> " . $value["user_id"] . "<br>";
+            }
+            return $next_approver;
+            // echo "<pre>";
+            // print_r($approvers);
+            // exit;
+
+        }else{
+            $approvers = get_approvers($typeprocess);
+            $approvers = $approvers->toArray();
+            $next_approver = "";
+            foreach ($approvers as $key => $value) {
+
+                $user_data = User::find($value["user_id"]);
+                $name = $user_data->name;
+                $email = $user_data->email;
+                $email = "christian.villamer@jakagroup.com";
+                $data = get_current_approvers($borrowed_id, $pages_id, $value["user_id"]);
+                if($data["status"] === "NA" && $value["increment_num"] == 1 && $data["isNew"] === "Y"){
+                
+                    $change1 = ApproversStatus::find($data["status_id"]);
+                    $change1->status = "P";
+                    $change1->save();
+                    Mail::to($email)->send(new AssetDsiposalApprovalReq($borrowed_id, $pages_id, $value["user_id"]));
+                    continue;
+                }else if($data["status"] === "NA" && $value["increment_num"] > 1 && $data["isNew"] === "N"){
+                    $change1 = ApproversStatus::find($data["status_id"]);
+                    if($change1->status  === "P"){
+                        break;
+                    }else{
+                        $change1->status = "P";
+                        $change1->save();
+                        Mail::to($email)->send(new AssetDsiposalApprovalReq($borrowed_id, $pages_id, $value["user_id"]));
                         $next_approver =  $name;
                         break;
                     }
