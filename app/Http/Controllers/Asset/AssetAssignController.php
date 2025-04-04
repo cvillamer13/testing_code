@@ -19,6 +19,12 @@ use App\Mail\Approvedissuance_Notif;
 use App\Mail\Revisedissuance_Notif;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Writer\ValidationException;
 
 class AssetAssignController extends Controller
 {
@@ -527,7 +533,21 @@ class AssetAssignController extends Controller
 
     function issuance_pdf($id){
         // $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep', ['data' => $data]);
-        $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep');
+        $data = AssetIssuance::with(['details', 'getEmployee'])->find($id);
+        $qrCode = QrCode::create($data->id)
+                ->setEncoding(new Encoding('UTF-8'))
+                ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
+                ->setSize(200)
+                ->setMargin(10);
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+        $qrCodeBase64 = 'data:image/png;base64,' . base64_encode($result->getString());
+        $gatepasss_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 8)->get();
+        $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep', [
+            'data_show' => $data,
+            'qrCode' => $qrCodeBase64,
+            'gatepasss_status' => $gatepasss_status
+        ]);
         return $pdf->setPaper('letter', 'portrait')->stream(); 
 
     }
