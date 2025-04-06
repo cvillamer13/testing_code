@@ -296,7 +296,7 @@ if (!function_exists('approvalGatepass')) {
             $user_data = User::find($value["user_id"]);
             $name = $user_data->name;
             $email = $user_data->email;
-            $email = "christian.villamer@jakagroup.com";
+            // $email = "christian.villamer@jakagroup.com";
             $data = get_current_approvers($gatepass_id, $pages_id, $value["user_id"]);
             if($data["status"] === "NA" && $value["increment_num"] == 1 && $data["isNew"] === "Y"){
             
@@ -387,8 +387,8 @@ if (!function_exists('approvalAssetTransfer')) {
     
                     $user_data = User::find($value["user_id"]);
                     $name = $user_data->name;
-                    // $email = $user_data->email
-                    $email = "christian.villamer@jakagroup.com";
+                    $email = $user_data->email;
+                    // $email = "christian.villamer@jakagroup.com";
                     $data = get_current_approvers($transfer_id, $pages_id, $value["user_id"]);
                     if($data["status"] === "NA" && $value["increment_num"] == 1 && ($data["isNew"] === "Y" || $data["isNew"] === "N")){
                     
@@ -681,7 +681,7 @@ if (!function_exists('approvalAssetDisposalAsset')) {
                 $user_data = User::find($value["user_id"]);
                 $name = $user_data->name;
                 $email = $user_data->email;
-                $email = "christian.villamer@jakagroup.com";
+                // $email = "christian.villamer@jakagroup.com";
                 $data = get_current_approvers($borrowed_id, $pages_id, $value["user_id"]);
                 if($data["status"] === "NA" && $value["increment_num"] == 1 && ($data["isNew"] === "Y" || $data["isNew"] === "N")){
                 
@@ -718,7 +718,7 @@ if (!function_exists('approvalAssetDisposalAsset')) {
                 $user_data = User::find($value["user_id"]);
                 $name = $user_data->name;
                 $email = $user_data->email;
-                $email = "christian.villamer@jakagroup.com";
+                // $email = "christian.villamer@jakagroup.com";
                 $data = get_current_approvers($borrowed_id, $pages_id, $value["user_id"]);
                 if($data["status"] === "NA" && $value["increment_num"] == 1 && $data["isNew"] === "Y"){
                 
