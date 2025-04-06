@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Employee;
+use App\Models\AssetDisposal;
 class AssetDsiposalApproved extends Mailable
 {
     use Queueable, SerializesModels;
@@ -44,7 +45,7 @@ class AssetDsiposalApproved extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.name',
+            view: 'mail.disposal_approved',
             with:[
                 'data_disposal' => $this->data_disposal,
                 'employee_data' => $this->employee_data

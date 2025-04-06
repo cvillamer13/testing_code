@@ -558,7 +558,7 @@
                                 success: function (response) {
                                     
                                     toastr.success(response.message);
-                                    // location.reload();
+                                    location.reload();
                                 },
                                 error: function (error) {
                                     console.log(error)

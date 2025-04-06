@@ -13,6 +13,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/save_selected_asset_detl', [AssetDisposalController::class, 'save_selected_asset']);
     Route::post('/finalized', [AssetDisposalController::class, 'finalized']);
     Route::post('/approvers', [AssetDisposalController::class, 'to_approvers']);
-    
+    // Route::get('/received/{id}/{status}/{emp_id}', [AssetDisposalController::class, 'recieved_by'])->name('AssetDisposal.Recieved');
     
 });
+
+
+Route::get('/received/{id}/{status}/{emp_id}',[AssetDisposalController::class, 'recieved_by']);

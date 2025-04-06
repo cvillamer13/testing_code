@@ -19,6 +19,7 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Writer\ValidationException;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\AssetDsiposalApproved;
+use App\Models\ApproversMatrix;
 
 class AssetDisposalController extends Controller
 {
@@ -178,9 +179,9 @@ class AssetDisposalController extends Controller
             //code...
             
             $asset_issuance = AssetDisposal::find($request->asset_iss_id);
-            echo "<pre>";
-            print_r($asset_issuance);
-            exit;
+            // echo "<pre>";
+            // print_r($asset_issuance);
+            // exit;
             if ($request->status == "A") {
                 $approval = ApproversStatus::find($request->appr_id);
                 $approval->status = $request->status;
@@ -198,8 +199,8 @@ class AssetDisposalController extends Controller
                     $asset_issuance->approved_uid = $approval->uid;
                     $asset_issuance->save();
                     $transmittedto = AssetDisposal::with(['transmitted_emp'])->find($request->asset_iss_id);
-                    Mail::to($transmittedto->transmitted_emp->email)->send(new AssetDsiposalApproved($asset_issuance->id, $transmittedto->transmitted_emp->id));
-
+                    // Mail::to($transmittedto->transmitted_emp->email)->send(new AssetDsiposalApproved($asset_issuance->id, $transmittedto->transmitted_emp->id));
+                    Mail::to('christian.villamer@jakagroup.com')->send(new AssetDsiposalApproved($asset_issuance->id, 12, $transmittedto->transmitted_emp->id));
                     
                     // print_r($asset_issuance);
                     // exit;
@@ -289,4 +290,21 @@ class AssetDisposalController extends Controller
 
     }
 
+
+    function recieved_by($id, $status, $emp_id){
+        try {
+            $data = AssetDisposal::with(['details', 'transmitted_emp'])->find($id);
+            $disposal_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 12)->get();
+            // echo "<pre>";
+            // print_r($data);
+            // exit;
+            return view('Asset_disposal.reciever.select_asset',
+                [
+                    'data' => $data,
+                    'disposal_status' => $disposal_status,
+                ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

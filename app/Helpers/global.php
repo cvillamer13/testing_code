@@ -707,14 +707,8 @@ if (!function_exists('approvalAssetDisposalAsset')) {
                         continue;
                     }
                 }
-
-                // echo $data["status"] . " <> " . $value["increment_num"] . " <> " . $value["user_id"] . "<br>";
             }
             return $next_approver;
-            // echo "<pre>";
-            // print_r($approvers);
-            // exit;
-
         }else{
             $approvers = get_approvers($typeprocess);
             $approvers = $approvers->toArray();
@@ -750,8 +744,6 @@ if (!function_exists('approvalAssetDisposalAsset')) {
                         continue;
                     }
                 }
-
-                // echo $data["status"] . " <> " . $value["increment_num"] . " <> " . $value["user_id"] . "<br>";
             }
 
             return $next_approver;

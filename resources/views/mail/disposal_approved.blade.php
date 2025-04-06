@@ -49,7 +49,7 @@
               <p style="margin-top: 20px;">You may now proceed with the next steps for proper asset disposal.</p>
 
               <p style="text-align: center; margin-top: 30px;">
-                <a href="{{ url('/AssetDisposal/received/'.$data_disposal->id.'/'.$data_disposal->requested_by_id) }}" target="_blank"
+                <a href="{{ url('/AssetDisposal/received/'.$data_disposal->id.'/R/12/'.$data_disposal->requested_by_id) }}" target="_blank"
                    style="display: inline-block; background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: bold; box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); transition: background-color 0.3s ease-in-out;">
                   ✅ Mark as Received
                 </a>
