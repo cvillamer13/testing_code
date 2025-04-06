@@ -23,6 +23,7 @@
                                                 <div class="mb-3 col-md-4">
                                                     <label class="form-label">Employee number</label>
                                                     <input type="text" class="form-control" id="name_data" value="{{ $data->transmitted_emp->emp_no }}" readonly disabled>
+                                                    <input type="hidden" id="emp_id" value="{{ $data->transmitted_emp->id }}">
                                                 </div>
                                                 <div class="mb-3 col-md-4">
                                                     <label class="form-label">Name</label>
@@ -163,7 +164,14 @@
                                         @endif
                                         
                                 {{-- </form> --}}
-                                <button class="btn btn-primary mt-4 w-100" type="button" onclick="final_data()">Recieved</button>
+                                @if ($data->is_recieved)
+                                    <div class="alert alert-success text-center" role="alert">
+                                        Recieved By: {{ $data->recieved_by->first_name . " " . $data->recieved_by->last_name  }} at {{ $data->recieved_at }}
+                                    </div>
+                                @else
+                                    <button class="btn btn-primary mt-4 w-100" type="button" onclick="final_data()">Recieved</button>
+                                @endif
+                                
                             </div>
                         </div>
                     </div>
@@ -189,12 +197,14 @@
                 if (result.isConfirmed) {
                     Swal.showLoading();
                     var main_id = document.getElementById("asset_disposal_id").value;
+                    var emp_id = document.getElementById("emp_id").value;
                     $.ajax({
                         type: "POST",
                         url: "/AssetDisposal/received",
                         data: {
                             "_token": '{{ csrf_token() }}',
-                            "asset_disposal_id": main_id
+                            "asset_disposal_id": main_id,
+                            "emp_id" : emp_id
                         },
                         success: function (response) {
                             swal.close();

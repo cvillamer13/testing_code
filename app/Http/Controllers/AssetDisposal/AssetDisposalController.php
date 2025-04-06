@@ -293,18 +293,43 @@ class AssetDisposalController extends Controller
 
     function recieved_by($id, $status, $emp_id){
         try {
-            $data = AssetDisposal::with(['details', 'transmitted_emp'])->find($id);
+            $data = AssetDisposal::with(['details', 'transmitted_emp', 'recieved_by'])->find($id);
             $disposal_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 12)->get();
-            // echo "<pre>";
-            // print_r($data);
-            // exit;
             return view('Asset_disposal.reciever.select_asset',
                 [
                     'data' => $data,
                     'disposal_status' => $disposal_status,
+                    'emp_id' => $emp_id
                 ]);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    function recieved_final(Request $request){
+        try {
+            $request->validate([
+                'asset_disposal_id' => 'required',
+                'emp_id' => 'required'
+            ]);
+
+            $data = AssetDisposal::find($request->asset_disposal_id);
+            $data->recieved_emp = $request->emp_id;
+            $data->is_recieved = "1";
+            $data->recieved_at = now();
+            $data->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Asset Disposal Recieved Successfully.',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine()
+            ], 400);
         }
     }
 }

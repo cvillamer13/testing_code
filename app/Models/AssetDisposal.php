@@ -27,6 +27,9 @@ class AssetDisposal extends Model
         'deletedby',
         'isDelete',
         'deleted_at',
+        'recieved_emp',
+        'is_recieved',
+        'recieved_at',
     ];
 
     protected $casts = [
@@ -41,5 +44,9 @@ class AssetDisposal extends Model
 
     public function transmitted_emp(){
         return $this->belongsTo(Employee::class, 'trans_emp_id');
+    }
+
+    public function recieved_by(){
+        return $this->belongsTo(Employee::class, 'recieved_emp');
     }
 }

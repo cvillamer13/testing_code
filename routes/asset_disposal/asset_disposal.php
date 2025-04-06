@@ -19,3 +19,4 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/received/{id}/{status}/{emp_id}',[AssetDisposalController::class, 'recieved_by']);
+Route::post('/received', [AssetDisposalController::class, 'recieved_final']);
