@@ -25,11 +25,10 @@ class AssetDisposalController extends Controller
 {
     function view()
     {
+        $data = AssetDisposal::with(['details', 'transmitted_emp'])->get();
         return view('Asset_disposal.view',
             [
-                'title' => 'Asset Disposal',
-                'menu' => 'Asset Disposal',
-                'submenu' => 'Asset Disposal',
+                'data' => $data,
             ]);
     }
 

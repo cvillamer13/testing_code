@@ -30,7 +30,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    @foreach ($data as $detail)
+                                        <tr>
+                                            <td>{{ $detail->ref_num }}</td>
+                                            <td>
+                                                @if ($detail->status== 'A')
+                                                    <div class="alert alert-success" role="alert">
+                                                        Approved
+                                                    </div>
+                                                    
+                                                @elseif($detail->status == 'R')
+                                                    <div class="alert alert-danger" role="alert">
+                                                        Rejected
+                                                    </div>
+                                                @elseif($detail->status == 'RE')
+                                                    <div class="alert alert-danger" role="alert">
+                                                        Revised
+                                                    </div>
+                                                @else
+                                                    <div class="alert alert-info" role="alert">
+                                                        Pending
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-info" href="/AssetDisposal/select_asset/{{ $detail->id }}">View</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 <tbody>
                                 
                             </table>
