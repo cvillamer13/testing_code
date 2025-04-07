@@ -433,7 +433,7 @@
                 var main_id = document.getElementById("borrowed_id").value;
                 $.ajax({
                     type: "POST",
-                    url: "/BorrowedAsset/add_detl/",
+                    url: "/BorrowedAsset/add_detl",
                     data: {
                         "_token": '{{ csrf_token() }}',
                         "asset_id": asset_id,
