@@ -67,7 +67,10 @@ class AssetReturnController extends Controller
 
 
             $getassign_asset = AssetAssigns::with(['getAsset_data'])->where('employee_id', $request->selected_id)->where('status', 'TRUE')->get();
-
+            $count = $getassign_asset->count();
+            if ($count == 0) {
+                return redirect()->back()->with('error', 'No asset assigned to this employee.');
+            }
             
             $ref = generateAssetReturnsNumber();
             $asset_main = new AssetReturn();
