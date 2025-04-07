@@ -1041,7 +1041,7 @@
                 if (datastatus == "A") {
                     // alert(datastatus)
                     $("#btn_approved_data").trigger("click");
-                }else if(datastatus == "R"){
+                }else if(datastatus == "D"){
                     
                     $("#btn_reject_data").trigger("click");
                 }
