@@ -14,7 +14,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/finalized', [AssetDisposalController::class, 'finalized']);
     Route::post('/approvers', [AssetDisposalController::class, 'to_approvers']);
     // Route::get('/received/{id}/{status}/{emp_id}', [AssetDisposalController::class, 'recieved_by'])->name('AssetDisposal.Recieved');
-    
+    Route::get('/pdf_report/{id}', [AssetDisposalController::class, 'generate_report'])->name('AssetDisposal.pdf');
 });
 
 

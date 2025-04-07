@@ -332,4 +332,21 @@ class AssetDisposalController extends Controller
             ], 400);
         }
     }
+
+
+    function generate_report($id){
+        try {
+            $data = AssetDisposal::with(['details', 'transmitted_emp', 'recieved_by'])->find($id);
+            $disposal_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 12)->get();
+            $pdf = Pdf::loadView('Asset_disposal.report', [
+                'data' => $data,
+                'disposal_status' => $disposal_status,
+            ]);
+            // return $pdf->stream('Asset_Disposal_Report.pdf');
+            return $pdf->setPaper('A3', 'portrait')->stream(); 
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }
