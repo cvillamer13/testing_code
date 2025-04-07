@@ -254,7 +254,7 @@ class AssetDisposalController extends Controller
                             $approval->remarks = $request->reason_data;
                             $approval->uid = Str::uuid();
                             $approval->save();
-                            Mail::to('christian.villamer@jakagroup.com')->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
+                            // Mail::to('christian.villamer@jakagroup.com')->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
                             Mail::to($asset_issuance->finalizedby)->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
                             $approval3 = ApproversStatus::where('data_id', $asset_issuance->id)
                                 ->where('pages_id', 12)
@@ -277,7 +277,7 @@ class AssetDisposalController extends Controller
                             $approval->remarks = $request->reason_data;
                             $approval->uid = Str::uuid();
                             $approval->save();
-                            Mail::to('christian.villamer@jakagroup.com')->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
+                            // Mail::to('christian.villamer@jakagroup.com')->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
                             Mail::to($asset_issuance->finalizedby)->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
                             $approval3 = ApproversStatus::where('data_id', $asset_issuance->id)
                                 ->where('pages_id', 12)
