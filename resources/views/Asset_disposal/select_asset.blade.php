@@ -583,7 +583,7 @@
                 
 
                 Swal.fire({
-                    title: "Do you want to borrowed request?",
+                    title: "Do you want to Diapproved Asset disposal request?",
                     html: "Once Disaprroved, you will not be able to make changes. <br> <textarea class='form-control' name='reason_data' id='reason_data' placeholder='Reason'></textarea>",
                     icon: "error",
                     showDenyButton: true,
@@ -597,7 +597,7 @@
                     var reason_data = document.getElementById("reason_data").value;
                     $.ajax({
                         type: "POST",
-                        url: "/BorrowedAsset/approvers",
+                        url: "/AssetDisposal/approvers",
                         data: {
                             "_token": '{{ csrf_token() }}',
                             "appr_id": appr_id,

@@ -20,6 +20,8 @@ use Endroid\QrCode\Writer\ValidationException;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\AssetDsiposalApproved;
 use App\Models\ApproversMatrix;
+use App\Mail\AssetDsiposalRevised;
+
 
 class AssetDisposalController extends Controller
 {
@@ -250,9 +252,10 @@ class AssetDisposalController extends Controller
                             $approval->remarks = $request->reason_data;
                             $approval->uid = Str::uuid();
                             $approval->save();
-                            Mail::to($asset_issuance->requested_by)->send(new RevisedBorrowed($asset_issuance->id, $approval->id));
+                            Mail::to('christian.villamer@jakagroup.com')->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
+                            Mail::to($asset_issuance->finalizedby)->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
                             $approval3 = ApproversStatus::where('data_id', $asset_issuance->id)
-                                ->where('pages_id', session('current_page'))
+                                ->where('pages_id', 12)
                                 ->where('status', 'NA')
                                 ->update([
                                     'status' => 'CNA',
@@ -260,10 +263,11 @@ class AssetDisposalController extends Controller
                                 ]);
 
                             $asset_issuance->approved_status = "RE";
+                            $asset_issuance->status = "RE";
                             $asset_issuance->is_finalized = 0;
                             $asset_issuance->approved_by = session('user_email');
                             $asset_issuance->approved_at = now();
-                            $asset_issuance->uid = $approval->uid;
+                            $asset_issuance->approved_uid = $approval->uid;
                             $asset_issuance->save();
                         }else{
                             $approval = ApproversStatus::find($request->appr_id);
@@ -271,9 +275,10 @@ class AssetDisposalController extends Controller
                             $approval->remarks = $request->reason_data;
                             $approval->uid = Str::uuid();
                             $approval->save();
-                            Mail::to($asset_issuance->requested_by)->send(new RevisedBorrowed($asset_issuance->id, $approval->id));
+                            Mail::to('christian.villamer@jakagroup.com')->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
+                            Mail::to($asset_issuance->finalizedby)->send(new AssetDsiposalRevised($asset_issuance->id, $approval->id));
                             $approval3 = ApproversStatus::where('data_id', $asset_issuance->id)
-                                ->where('pages_id', 11)
+                                ->where('pages_id', 12)
                                 ->where('status', 'NA')
                                 ->update([
                                     'status' => 'CNA',
@@ -282,10 +287,11 @@ class AssetDisposalController extends Controller
 
                             
                                 $asset_issuance->approved_status = "RE";
+                                $asset_issuance->status = "RE";
                                 $asset_issuance->is_finalized = 0;
                                 $asset_issuance->approved_by = session('user_email');
                                 $asset_issuance->approved_at = now();
-                                $asset_issuance->uid = $approval->uid;
+                                $asset_issuance->approved_uid = $approval->uid;
                                 $asset_issuance->save();
                         }
 
