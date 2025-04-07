@@ -76,6 +76,25 @@ class AssetDisposalController extends Controller
         }
     }
 
+    function select_asset_approvers($id, $status, $pages_id, $user_id){
+        try {
+            $data = AssetDisposal::with(['details', 'transmitted_emp'])->find($id);
+            $disposal_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 12)->get();
+            return view('Asset_disposal.select_asset_approvers',
+                [
+                    'data' => $data,
+                    'disposal_status' => $disposal_status,
+                    'status' => $status,
+                    'pages_id' => $pages_id,
+                    'user_id' => $user_id
+                ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    
+
     function pre_store_detl(Request $request){
         try {
             $request->validate([
