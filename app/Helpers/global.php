@@ -5,6 +5,7 @@ use App\Models\ReferenceNumber;
 use App\Models\ReferenceGatepassNumber;
 use App\Models\ApproversMatrix;
 use App\Models\User;
+use App\Models\Asset;
 use App\Models\ApproversStatus;
 use App\Mail\MyTestEmail;
 use App\Mail\BorrowedNotif;
@@ -336,24 +337,6 @@ if (!function_exists('approvalGatepass')) {
 
 
 
-if (!function_exists('asset_assign_changes')) {
-    function asset_assign_changes($asset_id, $emp_id, $status, $current = false){
-        if($current){
-            $data = AssetAssigns::where('asset_id', $asset_id)->where('status', $status)->first();
-        }else{
-            // $data = AssetAssigns::where('asset_id', $asset_id)->where('status', $status)->get();
-            $data = new AssetAssigns();
-            $data->employee_id = $emp_id;
-            $data->asset_id = $asset_id;
-            $data->status = "TRUE";
-            $data->createdby = session('session_email');
-            $data->updatedby = session('session_email');
-            $data->save();
-        }
-        
-        return $data;
-    }
-}
 
 
 
@@ -752,4 +735,79 @@ if (!function_exists('approvalAssetDisposalAsset')) {
         
     }
 
+}
+
+
+
+if (!function_exists('changing_assetstatus')) {
+    function changing_assetstatus($asset_id, $status_id){
+        $data = Asset::find($asset_id);
+        $data->asset_status_id = $status_id;
+        $data->save();
+        return $data;
+    }
+}
+
+
+if (!function_exists('asset_assign_changes')) {
+    function asset_assign_changes($asset_id, $emp_id, $status, $current = false){
+        if($current){
+            $data = AssetAssigns::where('asset_id', $asset_id)->where('status', $status)->first();
+        }else{
+            // $data = AssetAssigns::where('asset_id', $asset_id)->where('status', $status)->get();
+            $data = new AssetAssigns();
+            $data->employee_id = $emp_id;
+            $data->asset_id = $asset_id;
+            $data->status = "TRUE";
+            $data->createdby = session('user_email');
+            $data->updatedby = session('user_email');
+            $data->save();
+        }
+        
+        return $data;
+    }
+}
+
+
+
+if (!function_exists('asset_assignee')) {
+    function asset_assignee($asset_id, $emp_id){
+        try {
+            //1 unassigned the past assigne employee
+            $data2 = AssetAssigns::where('asset_id', $asset_id)->where('status', 'TRUE')->get();
+            if($data2){
+                foreach($data2 as $key => $value){
+                    $data1 = AssetAssigns::find($value->id);
+                    $data1->status = "FALSE";
+                    $data1->updatedby = session('user_email');
+                    $data1->updated_at = now();
+                    $data1->save();
+                }
+            }
+            //2 assign the new employee
+            $data = new AssetAssigns();
+            $data->employee_id = $emp_id;
+            $data->asset_id = $asset_id;
+            $data->status = "TRUE";
+            $data->createdby = session('session_email');
+            $data->updatedby = session('session_email');
+            $data->created_at = now();
+            $data->updated_at = now();
+            $data->save();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $data,
+                'message' => 'changed successfully'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine()
+            ], 400);
+        }
+        
+    }
 }

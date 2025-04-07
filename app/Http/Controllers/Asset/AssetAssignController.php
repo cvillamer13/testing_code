@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Approvedissuance_Notif;
+use App\Mail\AssetRecieved_Notif;
 use App\Mail\Revisedissuance_Notif;
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -398,16 +399,16 @@ class AssetAssignController extends Controller
                 $approval->uid = Str::uuid(); //generate uuid
                 $approval->save();
 
-                foreach ($asset_issuance->details as $key => $value) {
-                    $status_assset = asset_assign_changes($value->asset_id, $asset_issuance->emp_id, "TRUE", false);
-                    if(!empty($status_assset)){
-                        $asset_data_transfer = Asset::find($status_assset->asset_id);
-                        $asset_data_transfer->asset_status_id = "10";
-                        $asset_data_transfer->save();
-                    }
-                    // print_r($status_assset);
+                // foreach ($asset_issuance->details as $key => $value) {
+                //     $status_assset = asset_assign_changes($value->asset_id, $asset_issuance->emp_id, "TRUE", false);
+                //     if(!empty($status_assset)){
+                //         $asset_data_transfer = Asset::find($status_assset->asset_id);
+                //         $asset_data_transfer->asset_status_id = "10";
+                //         $asset_data_transfer->save();
+                //     }
+                //     // print_r($status_assset);
                     
-                }
+                // }
 
                 
                 // exit;
@@ -423,6 +424,12 @@ class AssetAssignController extends Controller
                     $asset_issuance->uid = $approval->uid;
                     $asset_issuance->save();
 
+                    foreach ($asset_issuance->details as $key => $value) {
+                        $data_status = asset_assignee($value->asset_id, $asset_issuance->emp_id);
+                        changing_assetstatus($value->asset_id, "23");
+                    }
+                    
+
                     $gatepass = new GatepassData();
                     $gatepass->uid = Str::uuid();
                     $gatepass->data_id = $asset_issuance->id;
@@ -434,7 +441,7 @@ class AssetAssignController extends Controller
                     $gatepass->save();
                     Mail::to($asset_issuance->issued_by)->send(new Approvedissuance_Notif($asset_issuance->id, $gatepass->id, "issuance"));
 
-                    
+                    Mail::to('christian.villamer@jakagroup.com')->send(new AssetRecieved_Notif($asset_issuance->id));
                     // print_r($asset_issuance);
                     // exit;
                     return response()->json([
