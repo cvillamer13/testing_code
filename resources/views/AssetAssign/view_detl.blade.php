@@ -1124,7 +1124,7 @@
                                 if(response.status == "success"){
                                     var rowCount2 = parseInt($('#last_count_data').val());
                                     var intCurrent = rowCount2;
-                                    console.log("inp",rowCount2 + 1)
+                                    // console.log("inp",rowCount2 + 1)
                                         Swal.showLoading();
                                         if(response.data == null){
                                             Swal.close();
@@ -1142,7 +1142,7 @@
                                         document.getElementById("model_"+intCurrent).innerHTML = response.data.model_no
                                         document.getElementById("serial_"+intCurrent).innerHTML = response.data.serial_number
                                         getSave_detl(intCurrent, response.data.id);
-                                        addNewRow()
+                                        // addNewRow()
                                         
                                     }
                             },
