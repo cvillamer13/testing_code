@@ -56,7 +56,8 @@ class ReleaseGatePass extends Mailable
             view: 'mail.Released_gatepass',
             with: [
                 'issueby' => $this->issueby,
-                'gatepass_no' => $this->gatepass_no
+                'gatepass_no' => $this->gatepass_no,
+                'gatepass_id' => $this->gatepass_id,
             ]
         );
     }

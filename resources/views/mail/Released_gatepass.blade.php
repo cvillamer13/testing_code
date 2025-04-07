@@ -23,7 +23,8 @@
                             <ul>
                                 <li><strong>Gate Pass No:</strong> <a>{{ $gatepass_no }}</a></li>
                             </ul>
-                            
+                            <a href="{{ url('/Gatepass/gatepass_report/'. $gatepass_id ) }}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: #ffffff; text-decoration: none; border-radius: 5px; margin-right: 10px;">View Gatepass document</a>
+
                         </td>
                     </tr>
                 </table>
