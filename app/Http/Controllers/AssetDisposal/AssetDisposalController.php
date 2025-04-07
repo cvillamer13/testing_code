@@ -199,18 +199,20 @@ class AssetDisposalController extends Controller
             //code...
             
             $asset_issuance = AssetDisposal::find($request->asset_iss_id);
-            // echo "<pre>";
-            // print_r($asset_issuance);
-            // exit;
+            
             if ($request->status == "A") {
                 $approval = ApproversStatus::find($request->appr_id);
+                
                 $approval->status = $request->status;
                 $approval->uid = Str::uuid(); //generate uuid
                 $approval->save();
+                // echo "<pre>";
+                // print_r($approval);
+                // exit;
 
                 $approver = approvalAssetDisposalAsset($asset_issuance->id, 3, 12, $asset_issuance->status);
                 $data_of_approvers = ApproversMatrix::where('user_id', $approval->user_id)->where('type_of_process', 3)->first();
-
+                
                 if($data_of_approvers->increment_num == "FA"){
                     $asset_issuance->approved_status = "A";
                     $asset_issuance->status = "A";

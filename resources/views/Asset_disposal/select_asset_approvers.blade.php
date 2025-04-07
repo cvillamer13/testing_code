@@ -535,8 +535,8 @@
                 // Swal.showLoading();
 
                 Swal.fire({
-                    title: "Do you want to approved issuance?",
-                    html: "Once approved, you will not be able to make changes and send the issuance to the next approvers",
+                    title: "Do you want to approved asset disposal request?",
+                    html: "Once approved, you will not be able to make changes and send the request to the next approvers",
                     icon: "warning",
                     showDenyButton: true,
                     showCancelButton: false,
@@ -566,7 +566,7 @@
                                 success: function (response) {
                                     
                                     toastr.success(response.message);
-                                    location.reload();
+                                    // location.reload();
                                 },
                                 error: function (error) {
                                     console.log(error)
