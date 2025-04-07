@@ -12,8 +12,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/checker_req/{id}', [AssetReturnController::class, 'checker_to']);
     Route::post('/confirmed', [AssetReturnController::class, 'confirmed_req']);
     Route::post('/detl_data', [AssetReturnController::class, 'store_detl']);
+    Route::post('/finalize', [AssetReturnController::class, 'to_finalize']);
     
     
+    Route::get('/check/{id}/{pages_id}/{user_id}', [AssetReturnController::class, 'checker_to']);
     
 });
 

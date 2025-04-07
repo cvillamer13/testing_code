@@ -99,8 +99,23 @@
                                             <button class="btn btn-primary mt-4 w-100" onclick="final_data()" type="submit">Finalize</button>
                                         @else
                                             <hr>
-                                            <button class="btn btn-primary mt-4 w-100" onclick="final_data()" type="submit">confirmed</button>
+                                            @if ($status->status == "A")
+                                            <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;" class="text-center">
+                                                <tr>
+                                                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Confirmed by</th>
+                                                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">UID</th>
+                                                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Date</th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $status->confirmed_by }}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $status->confirmed_uid }}</td>
+                                                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $status->confirmed_at }}</td>
+                                                </tr>
+                                            </table>
                                             
+                                            @else
+                                                <button class="btn btn-primary mt-4 w-100" onclick="final_data()" type="submit">confirmed</button>
+                                            @endif
                                             
                                         @endif
                                         
