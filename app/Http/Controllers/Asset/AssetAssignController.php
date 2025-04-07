@@ -361,25 +361,24 @@ class AssetAssignController extends Controller
     }
 
 
-    function view_rev_approval($rev_, $page_id_data, $user_id){
-        $page_id = session('current_page');
-        if($page_id == ""){
-            $page_id = $page_id_data;
-            Session::put('current_page', $page_id);
-        }
+    function view_rev_approval($rev_, $status,$page_id_data, $user_id){
+        // $page_id = session('current_page');
+        // if($page_id == ""){
+        //     $page_id = $page_id_data;
+        //     Session::put('current_page', $page_id);
+        // }
         $asset_issuance = AssetIssuance::with(['details', 'getEmployee'])->where('rev_num', $rev_)->first();
-        $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', $page_id_data)->get();
+        $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', 8)->get();
         // print_r( $issuance_status);
         // exit;
-        return view('AssetAssign.view_detl', [
+        return view('AssetAssign.for_approvers', [
             'asset_issuance' => $asset_issuance,
             'employee_data' => $asset_issuance->getEmployee,
             'issuance_detl' => $asset_issuance->details,
-            'issuance_status' => $issuance_status
+            'issuance_status' => $issuance_status,
+            'status' => $status,
         ]);
-        // echo "<pre>";
-        // print_r($asset_issuance->details);
-        // exit;
+
     }
 
 
