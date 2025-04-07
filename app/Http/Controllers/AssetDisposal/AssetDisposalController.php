@@ -175,6 +175,8 @@ class AssetDisposalController extends Controller
             ]);
             $other_detl = AssetDisposal::find($request->asset_disposal_id);
             $other_detl->is_finalized = "1";
+            $other_detl->status = "P";
+            $other_detl->approved_status = "P";
             $other_detl->finalizedby = session('user_email');
             $other_detl->finalize_at = now();
             $other_detl->save();
