@@ -322,7 +322,7 @@
                 var main_id = document.getElementById("asset_disposal_id").value;
                 $.ajax({
                     type: "POST",
-                    url: "/AssetDisposal/save_selected_asset/",
+                    url: "/AssetDisposal/save_selected_asset",
                     data: {
                         "_token": '{{ csrf_token() }}',
                         "asset_id": asset_id,
