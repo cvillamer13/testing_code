@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'comp_id', 'department_id'];
+    protected $fillable = ['name', 'description', 'comp_id', 'department_id', 'location_id'];
     protected $table = 'location';
 
 
@@ -20,5 +20,10 @@ class Location extends Model
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function location_data()
+    {
+        return $this->belongsTo(Location_name::class, 'location_id');
     }
 }

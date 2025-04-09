@@ -69,8 +69,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/Location/view', [LocationController::class, 'view'])->name('location');
     Route::post('/Location/add', [LocationController::class, 'Add_Location']);
     Route::post('/Location/edit/{id}', [LocationController::class, 'Edit_Location']);
+    Route::post('/Location/getCompany', [LocationController::class, 'getCompany']);
     Route::post('/Location/getDepartment', [LocationController::class, 'getDepartment']);
     Route::post('/Location/getLocation', [LocationController::class, 'getLocation']);
+    Route::post('/Location/getLocation_name', [LocationController::class, 'getLocation_name']);
+    
     
 });
 

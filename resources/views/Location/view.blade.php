@@ -1,3 +1,9 @@
+<style>
+    .select2-container{
+        z-index:100000;
+    }
+    
+</style>
 <x-app-layout>
     <x-slot name="header">
             {{ __('Location') }}
@@ -21,7 +27,6 @@
                         <tr>
                             <th class="staff_thead_no">No</th>
                             <th class="staff_thead_name">Name</th>
-                            <th class="staff_thead_name">Description</th>
                             <th class="staff_thead_name">Company</th>
                             <th class="staff_thead_name">Department</th>
                             <th class="staff_thead_name">Action</th>
@@ -34,8 +39,7 @@
                         @foreach($location as $loc)
                             <tr>
                                 <td>{{ $i }}</td>
-                                <td>{{ $loc->name }}</td>
-                                <td>{{ $loc->description }}</td>
+                                <td>{{ $loc->location_data->name ?? "" }}</td>
                                 <td>{{ $loc->company->name}}</td>
                                 <td>{{ $loc->department->name }}</td>
                                 <td>
@@ -63,7 +67,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
 @csrf
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
@@ -72,38 +76,34 @@
                 <div class="modal-content">
                     <div class="modal-header bg-primary ">
                         <h5 class="modal-title text-white" id="exampleModalLabel">
-                            Add Department
+                            Add Location
                         </h5>
 
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-9">
                                 <label for="recipient-name" class="col-form-label">Name<span class="text-red">*</span>
                                 </label>
                                 <input type="text" class="form-control" id="name" placeholder="Location Name" name="name" required>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3 col-md-12">
-                                <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label">Description<span class="text-red">*</span>
-                                    </label>
-                                    <textarea type="text" class="form-control" id="description" placeholder="Description" name="description" required></textarea>
-                                </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="is_exist" class="col-form-label">is Exist</label>
+                                <input type="checkbox" class="form-check" id="is_exist" name="is_exist" onclick="getLocation()">
+                                <input type="hidden" class="form-control" id="is_exist_val" name="is_exist_val" value="0">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="mb-3 col-md-12">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label">Company<span class="text-red">*</span>
-                                    </label>
-                                    <select class="form-control" id="company_id" name="company_id" onchange="getDepartment(0)">
+                                    <label for="recipient-name" class="col-form-label">Company<span class="text-red">*</span></label>
+                                 
+
+                                    <select id="company_id" class="form-control select2-container" style="width:100%;" required="" data-val="true" name="company_id" onchange="getDepartment(0)">
                                         <option value="" disabled selected>Select Company</option>
                                         @foreach ($company as $comp)
                                             <option value="{{ $comp->id }}">{{ $comp->name }}</option>
-                                            
                                         @endforeach
                                     </select>
                                 </div>
@@ -208,11 +208,14 @@
 
 <script>
     $(document).ready(function() {
+
+
         $('#add_submit').click(function() {
             var name = $('#name').val();
             var description = $('#description').val();
             var company_id = $('#company_id').val();
             var dep_id_edit = $('#dep_id_edit').val();
+            var is_exist_val = $('#is_exist_val').val();
 
             let data_loading = `<div class="spinner-border text-primary" role="status">
                         <span class="sr-only">Loading...</span>
@@ -226,7 +229,8 @@
                     name: name,
                     description: description,
                     company_id: company_id,
-                    dep_id_edit: dep_id_edit
+                    dep_id_edit: dep_id_edit,
+                    is_exist_val: is_exist_val
                 },
                 success: function(data) {
                     toastr.success(data.message);
@@ -341,6 +345,84 @@
             });
         }
         
+    }
+
+
+    function getLocation(){
+        var is_exist = $('#is_exist').is(':checked');
+        if(is_exist){
+            $('#is_exist_val').val(1);
+            
+            // $('#name').select2({
+            //     placeholder: "Select Location",
+            //     allowClear: false,
+            //     ajax: {
+            //         url: '/Location/getLocation_name',
+            //         type: 'POST',
+            //         dataType: 'json',
+            //         delay: 250,
+            //         headers: {
+            //             'X-CSRF-TOKEN': '{{ csrf_token() }}' // CSRF token for POST
+            //         },
+            //         data: function(params) {
+            //             return {
+            //                 search: params.term || '' // send search term as 'search'
+            //             };
+            //         },
+            //         processResults: function(data) {
+            //             // assuming data is an array of { id: 1, name: "Location Name" }
+            //             return {
+            //                 results: data.map(function(item) {
+            //                     return {
+            //                         id: item.id,
+            //                         text: item.name
+            //                     };
+            //                 })
+            //             };
+            //         },
+            //         cache: true
+            //     },
+            //     minimumResultsForSearch: Infinity // disable search box if you want
+            // });
+
+            $.ajax({
+                url: '/Location/getLocation_name',
+                type: 'POST',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    let options = `<option></option>`;
+                    data.forEach(function(item) {
+                        options += `<option value="${item.id}">${item.name}</option>`;
+                    });
+
+                    $('#name').html('');
+                    $('#name').replaceWith('<select id="name" class="form-control select2-container" style="width:100%;" name="name" required> ' + options + ' </select>');
+                    // $('#name').html(options);
+                    $('#name').select2({
+                        placeholder: "Select Location",
+                        allowClear: false
+                    });
+
+                    
+                },
+                error: function(error) {
+                    toastr.error(error.responseJSON.message);
+                }
+            });
+
+
+
+            
+        }else{
+            $('#is_exist_val').val(0);
+            $('#name').html('');
+            $('#name').replaceWith('<input type="text" class="form-control" id="name" placeholder="Location Name" name="name" required>');
+            $('#name').select2('destroy'); // Destroy the select2 instance if it exists
+        }
+       
     }
 </script>
 </x-app-layout>
