@@ -542,10 +542,10 @@
                             response.forEach(element => {
                                 const loc_id = "{{ $asset_data->location_id }}";
                                 if (element.id == loc_id) {
-                                    data_str += `<option value="${element.id}" selected>${element.name}</option>`;
+                                    data_str += `<option value="${element.id}" selected>${element.location_data.name}</option>`;
                                     
                                 } else {
-                                    data_str += `<option value="${element.id}">${element.name}</option>`;
+                                    data_str += `<option value="${element.id}">${element.location_data.name}</option>`;
                                 }
                                 
                             });

@@ -47,11 +47,11 @@
     @include('partials.script')
     @include('partials.footer')
     <script>
-        $(document).ready(function() {
-            $('select').select2({
-                placeholder: "Select an option",
-                allowClear: false
-            });
-        });
+        // $(document).ready(function() {
+        //     $('select').select2({
+        //         placeholder: "Select an option",
+        //         allowClear: false
+        //     });
+        // });
     </script>
 </html>

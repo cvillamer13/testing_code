@@ -48,8 +48,7 @@
                                                                         
                                         <a data-toggle="modal" id="staff_id_new"
                                             data-target="#EditModal"
-                                            data-name="{{ $loc->name }}"
-                                            data-description="{{ $loc->description }}"
+                                            data-name="{{ $loc->location_id }}"
                                             data-company_id="{{ $loc->comp_id }}"
                                             data-dept_id="{{ $loc->department_id }}"
                                             data-id="{{ $loc->id }}"><i class="la la-pencil"></i>
@@ -141,24 +140,20 @@
                 <div class="modal-content">
                     <div class="modal-header bg-primary ">
                         <h5 class="modal-title text-white" id="exampleModalLabel">
-                            Edit Department
+                            Edit Location
                         </h5>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-9">
                                 <label for="recipient-name" class="col-form-label">Name<span class="text-red">*</span>
                                 </label>
                                 <input type="text" class="form-control" id="name_edit" placeholder="Role Name" name="name_edit" required>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3 col-md-12">
-                                <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label">Description<span class="text-red">*</span>
-                                    </label>
-                                    <textarea type="text" class="form-control" id="description_edit" placeholder="Description" name="description_edit" required></textarea>
-                                </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="is_exist" class="col-form-label">is Exist</label>
+                                <input type="checkbox" class="form-check" id="is_exist_edit" name="is_exist_edit" onclick="getLocation_edit()">
+                                <input type="hidden" class="form-control" id="is_exist_val_edit" name="is_exist_val_edit" value="0">
                             </div>
                         </div>
 
@@ -234,7 +229,6 @@
                 },
                 success: function(data) {
                     toastr.success(data.message);
-
                     location.reload();
 
                 },
@@ -249,24 +243,22 @@
     
     $(document).on("click", "#staff_id_new", function () {
         var name = $(this).attr("data-name");
-        var description = $(this).attr("data-description");
         var company_id = $(this).attr("data-company_id");
         var dep_id = $(this).attr("data-dept_id");
         var id = $(this).attr("data-id");
-        
-        $('#name_edit').val(name);
-        $('#description_edit').val(description);
+
+        document.getElementById("is_exist_edit").checked = true;
+        getLocation_edit(name );
+        // $('#name_edit').val(name);
         $("#company_id_edit").val(company_id).attr("selected", "selected");
-        // $("#dep_edit").val(dep_id).attr("selected", "selected");
-        getDepartment();
-        setTimeout(function() {
-            $("#dep_edit").val(dep_id).attr("selected", "selected");
-        }, 2000); // 10 seconds (10,000 milliseconds)
+        getDepartment(dep_id);
+        // setTimeout(function() {
+        //     $("#dep_edit").val(dep_id).attr("selected", "selected");
+        // }, 2000); // 10 seconds (10,000 milliseconds)
             $('#edit_submit').click(function() {
 
 
                 var name = $('#name_edit').val();
-                var description = $('#description_edit').val();
                 var company_id = $('#company_id_edit').val();
                 var dep_id_edit = $('#dep_edit').val();
 
@@ -298,7 +290,7 @@
     });
     
     function getDepartment(id){
-
+        
         if(id == 0){
             var company_id = $('#company_id').val();
             $.ajax({
@@ -334,7 +326,14 @@
                     let data_str = `<option value="" disabled selected>Select Department</option>`;
 
                     data.forEach(element => {
-                        data_str += `<option value="${element.id}">${element.name}</option>`;
+                        console.log(id, element.id);
+                        if (id == element.id) {
+                            data_str += `<option value="${element.id}" selected>${element.name}</option>`;
+                            
+                        }else{
+                            data_str += `<option value="${element.id}">${element.name}</option>`;
+                        }
+                        // data_str += `<option value="${element.id}">${element.name}</option>`;
                     });
                 
                     $('#dep_edit').html(data_str);
@@ -421,6 +420,51 @@
             $('#name').html('');
             $('#name').replaceWith('<input type="text" class="form-control" id="name" placeholder="Location Name" name="name" required>');
             $('#name').select2('destroy'); // Destroy the select2 instance if it exists
+        }
+       
+    }
+
+
+    function getLocation_edit(name){
+        var is_exist = $('#is_exist_edit').is(':checked');
+        if(is_exist){
+            $('#is_exist_val_edit').val(1);
+            
+            // alert(name);
+            $.ajax({
+                url: '/Location/getLocation_name',
+                type: 'POST',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    let options = `<option selected disabled>please select</option>`;
+                    data.forEach(function(item) {
+                        if(item.id == name){
+                            options += `<option value="${item.id}" selected>${item.name}</option>`;
+                        }else{
+                            options += `<option value="${item.id}">${item.name}</option>`;
+                        }
+                        // options += `<option value="${item.id}">${item.name}</option>`;
+                    });
+
+                    $('#name_edit').html('');
+                    $('#name_edit').replaceWith('<select id="name_edit" class="form-control select2-container" style="width:100%;" name="name_edit" required> ' + options + ' </select>');
+                },
+                error: function(error) {
+                    toastr.error(error.responseJSON.message);
+                }
+            });
+
+
+
+            
+        }else{
+            $('#is_exist_val_edit').val(0);
+            $('#name_edit').html('');
+            $('#name_edit').replaceWith('<input type="text" class="form-control" id="name_edit" placeholder="Location Name" name="name_edit" required>');
+            $('#name_edit').select2('destroy'); // Destroy the select2 instance if it exists
         }
        
     }

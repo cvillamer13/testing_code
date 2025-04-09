@@ -480,7 +480,7 @@
                             let data_str = `<option value="" disabled selected>Select Location</option>`;
                             // console.log(response)
                             response.forEach(element => {
-                                data_str += `<option value="${element.id}">${element.name}</option>`;
+                                data_str += `<option value="${element.id}">${element.location_data.name}</option>`;
                             });
                             $('#LocationArea').html(data_str);
                         },

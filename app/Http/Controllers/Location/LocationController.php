@@ -115,7 +115,7 @@ class LocationController extends Controller
     public function getLocation(Request $request){
         $company_id = $request->company_id;
         $department_id = $request->department_id;
-        $department = Location::where('comp_id', $company_id)->where('department_id', $department_id)->orderBy('name', 'asc')->get();
+        $department = Location::with(['location_data'])->where('comp_id', $company_id)->where('department_id', $department_id)->orderBy('name', 'asc')->get();
         return response()->json($department);
     }
 
