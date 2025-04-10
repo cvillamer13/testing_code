@@ -142,8 +142,8 @@ class AssetAssignController extends Controller
     public function add_detl($id){
         try {
             //code...
-            $permissions = checkingpages();
-            if($permissions->isUpdate){
+            // $permissions = checkingpages();
+            // if($permissions->isUpdate){
                 $asset_issuance = AssetIssuance::with(['getLocation'])->find($id);
                 $employee_data = Employee::with(['gender', 'position', 'company', 'department'])->find($asset_issuance->emp_id);
                 $issuance_detl = AssetIssuanceDetl::with(['asset_details'])->where('issuance_main_id', $id)->where('isDelete', false)->orderBy('created_at', 'asc')->get();
@@ -155,9 +155,9 @@ class AssetAssignController extends Controller
                 'issuance_detl' => $issuance_detl,
                 'issuance_status' => $issuance_status
             ]);
-            }else{
-                return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
-            }
+            // }else{
+            //     return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
+            // }
         } catch (\Throwable $th) {
             //throw $th;
             return redirect()->back()->with('error', $th->getMessage());

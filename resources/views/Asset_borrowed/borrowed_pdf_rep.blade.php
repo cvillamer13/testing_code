@@ -189,13 +189,13 @@
             <td><strong>Employee #:</strong></td>
             <td>{{ $data_show->getEmployee->emp_no }}</td>
             <td><strong>From:</strong></td>
-            <td>{{ $data_show->getLocation_from->name }}</td>
+            <td>{{ $data_show->getLocation_from->location_data->name }}</td>
         </tr>
         <tr>
             <td><strong>Phone #:</strong></td>
             <td>{{ $data_show->getEmployee->phone_number }}</td>
             <td><strong>To:</strong></td>
-            <td>{{ $data_show->getLocation_to->name }}</td>
+            <td>{{ $data_show->getLocation_to->location_data->name }}</td>
         </tr>
         <tr>
             <td><strong>Email:</strong></td>

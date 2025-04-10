@@ -39,7 +39,7 @@ class BorrowedAssetController extends Controller
             // print_r($employee);
             // exit;
 
-            $mis = Location::with(['company', 'department'])->find('2801');
+            $mis = Location::with(['company', 'department'])->find('2898');
             $to_company = Company::orderBy('name', 'asc')->get();
 
             return view('Asset_borrowed.add', [
@@ -67,7 +67,7 @@ class BorrowedAssetController extends Controller
             $ref = generate_asset_borrowed_ref();
             $borrowed = new AssetBorrowed();
             $borrowed->emp_id = $request->emp_no;
-            $borrowed->from_location = "2801";
+            $borrowed->from_location = "2898";
             $borrowed->to_location = $request->to_location;
             $borrowed->ref_rss = $request->rss_num;
             $borrowed->ref_num = $ref;

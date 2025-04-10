@@ -105,7 +105,7 @@
 
                                             <div class="mb-3 col-md-3">
                                                 <label class="form-label">Location<span class="text-red">*</span></label>
-                                                <input type="text" class="form-control" id="location_id" name="location_id"  value="{{ $data_view->getLocation_to->name }}" readonly disabled>
+                                                <input type="text" class="form-control" id="location_id" name="location_id"  value="{{ $data_view->getLocation_to->location_data->name }}" readonly disabled>
                                             </div>
                                         </div>
 

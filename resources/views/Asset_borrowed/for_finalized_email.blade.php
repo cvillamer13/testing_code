@@ -83,10 +83,10 @@
                                                     <tr>
                                                         <td>{{ $data->getLocation_from->company->name }}</td>
                                                         <td>{{ $data->getLocation_from->department->name }}</td>
-                                                        <td>{{ $data->getLocation_from->name }}</td>
+                                                        <td>{{ $data->getLocation_from->location_data->name }}</td>
                                                         <td>{{ $data->getLocation_to->company->name }}</td>
                                                         <td>{{ $data->getLocation_to->department->name }}</td>
-                                                        <td>{{ $data->getLocation_to->name }}</td>
+                                                        <td>{{ $data->getLocation_to->location_data->name }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

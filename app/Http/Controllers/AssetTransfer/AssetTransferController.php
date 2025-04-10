@@ -72,6 +72,8 @@ class AssetTransferController extends Controller
     public function store(Request $request){
         try {
             //code...
+
+         
             $request->validate([
                 'issuance_id_show' => 'required',
                 'selected_transfer' => 'required'
@@ -79,6 +81,8 @@ class AssetTransferController extends Controller
             // echo "<pre>";
             // print_r($request->all());
             // exit;
+
+            
 
             $data_issuance = AssetIssuance::with(['details'])->find($request->issuance_id_show);
             $trf_save = new AssetTransfer();
@@ -101,6 +105,8 @@ class AssetTransferController extends Controller
             $trf_save->save();
 
             
+
+
             $data_selected = explode("~", $request->selected_transfer);
             foreach ($data_selected as $key => $value) {
                 $asset_data = Asset::where('asset_id', $value)->first();
