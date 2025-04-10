@@ -47,7 +47,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group mb-3">
                                                 <label for="rev_no" class="form-label">Location</label><br>
-                                                <label for="rev_no" class="form-label"><b>{{ $from_location->name }}</b></label>
+                                                <label for="rev_no" class="form-label"><b>{{ $from_location->location_data->name }}</b></label>
                                             </div>
                                         </div>
                                     </div>
@@ -75,7 +75,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group mb-3">
                                                 <label for="rev_no" class="form-label">Location</label><br>
-                                                <label for="rev_no" class="form-label"><b>{{ $to_location->name }}</b></label>
+                                                <label for="rev_no" class="form-label"><b>{{ $to_location->location_data->name }}</b></label>
                                             </div>
                                         </div>
                                     </div>

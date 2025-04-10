@@ -434,7 +434,7 @@ class AssetAssignController extends Controller
                     $gatepass->uid = Str::uuid();
                     $gatepass->data_id = $asset_issuance->id;
                     $gatepass->module_from = "issuance";
-                    $gatepass->from_location = "2801";
+                    $gatepass->from_location = "2898";
                     $gatepass->to_location = $asset_issuance->location_id;
                     $gatepass->createdby = session('user_email');
                     $gatepass->created_at = now();
