@@ -181,7 +181,7 @@ h2 {
     </td>
     <td>
         <div class="form-group">
-            <span>Location: {{ $data_show->getLocation->name }}</span>
+            <span>Location: {{ $data_show->getLocation->name ?? "" }}</span>
         </div>
     </td>
 </tr>

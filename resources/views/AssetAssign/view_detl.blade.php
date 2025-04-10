@@ -68,7 +68,7 @@
                                                 </div>
                                                 <div class=" col-md-3">
                                                     <label class="form-label">Location<span class="text-red">*</span></label>
-                                                    <p class="form-control-plaintext" id="reports_to"><b>{{ $asset_issuance->getLocation->name ?? ""  }}</b></p>
+                                                    <p class="form-control-plaintext" id="reports_to"><b>{{ $asset_issuance->getLocation->location_data->name ?? ""  }}</b></p>
                                                 </div>
                                             </div>
                                             
