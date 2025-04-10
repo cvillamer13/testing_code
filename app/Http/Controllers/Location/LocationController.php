@@ -72,23 +72,51 @@ class LocationController extends Controller
     public function Edit_Location(Request $request, $id)
     {
         try {
+            // echo "<pre>";
+            // print_r($request->all());
+            // exit;
+
+
             $request->validate([
                 'name' => 'required',
-                'description' => 'required',
+                // 'description' => 'required',
                 'company_id' => 'required',
                 'dep_id_edit' => 'required',
             ]);
+            if($request->is_exist_val_edit){
 
-            $location = Location::find($id);
-            $location->name = $request->name;
-            $location->description = $request->description;
-            $location->comp_id = $request->company_id;
-            $location->department_id = $request->dep_id_edit;
-            $location->save();
+                $location_name = Location::find($id);
+                $location_name->location_id = $request->name;
+                $location_name->comp_id = $request->company_id;
+                $location_name->department_id = $request->dep_id_edit;
+                $location_name->updated_at = now();
+                $location_name->save();
+            }else{
+                $location_name = new Location_name();
+                $location_name->name = $request->name;
+                $location_name->createdby = session('user_email');
+                $location_name->created_at = now();
+                $location_name->save();
+                
+                // $location = new Location();
+                $location = Location::find($id);
+                // print_r($request->id);
+                // exit;
+                $location->location_id = $location_name->id;
+                $location->comp_id = $request->company_id;
+                $location->department_id = $request->dep_id_edit;
+                $location->save();
+            }
+            // $location = Location::find($id);
+            // $location->name = $request->name;
+            // $location->description = $request->description;
+            // $location->comp_id = $request->company_id;
+            // $location->department_id = $request->dep_id_edit;
+            // $location->save();
 
             return response()->json([
                 'status' => 'success',
-                'message' => $location->name . ' Location Updated Successfully'
+                'message' =>  ' Location Updated Successfully'
             ], 200); 
         } catch (\Throwable $th) {
             return response()->json([

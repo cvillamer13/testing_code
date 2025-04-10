@@ -267,15 +267,18 @@
                         <span class="sr-only">Loading...</span>
                     </div>`;
                 $('#edit_submit').html(data_loading);
+
+                var is_exist_val_edit = $('#is_exist_val_edit').val();
                 $.ajax({
                     url: '/Location/edit/' + id,
                     type: 'POST',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         name: name,
-                        description: description,
+                        // description: description,
                         company_id: company_id,
-                        dep_id_edit: dep_id_edit
+                        dep_id_edit: dep_id_edit,
+                        is_exist_val_edit : is_exist_val_edit
                     },
                     success: function(data) {
                         toastr.success(data.message);
