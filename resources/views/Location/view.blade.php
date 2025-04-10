@@ -30,6 +30,7 @@
                             <th class="staff_thead_name">Company</th>
                             <th class="staff_thead_name">Department</th>
                             <th class="staff_thead_name">Action</th>
+                            <th class="staff_thead_name">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,6 +55,14 @@
                                             data-id="{{ $loc->id }}"><i class="la la-pencil"></i>
                                             Edit</a>
 
+                                    </button>
+
+                                    
+                                </td>
+                                <td>
+                                    <button type="button" class="badge badge-lg badge-danger">
+                                                                        
+                                        <a  onclick="onDelete({{ $loc->id }})"><i class="fas fa-trash"></i>Delete</a>
                                     </button>
                                 </td>
                             </tr>
@@ -470,6 +479,48 @@
             $('#name_edit').select2('destroy'); // Destroy the select2 instance if it exists
         }
        
+    }
+
+
+
+    function onDelete(id){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            $.ajax({
+                url: '/Location/delete',
+                type: 'POST',
+                data: {
+                "_token": "{{ csrf_token() }}",
+                'id': id
+                },
+                success: function(data) {
+                    console.log(data);
+                Swal.fire(
+                    'Deleted!',
+                    data.message,
+                    'success'
+                ).then(() => {
+                    location.reload();
+                });
+                },
+                error: function(data) {
+                Swal.fire(
+                    'Error!',
+                    data.responseJSON.message,
+                    'error'
+                );
+                }
+            });
+            }
+        });
     }
 </script>
 </x-app-layout>

@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/Location/getDepartment', [LocationController::class, 'getDepartment']);
     Route::post('/Location/getLocation', [LocationController::class, 'getLocation']);
     Route::post('/Location/getLocation_name', [LocationController::class, 'getLocation_name']);
-    
+    Route::post('/Location/delete', [LocationController::class, 'delete']);
     
 });
 

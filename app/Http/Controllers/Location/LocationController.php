@@ -159,4 +159,29 @@ class LocationController extends Controller
             ], 400);
         }
     }
+
+
+    function delete(Request $request){
+        try {
+            $location = Location::find($request->id);
+            if (!$location) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Location not found'
+                ], 404);
+            }
+
+            $location->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Location deleted successfully'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
 }
