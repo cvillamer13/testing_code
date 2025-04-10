@@ -20,4 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/approvers', [AssetAssignController::class, 'to_approvers']);
     Route::get('/issuance_pdf/{id}', [AssetAssignController::class, 'issuance_pdf']);
     Route::get('/gate_pass_rep/{id}', [AssetAssignController::class, 'gatepass_pdf']);
+    
 });
+
+Route::get('/recieved/{id}/{status}/{emp_id}', [AssetAssignController::class, 'to_recieved']);
+Route::post('/received', [AssetAssignController::class, 'recieved']);

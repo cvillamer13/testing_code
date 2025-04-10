@@ -13,7 +13,10 @@ class AssetCountController extends Controller
 {
     function view()
     {
-        return view('AssetCount.view');
+
+        return view('AssetCount.view', [
+            'asset_count' => AssetCount::with(['location_name', 'location.company', 'location.department'])->get(),
+        ]);
     }
 
     function add()

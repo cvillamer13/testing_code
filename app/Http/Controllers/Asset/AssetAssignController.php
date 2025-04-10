@@ -566,4 +566,67 @@ class AssetAssignController extends Controller
         
 
     }
+
+
+    function to_recieved($id, $status, $emp_id){
+
+        // $asset_issuance = AssetIssuance::with(['details'])->find($id);
+        // $employee = Employee::find($emp_id);
+        // if($status == "R"){
+        //     $asset_issuance->is_recieved = 1;
+        //     $asset_issuance->recieved_by = session('user_email');
+        //     $asset_issuance->recieved_at = now();
+        //     $asset_issuance->save();
+
+        //     foreach ($asset_issuance->details as $key => $value) {
+        //         $data_status = asset_assignee($value->asset_id, $asset_issuance->emp_id);
+        //         changing_assetstatus($value->asset_id, "24");
+        //     }
+            
+        //     return response()->json([
+        //         'status' => 'success',
+        //         'message' => 'Asset Recieved Successfully'
+        //     ], 200);
+        // }else{
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Something went wrong'
+        //     ], 400);
+        // }
+
+        $asset_issuance = AssetIssuance::with(['details', 'getEmployee'])->find($id);
+        $issuance_status = ApproversStatus::with(['user'])->where('data_id', $asset_issuance->id)->where('pages_id', 8)->get();
+        // print_r( $issuance_status);
+        // exit;
+        return view('AssetAssign.reciever.recieved', [
+            'asset_issuance' => $asset_issuance,
+            'employee_data' => $asset_issuance->getEmployee,
+            'issuance_detl' => $asset_issuance->details,
+            'issuance_status' => $issuance_status,
+            'status' => $status,
+        ]);
+    }
+
+
+    function recieved(Request $request){
+        try {
+            //code...
+            $asset_issuance = AssetIssuance::find($request->issuance_id);
+            $asset_issuance->is_recieved = 1;
+            $asset_issuance->recieved_at = now();
+            $asset_issuance->save();
+
+            // foreach ($asset_issuance->details as $key => $value) {
+            //     $data_status = asset_assignee($value->asset_id, $asset_issuance->emp_id);
+            //     changing_assetstatus($value->asset_id, "24");
+            // }
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Asset Recieved Successfully'
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

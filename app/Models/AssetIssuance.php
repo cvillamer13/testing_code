@@ -36,6 +36,8 @@ class AssetIssuance extends Model
         'approved_by',
         'approved_at',
         'uid',
+        'is_recieved',
+        'recieved_at'
     ];
 
     protected $casts = [

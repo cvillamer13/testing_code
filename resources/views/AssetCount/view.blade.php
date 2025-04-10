@@ -31,7 +31,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    @foreach ($assetCounts as $assetCount)
+                                        <tr>
+                                            <td>{{ $assetCount->year }}</td>
+                                            <td>{{ $assetCount->count_type }}</td>
+                                            <td>{{ $assetCount->location }}</td>
+                                            <td>{{ $assetCount->is_lock ? 'Yes' : 'No' }}</td>
+                                        </tr>
+                                    @endforeach
                                 <tbody>
                                 
                             </table>

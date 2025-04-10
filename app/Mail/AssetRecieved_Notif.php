@@ -70,7 +70,7 @@ class AssetRecieved_Notif extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'AssetAssign.issuance_pdf_rep',
+            view: 'mail.issuance_pdf_rep',
             with: [
                 'data_show' => $this->data,
                 'qrCode' => $this->qrCodeBase64,
