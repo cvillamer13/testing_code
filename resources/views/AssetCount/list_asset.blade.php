@@ -68,7 +68,7 @@
                                                 <tr>
                                                     <th>Company</th>
                                                     <th>Departments</th>
-                                                    <th>Scanning</th>
+                                                    {{-- <th>Scanning</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody id="company-department-table">
@@ -151,28 +151,6 @@
                 //     tableBody.appendChild(row);
                 // });
 
-                // Object.entries(data.data).forEach(([companyName, departments]) => {
-                //     departments.forEach((department, index) => {
-                //         const row = document.createElement('tr');
-
-                //         // Add company name cell only in the first row of this group
-                //         if (index === 0) {
-                //             const companyCell = document.createElement('td');
-                //             companyCell.textContent = companyName;
-                //             companyCell.rowSpan = departments.length;
-                //             row.appendChild(companyCell);
-                //         }
-
-                //         // Add department cell
-                //         const departmentCell = document.createElement('td');
-                //         departmentCell.textContent = department;
-                //         row.appendChild(departmentCell);
-
-                //         tableBody.appendChild(row);
-                //     });
-                // });
-
-
                 Object.entries(data.data).forEach(([companyName, departments]) => {
                     departments.forEach((department, index) => {
                         const row = document.createElement('tr');
@@ -190,21 +168,43 @@
                         departmentCell.textContent = department;
                         row.appendChild(departmentCell);
 
-                        // Add scan button cell
-                        const buttonCell = document.createElement('td');
-                        const scanButton = document.createElement('button');
-                        scanButton.textContent = 'Start Scanning';
-                        scanButton.classList.add('btn', 'btn-primary'); // optional: for Bootstrap styling
-                        scanButton.addEventListener('click', () => {
-                            // Replace this with your scanning logic
-                            alert(`Starting scan for ${companyName} - ${department}`);
-                        });
-                        buttonCell.appendChild(scanButton);
-                        row.appendChild(buttonCell);
-
                         tableBody.appendChild(row);
                     });
                 });
+
+
+                // Object.entries(data.data).forEach(([companyName, departments]) => {
+                //     departments.forEach((department, index) => {
+                //         const row = document.createElement('tr');
+
+                //         // Add company name cell only in the first row of this group
+                //         if (index === 0) {
+                //             const companyCell = document.createElement('td');
+                //             companyCell.textContent = companyName;
+                //             companyCell.rowSpan = departments.length;
+                //             row.appendChild(companyCell);
+                //         }
+
+                //         // Add department cell
+                //         const departmentCell = document.createElement('td');
+                //         departmentCell.textContent = department;
+                //         row.appendChild(departmentCell);
+
+                //         // Add scan button cell
+                //         const buttonCell = document.createElement('td');
+                //         const scanButton = document.createElement('button');
+                //         scanButton.textContent = 'Start Scanning';
+                //         scanButton.classList.add('btn', 'btn-primary'); // optional: for Bootstrap styling
+                //         scanButton.addEventListener('click', () => {
+                //             // Replace this with your scanning logic
+                //             alert(`Starting scan for ${companyName} - ${department}`);
+                //         });
+                //         buttonCell.appendChild(scanButton);
+                //         row.appendChild(buttonCell);
+
+                //         tableBody.appendChild(row);
+                //     });
+                // });
 
 
             })
