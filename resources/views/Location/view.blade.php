@@ -21,8 +21,8 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table id="example" class="table table-responsive-sm text-center">
+            <div class="table-responsive" style="max-height: 900px; overflow-y: auto;">
+                <table id="example" class="table table-responsive-sm table-responsive-sm">
                     <thead>
                         <tr>
                             <th class="staff_thead_no">No</th>
