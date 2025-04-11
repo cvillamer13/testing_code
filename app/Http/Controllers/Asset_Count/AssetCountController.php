@@ -11,6 +11,7 @@ use App\Models\Location;
 use App\Models\Asset;
 use App\Models\Company;
 use App\Models\Department;
+use App\Models\AssetCountPlot;
 
 class AssetCountController extends Controller
 {
@@ -137,6 +138,10 @@ class AssetCountController extends Controller
     {
         try {
             // Validate the request data
+            // echo "<pre>";
+            // print_r($request->all());
+            // echo "</pre>";
+            // exit;
             $request->validate([
                 'location' => 'required',
                 'year' => 'required',
@@ -156,7 +161,7 @@ class AssetCountController extends Controller
             $data->finalizedby = null;
             $data->finalize_at = null;
             $data->ref_num = Str::uuid();
-            $data->createdby = auth()->user()->id;
+            $data->createdby = session('user_email');
             $data->updatedby = null;
             $data->created_at = now();
             $data->updated_at = null;
@@ -164,10 +169,29 @@ class AssetCountController extends Controller
             $data->deletedby = null;
             $data->isDelete = 0;
             $data->save();
+
+
+            // Loop through the assets and save them to the asset_count_plot table
+            $get_location = Location::where('location_id', $data->location)->first();
+            $assets = Asset::where('company_id', $get_location->comp_id)
+                ->where('department_id', $get_location->department_id)
+                ->where('location_id', $get_location->id)
+                ->get();
+
+            foreach ($assets as $asset) {
+                $assetCountPlot = new AssetCountPlot();
+                $assetCountPlot->asset_count_id = $data->id;
+                $assetCountPlot->asset_id = $asset->id;
+                $assetCountPlot->location_id = $data->location;
+                $assetCountPlot->company_id = $get_location->comp_id;
+                $assetCountPlot->department_id = $get_location->department_id;
+                $assetCountPlot->createdby = session('user_email');
+                $assetCountPlot->save();
+            }
             // Optionally, you can redirect or return a response
             return redirect('/AssetCount/for_finalize/'.$data->id)->with('success', 'Asset Count Schedule Add Successfully');
         } catch (\Throwable $th) {
-            //throw $th;
+            // throw $th;
             return redirect()->back()->with('error', 'Something went wrong: ' . $th->getMessage());
         }
     }
@@ -175,7 +199,8 @@ class AssetCountController extends Controller
 
     function list_asset($id)
     {
-        $asset_count = AssetCount::with(['location_show'])->find($id);
+        $asset_count = AssetCount::with(['location_show', 'asset_count_plot'])->find($id);
+
         if ($asset_count) {
             return view('AssetCount.list_asset', [
                 'asset_count' => $asset_count,
@@ -187,6 +212,6 @@ class AssetCountController extends Controller
 
 
 
-    
+
 
 }

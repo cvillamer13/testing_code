@@ -37,14 +37,14 @@ class LocationController extends Controller
 
             if($request->is_exist_val){
                 $location = new Location();
-                $location->location_id = $request->name;
+                $location->location_id = strtoupper($request->name);
                 $location->description = $request->description;
                 $location->comp_id = $request->company_id;
                 $location->department_id = $request->dep_id_edit;
                 $location->save();
             }else {
                 $location_name = new Location_name();
-                $location_name->name = $request->name;
+                $location_name->name = strtoupper($request->name);
                 $location_name->createdby = session('user_email');
                 $location_name->created_at = now();
                 $location_name->save();

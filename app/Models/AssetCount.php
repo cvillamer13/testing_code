@@ -34,4 +34,9 @@ class AssetCount extends Model
     {
         return $this->belongsTo(Location::class, 'location', 'location_id');
     }
+
+    public function asset_count_plot()
+    {
+        return $this->hasMany(AssetCountPlot::class, 'asset_count_id', 'id');
+    }
 }

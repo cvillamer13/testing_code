@@ -109,6 +109,17 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="company-department-table">
+                                                @foreach ($asset_count->asset_count_plot as $asset)
+                                                    <tr>
+                                                        <td>{{ $asset->company->name }}</td>
+                                                        <td>{{ $asset->department->name  }}</td>
+                                                        <td>{{ $asset->asset->asset_id }}</td>
+                                                        <td>{{ $asset->asset->asset_description }}</td>
+                                                        <td>{{ $asset->asset->asset_status_data->status }}</td>
+                                                        <td>{{ $asset->is_scanned ? 'Yes' : 'No' }}</td>
+                                                        {{-- <td><input type="checkbox" name="scanning[]" value="{{ $asset->id }}"></td> --}}
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -135,7 +146,7 @@
         }
         $(document).ready(function () {
             // Fetch the company and department data when the page loads
-            fetchCompanyAndDepartment();
+            // fetchCompanyAndDepartment();
             toggleQuarterDropdown();
         });
 

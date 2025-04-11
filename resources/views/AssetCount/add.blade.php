@@ -68,7 +68,7 @@
                                 <div class="row">
                                     <div class="mb-3 col-md-12">
                                         <label class="form-label">Location Scope</label>
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered table-secondary" border="1">
                                             <thead class="thead-light text-center">
                                                 <tr>
                                                     <th>Company</th>
@@ -126,27 +126,66 @@
             .then(data => {
                 const tableBody = document.getElementById('company-department-table');
                 
+                // Object.entries(data.data).forEach(([companyName, departments]) => {
+                //     const departmentEntries = Object.entries(departments);
+                //     const row = document.createElement('tr');
+                    
+                //     const companyCell = document.createElement('td');
+                //     companyCell.textContent = companyName;
+                //     companyCell.rowSpan = departments.length;
+                //     row.appendChild(companyCell);
+
+                //     console.log(departments)
+                //     departmentEntries.forEach(([departmentName, assets], deptIndex)=> {
+                //         const departmentCell = document.createElement('td');
+                //         departmentCell.textContent = departmentName;
+                //         row.appendChild(departmentCell);
+                //     });
+
+                    
+                //     // const departmentCell = document.createElement('td');
+                //     // const departmentList = document.createElement('ul');
+                    
+                //     // departments.forEach(department => {
+                //     //     const listItem = document.createElement('li');
+                //     //     listItem.textContent = department;
+                //     //     departmentList.appendChild(listItem);
+                //     // });
+                    
+                //     // departmentCell.appendChild(departmentList);
+                //     // row.appendChild(departmentCell);
+                    
+                //     tableBody.appendChild(row);
+                // });
+
+
+
                 Object.entries(data.data).forEach(([companyName, departments]) => {
-                    const row = document.createElement('tr');
-                    
-                    const companyCell = document.createElement('td');
-                    companyCell.textContent = companyName;
-                    row.appendChild(companyCell);
-                    
-                    const departmentCell = document.createElement('td');
-                    const departmentList = document.createElement('ul');
-                    
-                    departments.forEach(department => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = department;
-                        departmentList.appendChild(listItem);
+                    const departmentEntries = Object.entries(departments); // [ [deptName, [assets]], ... ]
+
+                    let companyRowPrinted = false;
+
+                    departmentEntries.forEach(([departmentName, assets], deptIndex) => {
+                        const row = document.createElement('tr');
+
+                        // Print company cell only once
+                        if (!companyRowPrinted) {
+                            const companyCell = document.createElement('td');
+                            companyCell.textContent = companyName;
+                            companyCell.rowSpan = departmentEntries.length;
+                            row.appendChild(companyCell);
+                            companyRowPrinted = true;
+                        }
+
+                        // Print department cell
+                        const departmentCell = document.createElement('td');
+                        departmentCell.textContent = departmentName;
+                        row.appendChild(departmentCell);
+
+                        tableBody.appendChild(row);
                     });
-                    
-                    departmentCell.appendChild(departmentList);
-                    row.appendChild(departmentCell);
-                    
-                    tableBody.appendChild(row);
                 });
+
 
             })
             .catch(error => {
