@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\AssetScanned;
 use App\Models\Asset;
 use Carbon\Carbon;
+use App\Models\AssetCountPlot;
+use App\Models\AssetCount;
+
+
 use Exception;
 
 class AssetAssignScannedController extends Controller
@@ -15,30 +19,33 @@ class AssetAssignScannedController extends Controller
 
     public function view()
     {
-        $permissions = checkingpages();
-        if($permissions->isView){
+        // $permissions = checkingpages();
+        // if($permissions->isView){
             // $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
             // $asset_scanned_data = AssetScanned::with('getAsset')->all();
             // $asset_scanned_data = AssetScanned::with('getAsset')->where('type_of_asset', session('type_asset'))->get();
-            $asset_scanned_data = AssetScanned::with('getAsset')
-                ->whereHas('getAsset', function ($query) {
-                    $query->where('type_of_asset', session('type_asset'));
-                })
-                ->orderBy('scanned_date', 'desc')
-                ->limit(10) 
-                ->get();
+            // $asset_scanned_data = AssetScanned::with('getAsset')
+            //     ->whereHas('getAsset', function ($query) {
+            //         $query->where('type_of_asset', session('type_asset'));
+            //     })
+            //     ->orderBy('scanned_date', 'desc')
+            //     ->limit(10) 
+            //     ->get();
 
             
             // echo "<pre>";
             // print_r($asset_scanned_data->all()[0]->scanned_date);
             // exit;
+
+
+            $asset_scanned_data = AssetCount::with(['location_show', 'asset_count_plot'])->where('is_finalized', 0)->get();
             return view('AssetScanned.view', [
                 'asset_scanned' => $asset_scanned_data,
                 
             ]);
-        }else {
-            return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
-        }
+        // }else {
+        //     return redirect('/dashboard')->with('error', 'Sorry you dont have right on this module.');
+        // }
         
     }
 

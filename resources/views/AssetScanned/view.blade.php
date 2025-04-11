@@ -42,16 +42,22 @@
                     <div class="settings-form">
                         <div class="table-responsive">
                             <h4>History</h4>
-                            <table id="example2" class="table table-responsive-sm text-center">
+                            <table id="example" class="table table-responsive-sm">
                                 <thead>
+                                    <tr>
+                                        <td>Year</td>
+                                        <td>Type</td>
+                                        <td>Location</td>
+                                        <td>Action</td>
+                                    </tr>
                                 </thead>
                                 <tbody id="tbody_data">
 
                                     @foreach ($asset_scanned as $scanned)
                                         <tr>
-                                            <td>{{ is_null($scanned->getAsset) == 1 ?  "No Asset: " . $scanned->asset_id : $scanned->getAsset->asset_id   }}</td>
-                                            <td>{{ date("F j, Y", strtotime($scanned->scanned_date))  }}</td>
-                                            <td>{{date("h:i A", strtotime($scanned->scanned_time)) }}</td>
+                                            <td>{{ $scanned->year }}</td>
+                                            <td>{{ $scanned->type == 'surprise' ? 'Count' : 'Quarterly'   }}</td>
+                                            <td>{{ $scanned->asset_count_plot->location->name }}</td>
                                         </tr>
                                         
                                     @endforeach
