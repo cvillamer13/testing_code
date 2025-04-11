@@ -8,6 +8,9 @@ use Illuminate\Support\Str;
 use App\Models\AssetCount;
 use App\Models\Location_name;
 use App\Models\Location;
+use App\Models\Asset;
+use App\Models\Company;
+use App\Models\Department;
 
 class AssetCountController extends Controller
 {
@@ -31,6 +34,40 @@ class AssetCountController extends Controller
         ]);
     }
 
+    // public function getLocationScope(Request $request)
+    // {
+    //     $locationId = $request->location_id;
+
+    //     // Get all locations with relationships
+    //     $locations = Location::with(['company', 'department'])
+    //         ->where('location_id', $locationId)
+    //         ->get();
+
+    //     // Group by company and list unique departments
+    //     $grouped = [];
+
+    //     foreach ($locations as $loc) {
+    //         $companyName = $loc->company->name ?? 'Unknown Company';
+    //         $departmentName = $loc->department->name ?? 'Unknown Department';
+
+    //         // Initialize company if not set
+    //         if (!isset($grouped[$companyName])) {
+    //             $grouped[$companyName] = [];
+    //         }
+
+    //         // Add department if it's not already added
+    //         if (!in_array($departmentName, $grouped[$companyName])) {
+    //             $grouped[$companyName][] = $departmentName;
+    //         }
+    //     }
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'data' => $grouped,
+    //         'assets' => $assets,
+    //     ]);
+    // }
+
     public function getLocationScope(Request $request)
     {
         $locationId = $request->location_id;
@@ -40,30 +77,61 @@ class AssetCountController extends Controller
             ->where('location_id', $locationId)
             ->get();
 
-        // Group by company and list unique departments
+        // Group by company name and list unique department names
         $grouped = [];
+        $companyDeptPairs = [];
 
         foreach ($locations as $loc) {
             $companyName = $loc->company->name ?? 'Unknown Company';
             $departmentName = $loc->department->name ?? 'Unknown Department';
 
-            // Initialize company if not set
+            // Grouping for frontend
             if (!isset($grouped[$companyName])) {
                 $grouped[$companyName] = [];
             }
 
-            // Add department if it's not already added
             if (!in_array($departmentName, $grouped[$companyName])) {
                 $grouped[$companyName][] = $departmentName;
             }
+
+            // Collecting for asset query
+            $key = $loc->comp_id . '-' . $loc->department_id;
+
+            if (!isset($companyDeptPairs[$key])) {
+                $companyDeptPairs[$key] = [
+                    'company_id' => $loc->comp_id,
+                    'department_id' => $loc->department_id,
+                ];
+            }
         }
+
+        // Now query assets based on company and department pairs
+        $structured = [];
+
+        foreach ($companyDeptPairs as $pair) {
+            $companyName = Company::find($pair['company_id'])->name ?? 'Unknown Company';
+            $departmentName = Department::find($pair['department_id'])->name ?? 'Unknown Department';
+        
+            $assets = Asset::where('company_id', $pair['company_id'])
+                ->where('department_id', $pair['department_id'])
+                ->get()
+                // ->pluck('name', 'asset_id', 'asset_description') // or any identifying field
+                ->toArray();
+        
+            if (!isset($structured[$companyName])) {
+                $structured[$companyName] = [];
+            }
+        
+            $structured[$companyName][$departmentName] = $assets;
+        }
+        
 
         return response()->json([
             'status' => 'success',
-            'data' => $grouped,
+            'data' => $structured,
+            // 'assets' => $assets,
         ]);
     }
-
 
     public function store(Request $request)
     {
@@ -116,5 +184,9 @@ class AssetCountController extends Controller
             return redirect()->back()->with('error', 'Asset Count not found');
         }
     }
+
+
+
+    
 
 }

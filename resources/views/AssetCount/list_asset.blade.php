@@ -59,6 +59,39 @@
                                         </select>
                                     </div>
                                 </div>
+                                <hr>
+                                <div class="row mb-3">
+                                    <div class="col-md-3">
+                                        <label>Filter by Company:</label>
+                                        <select id="filter-company" class="form-control">
+                                            <option value="">All Companies</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Filter by Department:</label>
+                                        <select id="filter-department" class="form-control">
+                                            <option value="">All Departments</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Filter by Status:</label>
+                                        <select id="filter-status" class="form-control">
+                                            <option value="">All Status</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Filter by Scanned:</label>
+                                        <select id="filter-scanned" class="form-control">
+                                            <option value="">All</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                
 
                                 <div class="row">
                                     <div class="mb-3 col-md-12">
@@ -68,6 +101,10 @@
                                                 <tr>
                                                     <th>Company</th>
                                                     <th>Departments</th>
+                                                    <th>Asset Code</th>
+                                                    <th>Asset Description</th>
+                                                    <th>Status</th>
+                                                    <th>is Scanned</th>
                                                     {{-- <th>Scanning</th> --}}
                                                 </tr>
                                             </thead>
@@ -77,7 +114,7 @@
                                     </div>
                                 </div>
 
-                                {{-- <button class="btn btn-primary mt-4 w-100" type="submit">Submit</button> --}}
+                                <button class="btn btn-primary mt-4 w-100" type="submit">Lock Schedule</button>
                             {{-- </form> --}}
                         </div>
                     </div>
@@ -151,28 +188,6 @@
                 //     tableBody.appendChild(row);
                 // });
 
-                Object.entries(data.data).forEach(([companyName, departments]) => {
-                    departments.forEach((department, index) => {
-                        const row = document.createElement('tr');
-
-                        // Add company name cell only in the first row of this group
-                        if (index === 0) {
-                            const companyCell = document.createElement('td');
-                            companyCell.textContent = companyName;
-                            companyCell.rowSpan = departments.length;
-                            row.appendChild(companyCell);
-                        }
-
-                        // Add department cell
-                        const departmentCell = document.createElement('td');
-                        departmentCell.textContent = department;
-                        row.appendChild(departmentCell);
-
-                        tableBody.appendChild(row);
-                    });
-                });
-
-
                 // Object.entries(data.data).forEach(([companyName, departments]) => {
                 //     departments.forEach((department, index) => {
                 //         const row = document.createElement('tr');
@@ -190,21 +205,97 @@
                 //         departmentCell.textContent = department;
                 //         row.appendChild(departmentCell);
 
-                //         // Add scan button cell
-                //         const buttonCell = document.createElement('td');
-                //         const scanButton = document.createElement('button');
-                //         scanButton.textContent = 'Start Scanning';
-                //         scanButton.classList.add('btn', 'btn-primary'); // optional: for Bootstrap styling
-                //         scanButton.addEventListener('click', () => {
-                //             // Replace this with your scanning logic
-                //             alert(`Starting scan for ${companyName} - ${department}`);
-                //         });
-                //         buttonCell.appendChild(scanButton);
-                //         row.appendChild(buttonCell);
+                //         tableBody.appendChild(row);
+                //     });
+                // });
+
+
+                // Object.entries(data.data).forEach(([companyName, departments]) => {
+                //     const departmentEntries = Object.entries(departments);
+
+                //     departmentEntries.forEach(([departmentName, assets], index) => {
+                //         const row = document.createElement('tr');
+
+                //         // Company cell with rowspan
+                //         if (index === 0) {
+                //             const companyCell = document.createElement('td');
+                //             companyCell.textContent = companyName;
+                //             companyCell.rowSpan = departmentEntries.length;
+                //             row.appendChild(companyCell);
+                //         }
+
+                //         // Department cell
+                //         const departmentCell = document.createElement('td')
+                //         departmentCell.textContent = departmentName;
+                //         row.appendChild(departmentCell);
+
+
+                //         console.log(assets.length);
+
+
 
                 //         tableBody.appendChild(row);
                 //     });
                 // });
+
+
+                Object.entries(data.data).forEach(([companyName, departments]) => {
+                        const departmentEntries = Object.entries(departments); // [ [deptName, [assets]], ... ]
+
+                        let totalRows = 0;
+                        departmentEntries.forEach(([_, assets]) => {
+                            totalRows += assets.length;
+                        });
+
+                        let companyRowPrinted = false;
+
+                        departmentEntries.forEach(([departmentName, assets], deptIndex) => {
+                            assets.forEach((asset, assetIndex) => {
+                                const row = document.createElement('tr');
+
+                                // Print company cell once
+                                if (!companyRowPrinted) {
+                                    const companyCell = document.createElement('td');
+                                    companyCell.textContent = companyName;
+                                    companyCell.rowSpan = totalRows;
+                                    row.appendChild(companyCell);
+                                    companyRowPrinted = true;
+                                }
+
+                                // Print department cell once per department group
+                                if (assetIndex === 0) {
+                                    const departmentCell = document.createElement('td');
+                                    departmentCell.textContent = departmentName;
+                                    departmentCell.rowSpan = assets.length;
+                                    row.appendChild(departmentCell);
+                                }
+
+                                // Asset Code
+                                const codeCell = document.createElement('td');
+                                codeCell.textContent = asset.asset_id;
+                                row.appendChild(codeCell);
+
+                                // Description
+                                const descCell = document.createElement('td');
+                                descCell.textContent = asset.asset_description;
+                                row.appendChild(descCell);
+
+                                // Status
+                                const statusCell = document.createElement('td');
+                                statusCell.textContent = asset.status;
+                                row.appendChild(statusCell);
+
+                                // Is Scanned
+                                const scanCell = document.createElement('td');
+                                scanCell.textContent = asset.is_scanned ? 'Yes' : 'No';
+                                row.appendChild(scanCell);
+
+                                tableBody.appendChild(row);
+                            });
+                        });
+                    });
+
+
 
 
             })
