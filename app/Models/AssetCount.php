@@ -28,4 +28,10 @@ class AssetCount extends Model
         'deletedby',
         'isDelete',
     ];
+
+
+    public function location_show()
+    {
+        return $this->belongsTo(Location::class, 'location', 'location_id');
+    }
 }

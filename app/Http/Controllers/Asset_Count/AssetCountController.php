@@ -13,9 +13,13 @@ class AssetCountController extends Controller
 {
     function view()
     {
-
+        $data = AssetCount::with(['location_show'])->get();
+        // echo "<pre>";
+        // print_r($data[0]->location_show->location_data->name);
+        // echo "</pre>";
+        // exit;
         return view('AssetCount.view', [
-            'asset_count' => AssetCount::with(['location_name', 'location.company', 'location.department'])->get(),
+            'asset_count' => $data,
         ]);
     }
 
@@ -26,25 +30,6 @@ class AssetCountController extends Controller
             'locations' => $locations,
         ]);
     }
-
-
-    // function getLocationScope(Request $request)
-    // {
-    //     $locationId = $request->location_id;
-    //     $location = Location::with(['company', 'department', 'location_data'])->where('location_id', $locationId)->get();
-
-    //     if ($location) {
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'data' => $location,
-    //         ]);
-    //     } else {
-    //         return response()->json([
-    //             'status' => 'error',
-    //             'message' => 'Location not found',
-    //         ]);
-    //     }
-    // }
 
     public function getLocationScope(Request $request)
     {
@@ -122,7 +107,7 @@ class AssetCountController extends Controller
 
     function list_asset($id)
     {
-        $asset_count = AssetCount::find($id);
+        $asset_count = AssetCount::with(['location_show'])->find($id);
         if ($asset_count) {
             return view('AssetCount.list_asset', [
                 'asset_count' => $asset_count,

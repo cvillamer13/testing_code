@@ -25,18 +25,42 @@
                                 <thead>
                                     <tr>
                                         <th class="staff_thead_no">Year</th>
+                                        <th class="staff_thead_no">From</th>
+                                        <th class="staff_thead_no">To</th>
                                         <th class="staff_thead_status">Count Type</th>
                                         <th class="staff_thead_status">Location</th>
                                         <th class="staff_thead_status">is Lock</th>
+                                        <th class="staff_thead_status">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($assetCounts as $assetCount)
+                                    @foreach ($asset_count as $data)
                                         <tr>
-                                            <td>{{ $assetCount->year }}</td>
-                                            <td>{{ $assetCount->count_type }}</td>
-                                            <td>{{ $assetCount->location }}</td>
-                                            <td>{{ $assetCount->is_lock ? 'Yes' : 'No' }}</td>
+                                            <td>{{ $data->year }}</td>
+                                            <td>{{ $data->date_from }}</td>
+                                            <td>{{ $data->date_to }}</td>
+                                            <td>
+                                                @if ($data->type == 'quarter')
+                                                    Quarter
+                                                @else
+                                                    Count
+                                                @endif
+                                            </td>
+                                            <td>{{ $data->location_show->location_data->name }}</td>
+                                                
+                                            </td>
+                                            <td>
+                                                @if ($data->is_finalized == 1)
+                                                    <span class="badge badge-success">Yes</span>
+                                                @else
+                                                    <span class="badge badge-danger">No</span>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                <a href="{{ url('/AssetCount/for_finalize/' . $data->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                                                <a href="{{ url('/AssetCount/delete/' .$data->id) }}" class="btn btn-danger btn-sm">Delete</a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 <tbody>
