@@ -34,7 +34,7 @@ class AssetCountPlot extends Model
     }
     public function location()
     {
-        return $this->belongsTo(Location::class, 'location_id', 'location_id');
+        return $this->hasMany(Location::class, 'location_id', 'location_id');
     }
 
     public function company()

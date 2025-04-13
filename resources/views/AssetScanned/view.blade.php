@@ -57,7 +57,12 @@
                                         <tr>
                                             <td>{{ $scanned->year }}</td>
                                             <td>{{ $scanned->type == 'surprise' ? 'Count' : 'Quarterly'   }}</td>
-                                            <td>{{ $scanned->asset_count_plot->location->name }}</td>
+                                            <td>{{ $scanned->location_show->location_data->name }}</td>
+                                            <td>
+                                                <a href="" class="btn btn-rounded btn-info">
+                                                    Start Scan Asset
+                                                </a>
+                                            </td>
                                         </tr>
                                         
                                     @endforeach
