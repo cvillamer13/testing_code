@@ -96,16 +96,17 @@
                                 <div class="row">
                                     <div class="mb-3 col-md-12">
                                         <label class="form-label">Location Scope</label>
-                                        <table class="table table-striped table-secondary" border="1">
+                                        <table class="table table-striped " border="1">
                                             <thead class="thead-light text-center">
                                                 <tr>
                                                     <th>Company</th>
                                                     <th>Departments</th>
                                                     <th>Asset Code</th>
                                                     <th>Asset Description</th>
-                                                    <th>Status</th>
+                                                    {{-- <th>Status</th> --}}
                                                     <th>is Scanned</th>
-                                                    {{-- <th>Scanning</th> --}}
+                                                    <th>Scanned by</th>
+                                                    <th>Scanned date</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="company-department-table">
@@ -115,8 +116,14 @@
                                                         <td>{{ $asset->department->name  }}</td>
                                                         <td>{{ $asset->asset->asset_id }}</td>
                                                         <td>{{ $asset->asset->asset_description }}</td>
-                                                        <td>{{ $asset->asset->asset_status_data->status }}</td>
-                                                        <td>{{ $asset->is_scanned ? 'Yes' : 'No' }}</td>
+                                                        {{-- <td>{{ $asset->asset->asset_status_data->status }}</td> --}}
+                                                        <td>
+                                                            <span class="{{ $asset->isScanned ? 'text-success' : 'text-danger' }}">
+                                                                {{ $asset->isScanned ? 'Yes' : 'No' }}
+                                                            </span>
+                                                        </td>
+                                                        <td>{{ $asset->scannedby }}</td>
+                                                        <td>{{ $asset->scanned_at }}</td>
                                                         {{-- <td><input type="checkbox" name="scanning[]" value="{{ $asset->id }}"></td> --}}
                                                     </tr>
                                                 @endforeach
