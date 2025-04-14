@@ -90,8 +90,8 @@
                                             <td>{{ $ass->asset_id }}</td>
                                             <td>{{ $ass->asset_description }}</td>
                                             <td>{{ $ass->company_data->name }}</td>
-                                            <td>{{ $ass->department_data->name }}</td>
-                                            <td>{{ $ass->location_data->name ?? "NA" }}</td>
+                                            <td>{{ $ass->department_data->name ?? "No Department Assign" }}</td>
+                                            <td>{{ $ass->location_data->name ?? "No Location Assign" }}</td>
                                             <td><a class="badge badge-lg badge-info" id="staff_id_new" onclick="printbarcode_data({{ $ass->id }})"><i class="fa fa-print"></i>print</a></td>
                                         </tr>
                                     @endforeach
