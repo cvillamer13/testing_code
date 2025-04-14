@@ -127,4 +127,44 @@ class AssetAssignScannedController extends Controller
                 ], 400);
             }
     }
+
+
+    public function prepared_scanned($id){
+        try {
+            //code...
+            $data_asset = AssetCountPlot::with(['asset'])->where('asset_count_id', $id)->get();
+
+
+            return view('AssetScanned.show_to_scanned', [
+                'asset_scanned' => $data_asset,
+                
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+
+
+    public function getScanned_new(Request $request){
+        try {
+            //code...
+            $request->validate([
+                'asset_id' => 'required',
+            ]);
+            // $get_asset = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('asset_id', $request->asset_id)->first();
+            AssetCountPlot::where('asset_id', $request->asset_id)->update([
+                'isScanned' => 1,
+                'scannedby' => session('user_email'),
+                'scanned_at' => Carbon::now(),
+                'updatedby' => session('user_email'),
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Scanned Successfully!'
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

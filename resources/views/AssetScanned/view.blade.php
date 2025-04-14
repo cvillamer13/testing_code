@@ -46,6 +46,8 @@
                                 <thead>
                                     <tr>
                                         <td>Year</td>
+                                        <td>From</td>
+                                        <td>To</td>
                                         <td>Type</td>
                                         <td>Location</td>
                                         <td>Action</td>
@@ -56,10 +58,12 @@
                                     @foreach ($asset_scanned as $scanned)
                                         <tr>
                                             <td>{{ $scanned->year }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($scanned->date_from)->format('F j, Y')}}</td>
+                                            <td>{{ \Carbon\Carbon::parse($scanned->date_to)->format('F j, Y')}}</td>
                                             <td>{{ $scanned->type == 'surprise' ? 'Count' : 'Quarterly'   }}</td>
                                             <td>{{ $scanned->location_show->location_data->name }}</td>
                                             <td>
-                                                <a href="" class="btn btn-rounded btn-info">
+                                                <a href="/AssetScanning/scanned/{{ $scanned->id }}" class="btn btn-info">
                                                     Start Scan Asset
                                                 </a>
                                             </td>

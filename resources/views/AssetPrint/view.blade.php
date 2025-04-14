@@ -129,7 +129,7 @@
                     let data_str = `<option value="all">All</option>`;
                     // console.log(response)
                     response.forEach(element => {
-                        data_str += `<option value="${element.id}">${element.name}</option>`;
+                        data_str += `<option value="${element.id}">${element.location_data.name}</option>`;
                     });
                     $('#loc_id').html(data_str);
                 },
@@ -248,7 +248,7 @@
                                 if(data.location_data == null){
                                     data_str += '<td><span class="badge badge-lg badge-warning">No Location</span></td>';
                                 }else{
-                                    data_str += '<td>'+ data.location_data.name +'</td>';
+                                    data_str += '<td>'+ data.location_data.location_data.name +'</td>';
                                 }
                                 data_str += '<td><a class="badge badge-lg badge-info" id="staff_id_new" onclick="print_one('+data.id+')"><i class="fa fa-print"></i>print</a></td>';
                             data_str += '</tr>';
