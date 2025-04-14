@@ -42,7 +42,7 @@
                     <div class="settings-form">
                         <div class="table-responsive">
                             <h4>History</h4>
-                            <table id="example" class="table table-responsive-sm">
+                            <table id="data_table" class="table table-responsive-sm">
                                 <thead>
                                     <tr>
                                         <td>Company</td>
@@ -55,23 +55,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbody_data">
-                                    @foreach ($asset_scanned as $asset)
-                                        <tr>
-                                            <td>{{ $asset->company->name }}</td>
-                                            <td>{{ $asset->department->name }}</td>
-                                            <td>{{ $asset->asset->asset_id }}</td>
-                                            <td>{{ $asset->asset->asset_description }}</td>
-                                            <td>
-                                                @if ($asset->isScanned == 1)
-                                                    <span class="badge badge-success">Scanned</span>
-                                                @else
-                                                    <span class="badge badge-danger">Not Scanned</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ $asset->scannedby }}</td>
-                                            <td>{{ $asset->scanned_at }}</td>
-                                        </tr>
-                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -82,6 +65,34 @@
         </div>
         
         <script>
+
+            $(document).ready(function() {
+                $('#data_table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '/AssetScanning/getCurrentData',
+                        type: 'POST',
+                        data: {
+                            "_token": '{{ csrf_token() }}', // For Laravel
+                            "id": '{{ $asset_count_id }}' // Pass the ID to the server
+                        }
+                    },
+                    columns: [
+                        { data: 'company.name' },
+                        { data: 'department.name' },
+                        { data: 'asset.asset_id' },
+                        { data: 'asset.asset_description' },
+                        { data: 'isScanned', render: function(data, type, row) {
+                            return data == 1 ? '<span class="badge badge-success">Scanned</span>' : '<span class="badge badge-danger">Not Scanned</span>';
+                        }},
+                        { data: 'scannedby' },
+                        { data: 'scanned_at' }
+                    ]
+                });
+            });
+           
+
              $("#scanned_start").click(function (e) {
                 e.preventDefault(); // Prevent default action
 
@@ -154,8 +165,8 @@
                                                         Swal.close();
                                                         toastr.success(response.message);
                                                         console.log(response.data);
-                                                        $('#example').DataTable().destroy();
-                                                        $('#example').DataTable(); // reinitialize
+                                                        $('#data_table').DataTable().ajax.reload();
+
 
                                                     },
                                                     error: function(error) {

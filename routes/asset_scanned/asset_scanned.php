@@ -9,5 +9,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/scanned_data', [AssetAssignScannedController::class, 'scanned_data']);
     Route::get('/scanned/{id}', [AssetAssignScannedController::class, 'prepared_scanned']);
     Route::post('/getScanned_new', [AssetAssignScannedController::class, 'getScanned_new']);
+    Route::post('/getCurrentData', [AssetAssignScannedController::class, 'getCurrentData']);
+    
     
 });

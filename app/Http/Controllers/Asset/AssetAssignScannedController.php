@@ -132,15 +132,53 @@ class AssetAssignScannedController extends Controller
     public function prepared_scanned($id){
         try {
             //code...
-            $data_asset = AssetCountPlot::with(['asset'])->where('asset_count_id', $id)->get();
+            $data_asset = AssetCountPlot::with(['asset', 'company', 'department'])->where('asset_count_id', $id)->get();
 
 
             return view('AssetScanned.show_to_scanned', [
                 'asset_scanned' => $data_asset,
+                'asset_count_id' => $id,
                 
             ]);
         } catch (\Throwable $th) {
             //throw $th;
+        }
+    }
+
+    function getCurrentData(Request $request){
+        try {
+            // $data = AssetCountPlot::with(['asset', 'company', 'department'])->where('asset_count_id', $request->id)->get();
+            // return response()->json([
+            //     'data' => $data
+            // ]);
+
+            $query = AssetCountPlot::with(['asset', 'company', 'department'])
+            ->where('asset_count_id', $request->id);
+
+            // Total records before filtering
+            $recordsTotal = $query->count();
+
+            // Apply pagination and ordering
+            $data = $query
+                ->skip($request->start)
+                ->take($request->length)
+                // ->orderBy(
+                //     $request->columns[$request->order[0]['column']]['data'],
+                //     $request->order[0]['dir']
+                // )
+                ->get();
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsTotal, // You can change if using search filtering
+                'data' => $data
+            ]);
+        } catch (Exception $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
         }
     }
 
