@@ -12,6 +12,7 @@
                     <div class="card-body">
                         <div class="form-validation">
                             {{-- <form class="needs-validation" action="{{ Route('AssetCount.add') }}" method="post" enctype="multipart/form-data"> --}}
+                                <input type="hidden" name="id" id="id" value="{{ $asset_count->id }}">
                                 @csrf
                                 <div class="row">
                                     <div class="mb-3 col-md-4">
@@ -132,7 +133,15 @@
                                     </div>
                                 </div>
 
-                                <button class="btn btn-primary mt-4 w-100" type="submit">Lock Schedule</button>
+                                @if ($asset_count->is_finalized)
+                                    <div class="alert alert-danger">
+                                        <strong>Warning!</strong> This schedule has been locked and cannot be modified.
+                                    </div>  
+                                @else
+                                    <button class="btn btn-primary mt-4 w-100" type="submit" onclick="lock_schedule()">Lock Schedule</button>
+                                @endif
+
+                                
                             {{-- </form> --}}
                         </div>
                     </div>
@@ -142,6 +151,35 @@
     </div>
 
     <script>
+        function lock_schedule(){
+            const id = document.getElementById('id').value;
+
+            // Perform an AJAX request to lock the schedule
+            fetch(`/AssetCount/lock_schedule`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ id:id })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+                // window.location.href = '/AssetCount/list_asset';
+                location.reload();
+
+            })
+            .catch(error => {
+                console.error('Error locking schedule:', error);
+            });
+        }
+
         function toggleQuarterDropdown() {
             const countType = document.getElementById('count_type').value;
             const quarterRow = document.getElementById('quarter-row');

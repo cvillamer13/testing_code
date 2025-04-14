@@ -9,4 +9,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/add', [AssetCountController::class, 'store']);
     Route::post('/getLocationScope', [AssetCountController::class, 'getLocationScope']);
     Route::get('/for_finalize/{id}', [AssetCountController::class, 'list_asset'])->name('AssetCount.list_asset');
+    Route::post('/lock_schedule', [AssetCountController::class, 'lock_schedule']);
+    
 });

@@ -211,6 +211,26 @@ class AssetCountController extends Controller
     }
 
 
+    function lock_schedule(Request $request)
+    {
+        try {
+            $data = AssetCount::find($request->id);
+            $data->is_finalized = 1;
+            $data->finalizedby = session('user_email');
+            $data->finalize_at = now();
+            $data->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Asset Count Schedule Locked Successfully'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong: ' . $th->getMessage()
+            ]);
+        }
+    }
 
 
 
