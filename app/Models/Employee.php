@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable; 
 
-class Employee extends Model
+class Employee extends Authenticatable
 {
     use HasFactory;
     protected $fillable = [
@@ -21,7 +22,6 @@ class Employee extends Model
         'department_data_id ',
         'phone_number',
         'date_of_hired',
-        'pwd_data',
         'address1',
         'address2',
         'barangay',
@@ -33,9 +33,26 @@ class Employee extends Model
         'updated_by',
         'created_at',
         'updated_at',
-        'image_path'
+        'image_path',
+        'pwd_data',
+
     ];
 
+
+    protected $hidden = [
+        'pwd_data',
+        'remember_token',
+    ];
+
+
+    protected $casts = [
+        'pwd_data' => 'hashed',
+    ];
+
+    public function getAuthPassword()
+    {
+        return $this->pwd_data; // Custom password field
+    }
 
     public function gender()
     {

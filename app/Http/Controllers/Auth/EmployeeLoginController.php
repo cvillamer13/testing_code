@@ -17,20 +17,35 @@ class EmployeeLoginController extends Controller
 
     public function store_sys(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+    
         $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember'); // true/false
 
-        if (auth()->attempt($credentials)) {
-            return redirect()->intended('dashboard');
+        if (Auth::guard('employee')->attempt($credentials, $remember)) {
+            // Login success, redirect to dashboard
+            return redirect()->intended('/employee/index');
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
-        ]);
+        ])->withInput($request->only('email', 'remember'));
+    }
+
+
+    public function main()
+    {
+        return view('Employee_portal.index');
     }
     public function logout(Request $request)
     {
-        auth()->logout();
+        Auth::guard('employee')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('/employee/login');
     }
 }
