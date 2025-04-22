@@ -11,6 +11,7 @@ use App\Models\Position;
 use App\Models\Gender;
 use App\Models\User_pages_permission;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {   
@@ -181,6 +182,7 @@ class EmployeeController extends Controller
                 'position_data' => 'required',
                 'company_data' => 'required',
                 'depart_data' => 'required',
+                'pass_wd' => 'string|min:8|confirmed'
             ]);
 
             $emp = Employee::find($id);
@@ -203,6 +205,7 @@ class EmployeeController extends Controller
             $emp->province = $request->province;
             $emp->country = $request->country;
             $emp->zip = $request->zip;
+            $emp->pwd_data = Hash::make($request->pass_wd);
             $emp->updated_by = session('user_email');
             if ($request->hasFile('profile_picture')) {
                 $image = $request->file('profile_picture');
