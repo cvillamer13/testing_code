@@ -115,7 +115,7 @@
 
                                             <div class="mb-3 col-md-3">
                                                 <label class="form-label">Confirm Password</label>
-                                                <input type="password" class="form-control" name="pass_wd_c" id="pass_wd_c" value="">
+                                                <input type="password" class="form-control" name="pass_wd_confirmation" id="pass_wd_confirmation" value="">
                                             </div>
     
                                         </div>
