@@ -1,1 +1,2 @@
-<h1>HELLO</h1>
+<x-employee-auth-layout>
+</x-employee-auth-layout>
