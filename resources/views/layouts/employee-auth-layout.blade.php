@@ -30,7 +30,7 @@
             <div id="main-wrapper">
                 @include('partials.employee.header_logo')
                 @include('partials.employee.header')
-                @include('partials.sidebar')
+                @include('partials.employee.sidebar')
                 <div class="content-body">
                     {{ $slot }}
                 </div>
@@ -43,15 +43,8 @@
        
     </body>
    
-    @include('partials.toastr')
-    @include('partials.script')
-    @include('partials.footer')
-    <script>
-        // $(document).ready(function() {
-        //     $('select').select2({
-        //         placeholder: "Select an option",
-        //         allowClear: false
-        //     });
-        // });
-    </script>
+    @include('partials.employee.toastr')
+    @include('partials.employee.script')
+    @include('partials.employee.footer')
+
 </html>

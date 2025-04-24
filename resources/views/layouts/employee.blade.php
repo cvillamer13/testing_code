@@ -2,7 +2,7 @@
 <html class="h-100" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
 
-        @include('partials.head')
+        @include('partials.employee.head')
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'Asset Management System') }}</title>
 

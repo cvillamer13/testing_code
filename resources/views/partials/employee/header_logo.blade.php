@@ -1,6 +1,6 @@
 <div class="nav-header">
    
-    <a href="/dashboard" class="brand-logo pt-3">
+    <a href="/employee/index" class="brand-logo pt-3">
         <div class="text-center brand-logo d-flex justify-content-center align-items-center" style="flex-direction: column;">
             <img src="{{ asset('images/Jakalogo.png') }}" class="mb-4" style="height: 50px;">
         </div>
