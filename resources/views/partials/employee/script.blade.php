@@ -96,7 +96,7 @@ $('.layout_style').on('click',function()
 function pages_checker(id){
     $.ajax({
         type: "POST",
-        url: "/permissions/check",
+        url: "/employee/permissions/check",
         data: {
             "_token": "{{ csrf_token() }}",
             page_id: id
