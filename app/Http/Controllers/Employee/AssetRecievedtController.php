@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AssetIssuance;
 use App\Models\ApproversStatus;
+use App\Models\AssetBorrowed;
+use App\Models\Location;
+use App\Models\Company;
+use App\Models\Employee;
 
 class AssetRecievedtController extends Controller
 {
@@ -18,8 +22,18 @@ class AssetRecievedtController extends Controller
                 return view('Employee_portal.asset_recieved', [
                     'asset_issuance' => $asset_issuance
                 ]);
+            break;
 
-                break;
+            case 'transmittal':
+                
+                $borrowed_asset = AssetBorrowed::with(['details', 'getEmployee', 'getLocation_from', 'getLocation_to'])->where('emp_id', session('emp_id'))->get();
+                return view('Employee_portal.borrowed_asset', [
+                    'borrowed_asset' => $borrowed_asset
+                ]);
+            break;
+            case 'borrowed':
+            // code...
+            break;
             
             default:
                 # code...
@@ -39,6 +53,19 @@ class AssetRecievedtController extends Controller
             'employee_data' => $asset_issuance->getEmployee,
             'issuance_detl' => $asset_issuance->details,
             'issuance_status' => $issuance_status,
+        ]);
+    }
+
+
+    public function req_transmittal(){
+        // event(new \App\Events\MessageSent('Hello from Laravel!'));
+        $mis = Location::with(['company', 'department', 'location_data'])->find('2898');
+        $to_company = Company::orderBy('name', 'asc')->get();
+        $employee_data = Employee::with(['department', 'position'])->find(session('emp_id'));
+        return view('Employee_portal.add_trans', [
+            'employee_data' => $employee_data,
+            'mis' => $mis,
+            'to_company' => $to_company,
         ]);
     }
 }
