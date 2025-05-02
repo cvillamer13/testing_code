@@ -12,7 +12,7 @@
                     <div class="card py-3 px-3">
                         <div class="card-body">
                             <div class="form-validation">
-                                <form class="needs-validation" action="{{ Route('BorrowedAsset.add') }}" method="post" enctype="multipart/form-data">
+                                <form class="needs-validation" action="/employee/trans_add" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <h5 class="card-title">Assignee Information</h5>
                                     

@@ -26,8 +26,12 @@ Route::middleware(['employee'])->group(function () {
     Route::get('/asset_recieved/issuance_pdf/{id}', [AssetAssignController::class, 'issuance_pdf']);
     Route::get('/asset_recieved/issuance/{id}', [AssetRecievedtController::class, 'to_recieved_emp']);
     Route::get('/trans_add', [AssetRecievedtController::class, 'req_transmittal'])->name('employee.transmittal.add');
+    Route::post('/trans_add', [AssetRecievedtController::class, 'req_trans_save']);
     Route::post('/Location/getDepartment', [LocationController::class, 'getDepartment']);
     Route::post('/Location/getLocation', [LocationController::class, 'getLocation']);
+    Route::get('/borrowed_asset/for_finalize/{id}', [BorrowedAssetController::class, 'for_finalize_emp'])->name('BorrowedAssetEMP.for_finalize');
+    Route::post('/BorrowedAsset/add_detl', [BorrowedAssetController::class, 'store_detl_emp']);
+    Route::post('/BorrowedAsset/finalized', [BorrowedAssetController::class, 'finalized_emp']);
     // Route::get('/transmittal', [BorrowedAssetController::class, 'view'])->name('employee.transmittal');
     
 });

@@ -91,7 +91,7 @@
                                             <td>{{ $ass->asset_description }}</td>
                                             <td>{{ $ass->company_data->name }}</td>
                                             <td>{{ $ass->department_data->name ?? "No Department Assign" }}</td>
-                                            <td>{{ $ass->location_data->name ?? "No Location Assign" }}</td>
+                                            <td>{{ $ass->location_data->location_data->name ?? "No Location Assign" }}</td>
                                             <td><a class="badge badge-lg badge-info" id="staff_id_new" onclick="printbarcode_data({{ $ass->id }})"><i class="fa fa-print"></i>print</a></td>
                                         </tr>
                                     @endforeach
@@ -440,9 +440,11 @@
                             doc.text(' : ', x + 25, y)
                             doc.text("NA", x + 28, y)
                         }else{
+
+                            console.log(response.message.location_data.location_data.name)
                             doc.text('LOCATION', x, y += lineHeight3)
                             doc.text(' : ', x + 25, y)
-                            doc.text(response.message.location_data.name, x + 28, y)
+                            doc.text(response.message.location_data.location_data.name, x + 28, y)
                         }
 
                         var blob = doc.output('bloburl');

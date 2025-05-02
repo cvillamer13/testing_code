@@ -23,6 +23,7 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Writer\ValidationException;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Category;
 
 class BorrowedAssetController extends Controller
 {
@@ -128,6 +129,37 @@ class BorrowedAssetController extends Controller
             ], 400);
         }
     }
+
+    function store_detl_emp(Request $request){
+        try {
+            $request->validate([
+                'category_id' => 'required',
+                'borrowed_id' => 'required',
+            ]);
+            $store_data = new AssetBorrowedDetl();
+            $store_data->asset_id = 0;
+            $store_data->category_id = $request->category_id;
+            $store_data->qty = "1";
+            $store_data->comments = $request->comment;
+            $store_data->date = $request->date_to_return;
+            $store_data->borrowed_main_id = $request->borrowed_id;
+            $store_data->createdby = session('user_email');
+            $store_data->created_at = now();
+            $store_data->save();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $store_data,
+                'message' => 'saving.'
+            ], 200);
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
     function get_data_detl(Request $request){
         try {
             $request->validate([
@@ -209,6 +241,34 @@ class BorrowedAssetController extends Controller
                 return response()->json([
                     'status' => 'success',
                     'message' => $other_detl->ref_num . ' Finalized! ' . $f_approver . " Notified."
+                ], 200);
+            }
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
+
+
+    function finalized_emp(Request $request){
+        try {
+            $request->validate([
+                'borrowed_id' => "required"
+            ]);
+            $other_detl = AssetBorrowed::find($request->borrowed_id);
+            $other_detl->is_finalized = "1";
+            $other_detl->finalizedby = "emp_".session('user_email');
+            $other_detl->finalize_at = now();
+            // $other_detl->save();
+            if ($other_detl->is_finalized) {
+                // $f_approver = approvalBorrowedAsset($other_detl->id, 3, 11, $other_detl->approved_status);
+                // notification of asset nick
+                return response()->json([
+                    'status' => 'success',
+                    'message' => $other_detl->ref_num . ' Finalized! ',
                 ], 200);
             }
             
@@ -390,5 +450,20 @@ class BorrowedAssetController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
+    }
+
+
+    function for_finalize_emp($id){
+        $data = AssetBorrowed::with(['getEmployee', 'getLocation_from', 'details'])->find($id);
+        $borrowed = AssetBorrowed::with(['getEmployee', 'getLocation_from', 'details'])->find($id);
+        $borrowed_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 11)->get();
+        $category = Category::all();
+
+        return view('Employee_portal.for_finalized_emp', [
+            'data' => $data,
+            'borrowed_status' =>  $borrowed_status,
+            'borrowed' => $borrowed,
+            'category' => $category
+        ]);
     }
 }

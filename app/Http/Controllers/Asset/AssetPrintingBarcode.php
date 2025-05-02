@@ -59,7 +59,7 @@ class AssetPrintingBarcode extends Controller
     public function getFilterbyOne(Request $request){
         try {
             $id = $request->id_data;
-            $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])
+            $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data.location_data'])
                 ->find($id);
                 // ->where('isDelete',false)
                 // ->where('type_of_asset', session('type_asset'));

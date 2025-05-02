@@ -19,11 +19,16 @@ class AssetBorrowedDetl extends Model
         'deletedby',
         'isDelete',
         'deleted_at',
-        'borrowed_main_id'
+        'borrowed_main_id',
+        'category_id'
     ];
 
     public function asset_details(){
         return $this->belongsTo(Asset::class, 'asset_id');
+    }
+
+    public function category_details(){
+        return $this->belongsTo(Category::class, 'category_id');
     }
     
 }

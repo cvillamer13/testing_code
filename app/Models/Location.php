@@ -26,4 +26,8 @@ class Location extends Model
     {
         return $this->belongsTo(Location_name::class, 'location_id');
     }
+    public function location_data2()
+    {
+        return $this->belongsTo(Location_name::class, 'location_id');
+    }
 }
