@@ -23,10 +23,21 @@
             {{ __('Asset Scanned') }}
     </x-slot>
         <div class="container-fluid">
+            <div class="card-header">
+                <h4 class="card-title col-6">List of Asset Scanned</h4>
+                <div class="card-title col-6 text-end">
+                    <a class="btn btn-rounded btn-info" id="scanned_start">
+                        Start Scan Asset
+                        <span class="btn-icon-start text-info"><i
+                                class="fa fa-barcode color-info"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
             <div class="row">
                 
-                <div class="col-xl-12">
-                    <div class="card-header">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    {{-- <div class="card-header">
                         <h4 class="card-title col-6">List of Asset Scanned</h4>
                         <div class="card-title col-6 text-end">
                             <a class="btn btn-rounded btn-info" id="scanned_start">
@@ -36,12 +47,12 @@
                                 </span>
                             </a>
                         </div>
-                    </div>
+                    </div> --}}
                     <input type="text" id="barcodeInput" style="position: absolute; left: -9999px;" autocomplete="off">
                     <div class="card py-3 px-3">
                     <div class="settings-form">
                         <div class="table-responsive">
-                            <h4>History</h4>
+                            <h4>Scheduled Asset Count</h4>
                             <table id="example" class="table table-responsive-sm">
                                 <thead>
                                     <tr>
@@ -70,6 +81,45 @@
                                         </tr>
                                         
                                     @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+
+
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    {{-- <div class="card-header">
+                        <h4 class="card-title col-6">List of Asset Scanned</h4>
+                        <div class="card-title col-6 text-end">
+                            <a class="btn btn-rounded btn-info" id="scanned_start">
+                                Start Scan Asset
+                                <span class="btn-icon-start text-info"><i
+                                        class="fa fa-barcode color-info"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div> --}}
+                    <input type="text" id="barcodeInput" style="position: absolute; left: -9999px;" autocomplete="off">
+                    <div class="card py-3 px-3">
+                    <div class="settings-form">
+                        <div class="table-responsive">
+                            <h4>Scanned Asset History</h4>
+                            <table id="example" class="table table-responsive-sm">
+                                <thead>
+                                    <tr>
+                                        <td>Year</td>
+                                        <td>From</td>
+                                        <td>To</td>
+                                        <td>Type</td>
+                                        <td>Location</td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_data_history">
+
                                 </tbody>
                             </table>
                         </div>

@@ -32,6 +32,7 @@ Route::middleware(['employee'])->group(function () {
     Route::get('/borrowed_asset/for_finalize/{id}', [BorrowedAssetController::class, 'for_finalize_emp'])->name('BorrowedAssetEMP.for_finalize');
     Route::post('/BorrowedAsset/add_detl', [BorrowedAssetController::class, 'store_detl_emp']);
     Route::post('/BorrowedAsset/finalized', [BorrowedAssetController::class, 'finalized_emp']);
+    Route::delete('/BorrowedAsset/getDeleteDetl', [BorrowedAssetController::class, 'delete_detl_emp']);
     // Route::get('/transmittal', [BorrowedAssetController::class, 'view'])->name('employee.transmittal');
     
 });

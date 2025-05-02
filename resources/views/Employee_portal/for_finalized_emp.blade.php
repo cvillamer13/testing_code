@@ -145,7 +145,7 @@
                                                                 @if ($data->is_finalized)
                                                                     <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }}, false)">Details</button>
                                                                 @else
-                                                                    <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }})">Details</button>
+                                                                    {{-- <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }})">Details</button> --}}
                                                                     <button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete({{ $assetdetl->id }})" >Delete</button>
                                                                 @endif
                                                             </td>
@@ -387,7 +387,7 @@
                 Swal.showLoading();
                 $.ajax({
                     type: "DELETE",
-                    url: "/BorrowedAsset/getDeleteDetl",
+                    url: "/employee/BorrowedAsset/getDeleteDetl",
                     data: {
                         "_token": '{{ csrf_token() }}',
                         "detl_id": id
@@ -456,7 +456,8 @@
                         // console.log(response)
                         var button = $('#data_save_'+i);
                         var button_remove = $('#data_remove_'+i);
-                        button.replaceWith(`<button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal(`+response.data.id+`)">Details</button>`);
+                        // button.replaceWith(`<button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal(`+response.data.id+`)">Details</button>`);
+                        button.replaceWith(``);
                         button_remove.replaceWith(`<button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete(`+response.data.id+`)" >Delete</button>`);
                             // Add a new row to allow further inputs
                         addNewRow1(i);
@@ -490,7 +491,7 @@
                         success: function (response) {
                             swal.close();
                             toastr.success(response.message);
-                            location.reload();
+                            // location.reload();
                         },
                         error: function (error) {
                             console.log(error)
@@ -510,6 +511,41 @@
 
             $(document).ready(function () {
                 // var table = $('#example3').DataTable();
+
+                // function addNewRow() {
+                    
+                //     var rowCount = parseInt($('#last_count_data').val()); // Get current row count
+                //     var newRowId = rowCount + 1; // Unique ID for new row
+                //     // <input type="text" class="form-control" data-id="${newRowId}" id="data_${newRowId}" autocomplete="off" autocorrect="off" spellcheck="false">
+                //     // <span class="text-center" id="asset_description${newRowId}"></span>
+                //     // <span class="text-center" id="serial_${newRowId}"></span>
+                //     var newRow = `
+                //         <tr>
+                //             <td>
+                                
+                //                 <select class="form-control" id="category_${newRowId}" name="category_${newRowId}">
+                //                     <option value="" disabled selected>Select Category</option>
+                //                     @foreach ($category as $cat)
+                //                         <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                //                     @endforeach
+                //                 </select>
+                //             </td>
+                //             <td>
+                //                 <input type="text" class="form-control" data-id="${newRowId}" id="data_comment_${newRowId}" name="data_comment" autocomplete="off" autocorrect="off" spellcheck="false">
+                //             </td>
+                //             <td>
+                //                 <input type="date" class="form-control" id="data_date_${newRowId}" name="data_date" >
+                //             </td>
+                //             <td>
+                //                 <button type="button" id="data_save_${newRowId}" class="btn btn-outline-success saveRow">Save</button>
+                //                 <button type="button" id="data_remove_${newRowId}" class="btn btn-outline-danger removeRow">Remove</button>
+                //             </td>
+                //         </tr>
+                //     `;
+                //     $('#data_selected tbody').append(newRow);
+                //     $('#last_count_data').val(newRowId)
+                //     $('#data_' + newRowId).focus();
+                // }
 
                 function addNewRow() {
                     

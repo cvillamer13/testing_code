@@ -24,6 +24,7 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Writer\ValidationException;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Category;
+use App\Mail\NotifTechnicalMail;
 
 class BorrowedAssetController extends Controller
 {
@@ -226,6 +227,30 @@ class BorrowedAssetController extends Controller
         }
     }
 
+    function delete_detl_emp(Request $request){
+        try {
+            $request->validate([
+                'detl_id' => 'required',
+            ]);
+            $other_detl = AssetBorrowedDetl::find($request->detl_id);
+            $other_detl->deletedby = session('user_email');
+            $other_detl->isDelete = "1";
+            $other_detl->deleted_at = now();
+            $other_detl->save();
+            return response()->json([
+                'status' => 'success',
+                'data' => $other_detl,
+                'message' => 'saving.'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
+    
+
     function finalized(Request $request){
         try {
             $request->validate([
@@ -265,6 +290,14 @@ class BorrowedAssetController extends Controller
             // $other_detl->save();
             if ($other_detl->is_finalized) {
                 // $f_approver = approvalBorrowedAsset($other_detl->id, 3, 11, $other_detl->approved_status);
+                $recipients = [
+                    'christian.villamer@jakagroup.com',
+                    'nicole.sevilla@jakagroup.com',
+                    'renato.calasicas@jakagroup.com',
+                ];
+          
+                Mail::to($recipients)->send(new NotifTechnicalMail($other_detl->id));
+
                 // notification of asset nick
                 return response()->json([
                     'status' => 'success',
@@ -458,7 +491,9 @@ class BorrowedAssetController extends Controller
         $borrowed = AssetBorrowed::with(['getEmployee', 'getLocation_from', 'details'])->find($id);
         $borrowed_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 11)->get();
         $category = Category::all();
-
+        // echo "<pre>";
+        // print_r($data->details[0]->category_details->name);
+        // exit;
         return view('Employee_portal.for_finalized_emp', [
             'data' => $data,
             'borrowed_status' =>  $borrowed_status,
