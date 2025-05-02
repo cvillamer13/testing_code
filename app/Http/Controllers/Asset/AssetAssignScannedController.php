@@ -66,7 +66,7 @@ class AssetAssignScannedController extends Controller
                 'asset_id' => 'required',
             ]);
 
-            $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('asset_id', $request->asset_id)->first();
+            $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data.location_data'])->where('asset_id', $request->asset_id)->first();
             if(is_null($asset_data)){
                 throw new Exception("No data found!");
             }

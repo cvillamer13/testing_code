@@ -132,7 +132,7 @@
                                                 <td>Asset Description: `+ response.data.asset_description + `</td>
                                         </tr>
                                         <tr>
-                                                <td>Location: `+ response.data.location_data?.name || "NO LOCATION" + `</td>
+                                                <td>Location: `+ response.data.location_data.location_data.name || "NO LOCATION" + `</td>
                                         </tr>
                                     </table>
 
