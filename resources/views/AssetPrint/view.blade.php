@@ -349,7 +349,7 @@
                                 var lineHeight3 = doc.getLineHeight();
                                 doc.text('LOCATION', x, y += lineHeight3)
                                 doc.text(' : ', x + 25, y)
-                                doc.text(data.location_data.name, x + 28, y)
+                                doc.text(data.location_data.location_data.name, x + 28, y)
                             }
 
                             doc.addPage();

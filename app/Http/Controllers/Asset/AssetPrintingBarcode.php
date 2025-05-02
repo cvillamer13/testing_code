@@ -29,15 +29,15 @@ class AssetPrintingBarcode extends Controller
             $department_data = $request->department_id;
             $location_data = $request->location_id;
             if ($company_data == "all") {
-                $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
+                $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data.location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->get();
             }else{
                 if ($department_data == "all") {
-                    $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->where('company_id',$company_data)->get();
+                    $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data.location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->where('company_id',$company_data)->get();
                 }else{
                     if ($location_data == "all") {
-                        $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->where('company_id',$company_data)->where('department_id',$department_data)->get();
+                        $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data.location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->where('company_id',$company_data)->where('department_id',$department_data)->get();
                     }else{
-                        $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->where('company_id',$company_data)->where('department_id',$department_data)->where('location_id',$location_data)->get();
+                        $asset_data = Asset::with(['unit_data', 'category_data', 'supplier_data', 'employee_data', 'asset_status_data', 'company_data', 'department_data', 'location_data.location_data'])->where('isDelete',false)->where('type_of_asset', session('type_asset'))->where('company_id',$company_data)->where('department_id',$department_data)->where('location_id',$location_data)->get();
                     }
                     
                 }
