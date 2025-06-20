@@ -123,9 +123,11 @@
                                                 <table class="table text-center" id="{{ $view_table }}">
                                                     <thead>
                                                         <tr>
+                                                            <th>Category</th>
                                                             <th>Asset Tag</th>
                                                             <th>Asset Description</th>
                                                             <th>Serial No</th>
+                                                            <th>Asset Status</th>
                                                             {{-- <th>Comment</th>
                                                             <th>Date to return</th> --}}
                                                             <th>Action</th>
@@ -138,13 +140,27 @@
 
                                                         @foreach ($data->details as $assetdetl)
                                                         <tr>
-                                                            <td>{{ $assetdetl->asset_details->asset_id }}</td>
-                                                            <td>{{ $assetdetl->asset_details->asset_description }}</td>
-                                                            <td>{{ $assetdetl->asset_details->serial_number }}</td>
+                                                            <td>{{ $assetdetl->category_details?->name }}</td>
+                                                            <td>{{ $assetdetl->asset_details?->asset_id }}</td>
+                                                            <td>{{ $assetdetl->asset_details?->asset_description }}</td>
+                                                            <td>{{ $assetdetl->asset_details?->serial_number }}</td>
+                                                            <td>{{ $assetdetl->status }}</td>
+                                                            
                                                         
                                                             <td>
                                                                 @if ($data->is_finalized)
-                                                                    <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }}, false)">Details</button>
+                                                                    @if ($data->status == "A")
+                                                                        @if ($assetdetl->status != "Returned")
+                                                                            <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal2({{ $assetdetl->id }})">Details</button>
+                                                                            
+                                                                        @else
+                                                                            
+                                                                        @endif
+                                                                        
+                                                                    @else
+                                                                        <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }}, false)">Details</button>
+
+                                                                    @endif
                                                                 @else
                                                                     <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }})">Details</button>
                                                                     <button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete({{ $assetdetl->id }})" >Delete</button>
@@ -330,9 +346,14 @@
                             html: `
                                 <label class="form-label">Date to return</label>
                                 <input type="date" class="form-control" id="swal-input-date" value="${response.data.date ?? "" }" >
+                                <label class="form-label">Condition</label>
+                        
 
                                 <label class="form-label">Comments</label>
                                 <textarea class="form-control" id="swal-input-text">${response.data.comments ?? "" }</textarea>
+
+                                
+                                
                             `,
                             showCancelButton: true,
                             showConfirmButton: data_stat,
@@ -356,6 +377,92 @@
                                         "_token": '{{ csrf_token() }}',
                                         "comment": result.value.text,
                                         "date_of_return":result.value.date,
+                                        "detl_id": id
+                                    },
+                                    success: function (response) {
+                                        if(response.status == "success"){
+                                            toastr.success("Other Details Saved");
+                                            Swal.close();
+                                            location.reload();
+                                        }
+                                    },
+                                    error: function (error) {
+                                        // console.log(error)
+                                        Swal.close();
+                                        toastr.error("Error: " + error.responseJSON.message);
+                                    }
+                                });
+                            }
+                        });
+                                }
+                            },
+                            error: function (error) {
+                                // console.log(error)
+                                Swal.close();
+                                toastr.error("Error: " + error.responseJSON.message);
+                            }
+                        });
+                
+            }
+
+            function showSwal2(id, data_stat = true) {
+                Swal.showLoading();
+                $.ajax({
+                    type: "POST",
+                    url: "/BorrowedAsset/getData_detl",
+                    data: {
+                        "_token": '{{ csrf_token() }}',
+                        "detl_id": id
+                    },
+                    success: function (response) {
+                        if(response.status == "success"){
+                            Swal.fire({
+                            title: 'Enter Details',
+                            html: `
+                                <label class="form-label">Date to return</label><br>
+                                <label class="form-label">${response.data.date ?? "" }</label>
+                                <br>
+                                <label class="form-label">Comments</label>
+                                <label class="form-label">${response.data.comments ?? "" }</label>
+                                <br>
+
+                                <label class="form-label">Condition</label>
+                                <select class="form-select" id="swal-input-condition">
+                                    <option value="" disabled selected>Select Condition</option>
+                                    <option value="pass" ${response.data.condition === 'pass' ? 'selected' : ''}>Pass</option>
+                                    <option value="damaged" ${response.data.condition === 'damaged' ? 'selected' : ''}>Damaged</option>
+                                    <option value="repair" ${response.data.condition === 'repair' ? 'selected' : ''}>Repair</option>
+                                </select>
+
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="swal-input-text-condition_desc">${response.data.condition_desc ?? "" }</textarea>
+                                
+
+                                
+                                
+                            `,
+                            showCancelButton: true,
+                            showConfirmButton: data_stat,
+                            confirmButtonText: 'Submit',
+                            preConfirm: () => {
+                                const condition_select = document.getElementById('swal-input-condition').value;
+                                const condition_desc = document.getElementById('swal-input-text-condition_desc').value;
+                                
+                                if (!condition_select || !condition_desc) {
+                                    Swal.showValidationMessage('Both fields are required!');
+                                }
+
+                                return { condition_select, condition_desc };
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/BorrowedAsset/saveOtherDetlReturn",
+                                    data: {
+                                        "_token": '{{ csrf_token() }}',
+                                        "condition_select": result.value.condition_select,
+                                        "condition_desc":result.value.condition_desc,
                                         "detl_id": id
                                     },
                                     success: function (response) {

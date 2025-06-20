@@ -92,7 +92,7 @@ class BorrowedAssetController extends Controller
         $borrowed = AssetBorrowed::with(['getEmployee', 'getLocation_from', 'details'])->find($id);
         $borrowed_status = ApproversStatus::with(['user'])->where('data_id', $id)->where('pages_id', 11)->get();
         // echo "<pre>";
-        // print_r($borrowed);
+        // print_r($borrowed->details);
         // exit;
         return view('Asset_borrowed.for_finalized', [
             'data' => $data,
@@ -190,6 +190,34 @@ class BorrowedAssetController extends Controller
             $other_detl = AssetBorrowedDetl::find($request->detl_id);
             $other_detl->comments = $request->comment;
             $other_detl->date = $request->date_of_return;
+            $other_detl->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'saving.'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
+
+
+    function store_otherdetl_return(Request $request){
+        try {
+            $request->validate([
+                'condition_select' => 'required',
+                'condition_desc' => 'required'
+            ]);
+
+            $other_detl = AssetBorrowedDetl::find($request->detl_id);
+            $other_detl->condition = $request->condition_select;
+            $other_detl->condition_desc = $request->condition_desc;
+            $other_detl->status = "Returned";
+            $other_detl->updatedby = session('user_email');
+            $other_detl->updated_at = now();
             $other_detl->save();
 
             return response()->json([

@@ -23,14 +23,7 @@
                                 {{-- pages_checker --}}
                             {{-- <a href="{{ $permission['page'] }}" class="has-arrow ai-icon" aria-expanded="false"> --}}
                             <a onclick="pages_checker({{ $permission['page_id'] }})" class="has-arrow ai-icon" aria-expanded="false">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g> 
-                                    <g> 
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.92234 21.8083C6.10834 21.8083 2.85034 21.2313 2.85034 18.9213C2.85034 16.6113 6.08734 14.5103 9.92234 14.5103C13.7363 14.5103 16.9943 16.5913 16.9943 18.9003C16.9943 21.2093 13.7573 21.8083 9.92234 21.8083Z" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.92231 11.2159C12.4253 11.2159 14.4553 9.1859 14.4553 6.6829C14.4553 4.1789 12.4253 2.1499 9.92231 2.1499C7.41931 2.1499 5.38931 4.1789 5.38931 6.6829C5.38031 9.1769 7.39631 11.2069 9.89031 11.2159H9.92231Z" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </g>
-                                    </g>
-                                </svg>
+                                <i class="{{ $permission['icon_data'] ?? 'far fa-circle' }}"></i>
                                 <span class="nav-text ">{{ ucwords(str_replace('-', ' ', basename($permission['page_name']))) }}</span>
                             </a>
                         </li>

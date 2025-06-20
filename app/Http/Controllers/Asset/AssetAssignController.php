@@ -562,6 +562,11 @@ class AssetAssignController extends Controller
         // $pdf = Pdf::loadView('AssetAssign.issuance_pdf_rep', ['data' => $data]);
         // echo url('images/logos.png'); exit;
         $data = GatepassData::where('data_id', $id)->where('module_from', 'issuance')->first();
+
+        if ($data->status == "P") {
+            return redirect()->back()->with("error", "Gatepass not fully approved");
+        }
+      
         return redirect('/Gatepass/gatepass_report/'.$data->id);
         
 

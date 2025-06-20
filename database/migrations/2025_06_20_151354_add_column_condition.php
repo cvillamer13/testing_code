@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('asset_issuance_detl', function (Blueprint $table) {
-            //
+        Schema::table('asset_barrowed_detl', function (Blueprint $table) {
+            $table->string('condition')->nullable();
+            $table->string('status')->nullable();
         });
     }
 
@@ -21,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('asset_issuance_detl', function (Blueprint $table) {
-            //
+        Schema::table('asset_barrowed_detl', function (Blueprint $table) {
+            $table->dropColumn('condition');
+            $table->dropColumn('status');
         });
     }
 };

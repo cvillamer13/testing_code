@@ -20,7 +20,9 @@ class AssetBorrowedDetl extends Model
         'isDelete',
         'deleted_at',
         'borrowed_main_id',
-        'category_id'
+        'category_id',
+        'condition',
+        'status'
     ];
 
     public function asset_details(){

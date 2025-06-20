@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('roles_id'); // Foreign key to roles table
+        if (Schema::hasTable('users') && !Schema::hasColumn('users', 'roles_id')) {
+            // Schema::dropIfExists('users');
+            Schema::table('users', function (Blueprint $table) {
+                $table->unsignedBigInteger('roles_id'); // Foreign key to roles table
 
-            // $table->foreign('roles_id')->references('id')->on('roles')->onDelete('cascade');
-        });
+                // $table->foreign('roles_id')->references('id')->on('roles')->onDelete('cascade');
+            });
+        }
+        
     }
 
     /**
