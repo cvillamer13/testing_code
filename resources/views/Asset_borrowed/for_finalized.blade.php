@@ -154,8 +154,10 @@
                                                                             <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal2({{ $assetdetl->id }})">Details</button>
                                                                             
                                                                         @else
-                                                                            
+                                                                            <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal2({{ $assetdetl->id }})">Details</button>
+
                                                                         @endif
+                                                                        
                                                                         
                                                                     @else
                                                                         <button type="button" class="btn btn-outline-primary viewDetails" data-comments="{{ $assetdetl->comments  }}" data-date_return="{{ $assetdetl->date  }}" data-detl_id="{{ $assetdetl->id }}" onclick="showSwal({{ $assetdetl->id }}, false)">Details</button>
