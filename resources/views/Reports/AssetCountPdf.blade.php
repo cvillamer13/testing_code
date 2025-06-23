@@ -29,7 +29,7 @@
             /* word-break: break-word; */
         }
         th, td {
-            padding: 6px 4px;
+            /* padding: 6px 4px; */
             border: 1px solid #aaa;
             text-align: left;
             overflow: hidden;
