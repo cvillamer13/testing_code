@@ -35,6 +35,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            max-width: 120px;
         }
         th {
             background-color: #f4f4f4;
