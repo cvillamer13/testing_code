@@ -103,6 +103,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->prefix('employee')
                 ->group(base_path('routes/employee_login/employee_login.php'));
+
+            Route::middleware('web')
+                ->prefix('AssetReport')
+                ->group(base_path('routes/reports/reports.php'));
                 
                 
         });
