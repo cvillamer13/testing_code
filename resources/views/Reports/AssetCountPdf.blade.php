@@ -5,44 +5,49 @@
     <title>Asset Count Report</title>
     <style>
         body {
-        font-family: Arial, sans-serif;
-        margin: 0px;
-        color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0px;
+            color: #333;
         }
         header {
-        text-align: center;
-        margin-bottom: 20px;
+            text-align: center;
+            margin-bottom: 20px;
         }
         h1 {
-        margin-bottom: 5px;
+            margin-bottom: 5px;
         }
         .report-info {
-        text-align: left;
-        font-size: 14px;
-        margin-bottom: 20px;
+            text-align: left;
+            font-size: 12px;
+            margin-bottom: 20px;
         }
         table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            table-layout: fixed;
+            word-break: break-word;
         }
         th, td {
-        padding: 10px;
-        border: 1px solid #aaa;
-        text-align: left;
+            padding: 6px 4px;
+            border: 1px solid #aaa;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         th {
-        background-color: #f4f4f4;
+            background-color: #f4f4f4;
         }
         tfoot td {
-        font-weight: bold;
-        background-color: #f9f9f9;
+            font-weight: bold;
+            background-color: #f9f9f9;
         }
         .footer {
-        margin-top: 40px;
-        text-align: center;
-        font-size: 12px;
-        color: #777;
+            margin-top: 40px;
+            text-align: center;
+            font-size: 10px;
+            color: #777;
         }
     </style>
 </head>
