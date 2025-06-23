@@ -35,7 +35,9 @@ class Employee extends Authenticatable
         'updated_at',
         'image_path',
         'pwd_data',
-        'is_active'
+        'is_active',
+        'is_resigned',
+        'date_of_resigned',
 
     ];
 

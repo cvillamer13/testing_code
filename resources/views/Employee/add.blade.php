@@ -73,6 +73,19 @@
                                                     <label class="form-label">Phone Number<span class="text-red">*</span></label>
                                                     <input type="text" class="form-control" name="phone_number" id="phone_number" required>
                                                 </div>
+
+                                                <div class="row">
+                                                    <div class="mb-3 col-md-3">
+                                                        <label class="form-label">Password</label>
+                                                        <input type="password" class="form-control" name="pass_wd" id="pass_wd" value="">
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-3">
+                                                        <label class="form-label">Confirm Password</label>
+                                                        <input type="password" class="form-control" name="pass_wd_confirmation" id="pass_wd_confirmation" value="">
+                                                    </div>
+            
+                                                </div>
                                             </div>
 
 

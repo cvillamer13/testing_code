@@ -182,7 +182,7 @@ class EmployeeController extends Controller
                 'position_data' => 'required',
                 'company_data' => 'required',
                 'depart_data' => 'required',
-                'pass_wd' => 'string|min:8|confirmed'
+                'pass_wd' => 'nullable|string|min:8|confirmed'
             ]);
 
             $emp = Employee::find($id);
@@ -205,7 +205,14 @@ class EmployeeController extends Controller
             $emp->province = $request->province;
             $emp->country = $request->country;
             $emp->zip = $request->zip;
-            $emp->pwd_data = Hash::make($request->pass_wd);
+            $emp->is_active = $request->status_data; // Convert checkbox to boolean
+            $emp->is_resigned = $request->is_resigned; // Convert checkbox to boolean
+            $emp->date_of_resigned = $request->dor; // Set date of resigned if provided
+            
+            if (!empty($request->pass_wd)) {
+                $emp->pwd_data = Hash::make($request->pass_wd);
+            }
+            
             $emp->updated_by = session('user_email');
             if ($request->hasFile('profile_picture')) {
                 $image = $request->file('profile_picture');

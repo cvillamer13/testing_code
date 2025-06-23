@@ -117,6 +117,18 @@
                                                 <label class="form-label">Confirm Password</label>
                                                 <input type="password" class="form-control" name="pass_wd_confirmation" id="pass_wd_confirmation" value="">
                                             </div>
+
+                                            <div class="mb-3 col-md-3">
+                                                <label class="form-label">Account Status</label>
+                                                <select class="form-select" id="status_data" name="status_data">
+                                                    <option value selected disabled>Select Status</option>
+                                                    <option value="1" {{ $employee->is_active == '1' ? 'selected' : '' }}>Active</option>
+                                                    <option value="0" {{ $employee->is_active == '0' ? 'selected' : '' }}>Inactive</option>
+                                                </select>
+                                            </div>
+
+
+                                            
     
                                         </div>
                                     </div>
@@ -127,7 +139,7 @@
                                     <h5 class="section-title"><i class="fas fa-briefcase me-2"></i> Designation Information</h5>
                                     <div class="section-content">
                                         <div class="row">
-                                            <div class="mb-3 col-md-6">
+                                            <div class="mb-3 col-md-3">
                                                 <label class="form-label">Position <span class="text-danger">*</span></label>
                                                 <select class="form-select" id="position_data" name="position_data" required>
                                                     <option value selected disabled>Select Position</option>
@@ -140,9 +152,23 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="mb-3 col-md-6">
+                                            <div class="mb-3 col-md-3">
                                                 <label class="form-label">Date of hired</label>
                                                 <input type="date" class="form-control" name="doh" id="doh" value="{{ $employee->date_of_hired }}">
+                                            </div>
+                                            <div class="mb-3 col-md-3">
+                                                <label class="form-label">Date of Resigned</label>
+                                                <input type="date" class="form-control" name="dor" id="dor" value="{{ $employee->date_of_resigned }}">
+                                            </div>
+
+
+                                            <div class="mb-3 col-md-3">
+                                                <label class="form-label">Employee Status</label>
+                                                <select class="form-select" id="is_resigned" name="is_resigned">
+                                                    <option value selected disabled>Select Status</option>
+                                                    <option value="1" {{ $employee->is_resigned == '1' ? 'selected' : '' }}>Resigned</option>
+                                                    <option value="0" {{ $employee->is_resigned == '0' ? 'selected' : '' }}>Employed</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="row">
