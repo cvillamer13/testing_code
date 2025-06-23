@@ -78,4 +78,8 @@ class Asset extends Model
     public function location_data(){
         return $this->belongsTo(Location::class, 'location_id');
     }
+
+    public function asset_scanned_data(){
+        return $this->hasMany(AssetScanned::class, 'asset_id', 'id');
+    }
 }
