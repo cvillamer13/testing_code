@@ -34,7 +34,7 @@
             text-align: left;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
+            /* white-space: nowrap; */
             max-width: 120px;
         }
         th {
