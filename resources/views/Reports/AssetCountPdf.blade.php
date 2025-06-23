@@ -26,7 +26,7 @@
             border-collapse: collapse;
             font-size: 11px;
             table-layout: fixed;
-            word-break: break-word;
+            /* word-break: break-word; */
         }
         th, td {
             padding: 6px 4px;
@@ -94,54 +94,31 @@
         <th>Department</th>
         </tr>
     </thead>
-  <tbody>
-    @foreach ($data_asset_count->asset_count_plot as $count_plot) )
+    <tbody>
+        @foreach ($data_asset_count->asset_count_plot as $count_plot)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $count_plot->asset->asset_id }}</td>
+                <td>{{ $count_plot->asset->asset_description }}</td>
+                <td>{{ $count_plot->isScanned ? 'Yes' : 'No' }}</td>
+                <td>{{ $count_plot->scannedby ?? 'N/A' }}</td>
+                <td>{{ $count_plot->scanned_at ? \Carbon\Carbon::parse($count_plot->scanned_date)->format('F d, Y h:i A') : 'N/A' }}</td>
+                <td>{{ $count_plot->company->name }}</td>
+                <td>{{ $count_plot->department->name }}</td>
+            </tr>
+        @endforeach
+    </tbody>
+    <tfoot>
         <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $count_plot->asset->asset_id }}</td>
-            <td>{{ $count_plot->asset->asset_description }}</td>
-            <td>{{ $count_plot->isScanned ? 'Yes' : 'No' }}</td>
-            <td>{{ $count_plot->scannedby ?? 'N/A' }}</td>
-            <td>{{ $count_plot->scanned_at ? \Carbon\Carbon::parse($count_plot->scanned_date)->format('F d, Y h:i A') : 'N/A' }}</td>
-            <td>{{ $count_plot->company->name }}</td>
-            <td>{{ $count_plot->department->name }}</td>
-    @endforeach
-    <tr>
-      <td>1</td>
-      <td>AST-00123</td>
-      <td>Laptop Dell XPS 13</td>
-      <td>IT Equipment</td>
-      <td>HQ - IT Dept</td>
-      <td>Active</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>AST-00124</td>
-      <td>Office Chair - Black</td>
-      <td>Furniture</td>
-      <td>HQ - HR Dept</td>
-      <td>Active</td>
-      <td>No</td>
-    </tr>
-    <!-- Add more rows dynamically -->
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="6">Total Counted</td>
-      <td>1</td>
-    </tr>
-  </tfoot>
+            <td colspan="7">Total Counted</td>
+            <td>{{ count($data_asset_count->asset_count_plot) }}</td>
+        </tr>
+    </tfoot>
 </table>
 
 <div class="footer">
   <p>Asset Management System © 2025</p>
 </div>
-
-<script>
-  // Set current date
-  document.getElementById('report-date').textContent = new Date().toLocaleDateString();
-</script>
 
 </body>
 </html>
