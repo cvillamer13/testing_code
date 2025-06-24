@@ -31,7 +31,7 @@
                                 <td>{{ $asset->company_data->name }}</td>
                                 <td>{{ $asset->department_data->name }}</td>
                                 <td>{{ $asset->location_data->location_data2->name ?? 'No Location' }}</td>
-                                <td>{{ $asset->status }}</td>
+                                <td>{{ $asset->asset_status_data->status ?? 'No Status' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($asset->updated_at)->format('F d, Y h:i:s A') }}</td>
                             </tr>
                         @endforeach
