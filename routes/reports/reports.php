@@ -13,6 +13,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/Assetstatus', [ReportController::class, 'AssetStatus'])->name('reports.assetstatus');
     Route::post('/filter/assetstatus', [ReportController::class, 'filterAssetStatus'])->name('reports.filter.asset_status');
 
+    Route::get('/Assetreport', [ReportController::class, 'Assetreport'])->name('reports.assetreport');
+
 
     //pdf
     Route::get('/pdf/assetcount/{id}', [ReportController::class, 'AssetCountPdf'])->name('reports.assetcount.pdf');

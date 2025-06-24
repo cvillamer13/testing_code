@@ -167,4 +167,21 @@ class ReportController extends Controller
             throw $th;
         }
     }
+
+
+    function Assetreport()
+    {
+        $asset_data = Asset::with([
+            'unit_data',
+            'category_data',
+            'supplier_data',
+            'employee_data',
+            'asset_status_data',
+            'company_data',
+            'department_data',
+            'location_data'
+        ])->where('isDelete', 0)->get();
+
+        return view('Reports.AssetReport', compact('asset_data'));
+    }
 }
