@@ -17,65 +17,33 @@
                 </li>
                 <!-- Loop through the user permissions stored in session -->
                 @if(Session::has('user_permissions'))
-                    @foreach(Session::get('user_permissions') as $permission)
-                        @if($permission['isView']) 
-                            <li>
-                                {{-- pages_checker --}}
-                            {{-- <a href="{{ $permission['page'] }}" class="has-arrow ai-icon" aria-expanded="false"> --}}
-                            <a onclick="pages_checker({{ $permission['page_id'] }})" class="has-arrow ai-icon" aria-expanded="false">
-                                <i class="{{ $permission['icon_data'] ?? 'far fa-circle' }}"></i>
-                                <span class="nav-text ">{{ ucwords(str_replace('-', ' ', basename($permission['page_name']))) }}</span>
+                    @php
+                        $grouped = collect(Session::get('user_permissions'))->groupBy('pages_category');
+                    @endphp
+                    @foreach($grouped as $category => $permissions)
+                        <li class="has-menu">
+                            <a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
+                                <i class="far fa-folder"></i>
+                                <span class="nav-text">{{ ucwords(str_replace('_', ' ', $category)) }}</span>
                             </a>
+                            <ul aria-expanded="false">
+                                @foreach($permissions as $permission)
+                                    @if($permission['isView'])
+                                        <li>
+                                            <a onclick="pages_checker({{ $permission['page_id'] }})" class="ai-icon" aria-expanded="false">
+                                                <i class="{{ $permission['icon_data'] ?? 'far fa-circle' }}"></i>
+                                                <span class="nav-text">{{ ucwords(str_replace('-', ' ', basename($permission['page_name']))) }}</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
                         </li>
-                        @endif
                     @endforeach
                 @endif
                 
-                {{-- <!-- PRODUCTS -->
-                <li class="has-menu">
-                    <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g> 
-                            <g> 
-                                <path d="M12.0002 2.75C5.06324 2.75 2.75024 5.063 2.75024 12C2.75024 18.937 5.06324 21.25 12.0002 21.25C18.9372 21.25 21.2502 18.937 21.2502 12" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5285 4.30364V4.30364C18.5355 3.42464 17.0185 3.51664 16.1395 4.50964C16.1395 4.50964 11.7705 9.44464 10.2555 11.1576C8.73853 12.8696 9.85053 15.2346 9.85053 15.2346C9.85053 15.2346 12.3545 16.0276 13.8485 14.3396C15.3435 12.6516 19.7345 7.69264 19.7345 7.69264C20.6135 6.69964 20.5205 5.18264 19.5285 4.30364Z" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path d="M15.009 5.80078L18.604 8.98378" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </g>
-                            </g>
-                        </svg>
-                        <span class="nav-text ">Test Dropdown menu</span>
-                    </a>
-                    <ul aria-expanded="false" class="mm-collapse">
-                        <li>
-                            <a href="/products/categories" href="javascript:void()" aria-expanded="false">
-                                <i class="far fa-arrow-alt-circle-right"></i>menu 1
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/products/brands" href="javascript:void()" aria-expanded="false">
-                                <i class="far fa-arrow-alt-circle-right"></i>menu 2
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/products/units" href="javascript:void()" aria-expanded="false">
-                                <i class="far fa-arrow-alt-circle-right"></i>menu 3
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/products/view" href="javascript:void()" aria-expanded="false">
-                                <i class="far fa-arrow-alt-circle-right"></i>menu 4
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="/products/print_barcode" href="javascript:void()" aria-expanded="false">
-                                <i class="far fa-arrow-alt-circle-right"></i>menu 5
-                            </a>
-                        </li>
-                    </ul>
-                </li> --}}
                 
-                <li class="has-menu">
+                {{-- <li class="has-menu">
                     <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                         <!-- <i class="menu-icon la la-money-check-alt"></i> -->
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +97,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
                 
                 
         </ul>

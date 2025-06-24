@@ -31,7 +31,7 @@ class CheckUserRole
                     ->get();
                     $data_images = asset("storage/".$user->image_path) ?? '/images/images.jpg';
                     // echo "<pre>";
-                    // print_r($permissions[0]->page->page_category_data->name);
+                    // print_r($permissions[0]->page->pages_category);
                     // exit;
                     Session::put('user_name', $user->name); // Store user name
                     Session::put('image_path', $data_images); // Store user 
@@ -46,6 +46,7 @@ class CheckUserRole
                             'page_id' => $permission->page->id,
                             'page' => $permission->page->URL,
                             'page_name' => $permission->page->name,
+                            'pages_category' => $permission->page->pages_category,
                             'icon_data' => $permission->page->icon_data,
                             'isView' => $permission->isView,
                             'isCreate' => $permission->isCreate,
