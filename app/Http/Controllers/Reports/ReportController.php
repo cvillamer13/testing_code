@@ -12,6 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Location;
 use App\Models\Location_name;
 use App\Models\Asset_Status;
+use App\Models\Employee;
 
 
 
@@ -183,5 +184,16 @@ class ReportController extends Controller
         ])->where('isDelete', 0)->get();
 
         return view('Reports.AssetReport', compact('asset_data'));
+    }
+
+
+    function AssetAllocation()
+    {
+        $employee_data = Employee::with(['company', 'department', 'assetAssigned'])->where('isDelete', 0)->get();
+        echo "<pre>";
+        print_r($employee_data[0]->assetAssigned);
+        exit;
+
+        return view('Reports.AssetAllocation', compact('employee_data'));
     }
 }

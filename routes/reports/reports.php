@@ -15,6 +15,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/Assetreport', [ReportController::class, 'Assetreport'])->name('reports.assetreport');
 
+    Route::get('/Assetallocation', [ReportController::class, 'AssetAllocation'])->name('reports.assetallocation');
+
 
     //pdf
     Route::get('/pdf/assetcount/{id}', [ReportController::class, 'AssetCountPdf'])->name('reports.assetcount.pdf');

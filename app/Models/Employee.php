@@ -76,4 +76,10 @@ class Employee extends Authenticatable
     {
         return $this->belongsTo(Department::class, 'department_data_id');
     }
+
+    public function assetAssigned()
+    {
+        return $this->hasMany(AssetAssigns::class, 'employee_id')
+            ->where('status', 'TRUE');
+    }
 }
