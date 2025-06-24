@@ -95,7 +95,7 @@ let dataSet = [
             }
         ],
         createdRow: function ( row, data, index ) {
-           $(row).addClass('selected')
+        $(row).addClass('selected')
         } 
     });
       
