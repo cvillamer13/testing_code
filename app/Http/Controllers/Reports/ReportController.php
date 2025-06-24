@@ -11,6 +11,8 @@ use App\Models\Asset;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Location;
 use App\Models\Location_name;
+use App\Models\Asset_Status;
+
 
 
 
@@ -139,4 +141,30 @@ class ReportController extends Controller
     }
 
 
+    function AssetStatus(){
+        $data_asset_status = Asset::with(['asset_status_data', 'location_data', 'company_data', 'department_data'])->where('isDelete', 0)->get();
+        $asset_status = Asset_Status::all();
+        return view('Reports.AssetStatus', compact('data_asset_status', 'asset_status'));
+    }
+
+    function filterAssetStatus(Request $request)
+    {
+        try {
+            $asset_status_id = $request->status_id;
+
+            $assetQuery = Asset::with(['asset_status_data', 'location_data', 'company_data', 'department_data'])->where('isDelete', 0);
+            if ($asset_status_id !== 'all') {
+                $assetQuery->where('asset_status_id', $asset_status_id);
+            }
+            $data_asset_status = $assetQuery->get();
+
+            return response()->json([
+                'error' => false,
+                'data' => $data_asset_status
+            ]);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

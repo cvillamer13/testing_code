@@ -65,32 +65,31 @@ let dataSet = [
                 //     }
                 // ]
 
-
                 buttons: [
                     {
                         extend: 'copyHtml5',
                         text: 'Copy',
-                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                        exportOptions: { columns: ':visible', page: 'all' }
                     },
                     {
                         extend: 'excelHtml5',
                         text: 'Export to Excel',
-                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                        exportOptions: { columns: ':visible', page: 'all' }
                     },
                     {
                         extend: 'csvHtml5',
                         text: 'Export to CSV',
-                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                        exportOptions: { columns: ':visible', page: 'all' }
                     },
                     {
                         extend: 'pdfHtml5',
                         text: 'Export to PDF',
-                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                        exportOptions: { columns: ':visible', page: 'all' }
                     },
                     {
                         extend: 'print',
                         text: 'Print',
-                        exportOptions: { columns: [1, 2, 3], page: 'all' }
+                        exportOptions: { columns: ':visible', page: 'all' }
                     }
                 ]
             }
