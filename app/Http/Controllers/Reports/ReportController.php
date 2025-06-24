@@ -190,9 +190,9 @@ class ReportController extends Controller
     function AssetAllocation()
     {
         $employee_data = Employee::with(['company', 'department', 'assetAssigned'])->where('isDelete', 0)->get();
-        echo "<pre>";
-        print_r($employee_data[0]->assetAssigned);
-        exit;
+        // echo "<pre>";
+        // print_r($employee_data[0]->assetAssigned);
+        // exit;
 
         return view('Reports.AssetAllocation', compact('employee_data'));
     }
