@@ -92,16 +92,16 @@
                                             <div class="row">
                                                 <div class="mb-3 col-md-6">
                                                         <label class="form-label">Company<span class="text-red">*</span></label>
-                                                        <select class="form-control form-select" multiple aria-label="multiple select example" style="height: 100px; " name="company" required>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
+                                                        <select class="form-control form-select" multiple aria-label="multiple select example" style="height: 100px; " name="company[]" required>
+                                                            @foreach ($company as $com)
+                                                                <option value="{{ $com->id }}">{{ $com->name }}</option>
+                                                            @endforeach
                                                         </select>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Type Of Asset<span class="text-red">*</span></label>
-                                                    <select class="form-select form-select-lg form-control" aria-label=".form-select-lg">
+                                                    <select class="form-select form-select-lg form-control" name="type_of_asset" aria-label=".form-select-lg">
                                                         <option selected>None</option>
                                                         <option value="1">All Asset</option>
                                                         <option value="2">Fixed Asset</option>

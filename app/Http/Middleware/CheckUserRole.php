@@ -57,7 +57,7 @@ class CheckUserRole
             }else{
                 Auth::logout();
                 Session::flush();
-                return redirect()->route('login')->with('error', 'Login First!');
+                return redirect()->route('login')->with('error', 'Session expired or user is inactive. Please log in again.');
             }
         }
         return $next($request);

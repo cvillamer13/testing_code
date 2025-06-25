@@ -23,8 +23,10 @@ class UserController extends Controller
     public function create()
     {
         $roles = Roles::all();
+        $company = Company::all();
         return view('Users.add', [
             'roles' => $roles,
+            'company' => $company,
         ]);
     }
 
@@ -51,6 +53,12 @@ class UserController extends Controller
             $user->password = bcrypt($request->input('pass_data'));
             $user->roles_id = $request->input('roles');
             $user->active_status = $request->input('active_status');
+            $selectedItems = implode('~', $request->company);
+            $user->company = $selectedItems;
+            $user->type_asset = $request->type_of_asset;
+            if ($request->pass_adta) {
+                $user->password = bcrypt($request->input('pass_data'));
+            }
             
             $user->save();
 

@@ -81,4 +81,12 @@
             }
         }
     </script>
+
+    {{-- @php
+        echo "<pre>";
+        print_r(session('error'));
+        echo "</pre>";
+        exit;
+    @endphp --}}
 </x-guest-layout>
+    
