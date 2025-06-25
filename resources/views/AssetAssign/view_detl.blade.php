@@ -1480,6 +1480,15 @@
                     Swal.showLoading();
                     var id = document.getElementById("issuance_id").value;
                     var reason_data = document.getElementById("reason_data").value;
+                    if (!reason_data || reason_data.trim() === "") {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Reason is required",
+                                text: "Please provide a reason for disapproval."
+                            });
+                            return;
+                        }
+                        
                     $.ajax({
                         type: "POST",
                         url: "/AssetAssign/approvers",

@@ -1478,45 +1478,50 @@
                 
 
                 Swal.fire({
-                    title: "Do you want to Disaprroved issuance?",
-                    html: "Once Disaprroved, you will not be able to make changes. <br> <textarea class='form-control' name='reason_data' id='reason_data' placeholder='Reason'></textarea>",
+                    title: "Do you want to Disapprove issuance?",
+                    html: "Once Disapproved, you will not be able to make changes. <br> <textarea class='form-control' name='reason_data' id='reason_data' placeholder='Reason'></textarea>",
                     icon: "error",
                     showDenyButton: true,
                     showCancelButton: false,
-                    confirmButtonText: "Disaprroved",
+                    confirmButtonText: "Disapprove",
                     denyButtonText: `Cancel`
                 }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.showLoading();
-                    var id = document.getElementById("issuance_id").value;
-                    var reason_data = document.getElementById("reason_data").value;
-                    $.ajax({
-                        type: "POST",
-                        url: "/AssetAssign/approvers",
-                        data: {
-                            "_token": '{{ csrf_token() }}',
-                            "appr_id": appr_id,
-                            "user_id": user_id,
-                            "status": status,
-                            "asset_iss_id": asset_iss_id,
-                            "reason_data": reason_data
-                        },
-                        success: function (response) {
-                            swal.close();
-                            toastr.success(response.message);
-                            location.reload();
-                        },
-                        error: function (error) {
-                            console.log(error)
-                            toastr.error("Error: " + error.responseJSON.message);
+                    if (result.isConfirmed) {
+                        var reason_data = document.getElementById("reason_data").value;
+                        if (!reason_data || reason_data.trim() === "") {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Reason is required",
+                                text: "Please provide a reason for disapproval."
+                            });
+                            return;
                         }
-                    });
-                    
-                    // Swal.fire("Saved!", "", "success");
-                    
-                } else if (result.isDenied) {
-                    Swal.fire("Changes are not saved", "", "info");
-                }
+                        Swal.showLoading();
+                        var id = document.getElementById("issuance_id").value;
+                        $.ajax({
+                            type: "POST",
+                            url: "/AssetAssign/approvers",
+                            data: {
+                                "_token": '{{ csrf_token() }}',
+                                "appr_id": appr_id,
+                                "user_id": user_id,
+                                "status": status,
+                                "asset_iss_id": asset_iss_id,
+                                "reason_data": reason_data
+                            },
+                            success: function (response) {
+                                swal.close();
+                                toastr.success(response.message);
+                                location.reload();
+                            },
+                            error: function (error) {
+                                console.log(error)
+                                toastr.error("Error: " + error.responseJSON.message);
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
                 });
                 
             });
