@@ -701,7 +701,7 @@ if (!function_exists('approvalAssetDisposalAsset')) {
                 $user_data = User::find($value["user_id"]);
                 $name = $user_data->name;
                 $email = $user_data->email;
-                // $email = "christian.villamer@jakagroup.com";
+                $email = "christian.villamer@jakagroup.com";
                 $data = get_current_approvers($borrowed_id, $pages_id, $value["user_id"]);
                 if($data["status"] === "NA" && $value["increment_num"] == 1 && $data["isNew"] === "Y"){
                 

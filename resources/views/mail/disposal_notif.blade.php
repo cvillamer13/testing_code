@@ -30,6 +30,7 @@
                             <p><strong>Asset(s) Proposed for Disposal:</strong></p>
                             <table role="presentation" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
                                 <tr>
+                                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Type</th>
                                     <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Asset Tag</th>
                                     <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Description</th>
                                     <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Model No.</th>
@@ -37,13 +38,23 @@
                                     <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Remarks</th>
                                 </tr>
                                 @foreach ($data_disposal->details as $valData)
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->asset_details->asset_id }}</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->asset_details->asset_description }}</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->asset_details->model_no }}</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->asset_details->serial_number }}</td>
-                                    <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->remarks }}</td>
-                                </tr>
+                                @if ($valData->asset_type == "csbles")
+                                    <tr>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">Consumables</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;" colspan="3">{{ $valData->consumable_item }}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;" colspan="2">{{ $valData->qty }}</td>
+                                    </tr>
+                                @else
+                                    <tr>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">Asset</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->asset_details->asset_id }}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->asset_details->asset_description }}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->asset_details->model_no }}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->asset_details->serial_number }}</td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $valData->remarks }}</td>
+                                    </tr>
+                                @endif
+                                
                                 @endforeach
                             </table>
 

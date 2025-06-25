@@ -20,6 +20,8 @@ class AssetDisposalDetl extends Model
         'deletedby',
         'isDelete',
         'deleted_at',
+        'asset_type',
+        'consumable_item'
     ];
 
     protected $casts = [

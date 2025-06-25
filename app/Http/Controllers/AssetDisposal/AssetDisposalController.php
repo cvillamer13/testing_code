@@ -377,4 +377,36 @@ class AssetDisposalController extends Controller
             throw $th;
         }
     }
+
+
+    function save_consumable(Request $request){
+        try {
+            
+            $request->validate([
+                'asset_disposal_id' => 'required',
+                'asset_id' => 'required',
+                'asset_type' => 'required',
+                'qty' => 'required',
+            ]);
+
+            $assetDisposal = AssetDisposal::find($request->asset_disposal_id);
+
+            // Assuming you have a Consumable model and relation
+            $consumable = new AssetDisposalDetl();
+            $consumable->asset_disposal_main_id = $assetDisposal->id;
+            $consumable->asset_id = NULL;
+            $consumable->qty = $request->qty;
+            $consumable->asset_type = $request->asset_type;
+            $consumable->consumable_item = $request->asset_id;
+            $consumable->save();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $consumable,
+                'message' => 'Consumable saved successfully.'
+            ], 200);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

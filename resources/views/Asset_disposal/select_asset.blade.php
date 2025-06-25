@@ -77,6 +77,7 @@
                                                 <table class="table text-center" id="{{ $view_table }}">
                                                     <thead>
                                                         <tr>
+                                                            <th>Type</th>
                                                             <th>Asset Tag</th>
                                                             <th>Asset Description</th>
                                                             <th>Asset Model</th>
@@ -90,21 +91,40 @@
                                                         @endphp
 
                                                         @foreach ($data->details as $assetdetl)
-                                                        <tr>
-                                                            <td>{{ $assetdetl->asset_details->asset_id }}</td>
-                                                            <td>{{ $assetdetl->asset_details->asset_description }}</td>
-                                                            <td>{{ $assetdetl->asset_details->model_no }}</td>
-                                                            <td>{{ $assetdetl->asset_details->serial_number }}</td>
+                                                        @if ($assetdetl->asset_type == "csbles")
+                                                            <tr>
+                                                                <td>{{ $assetdetl->asset_type == "csbles" ? 'Consumables' : 'Asset' }}</td>
+                                                                <td colspan="2">{{ $assetdetl->consumable_item }}</td>
+                                                                <td colspan="2">{{ $assetdetl->qty }}</td>
+                                                                <td>
+                                                                    @if ($data->is_finalized)
+                                                                        <button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal({{ $assetdetl->id }}, false)">Details</button>
+                                                                    @else
+                                                                        <button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal({{ $assetdetl->id }})">Details</button>
+                                                                        <button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete({{ $assetdetl->id }})" >Delete</button>
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                        @else
+                                                            <tr>
+                                                                <td>{{ $assetdetl->asset_details->asset_type == "csbles" ? 'Consumables' : 'Asset' }}</td>
+                                                                <td>{{ $assetdetl->asset_details->asset_id }}</td>
+                                                                <td>{{ $assetdetl->asset_details->asset_description }}</td>
+                                                                <td>{{ $assetdetl->asset_details->model_no }}</td>
+                                                                <td>{{ $assetdetl->asset_details->serial_number }}</td>
+                                                            
+                                                                <td>
+                                                                    @if ($data->is_finalized)
+                                                                        <button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal({{ $assetdetl->id }}, false)">Details</button>
+                                                                    @else
+                                                                        <button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal({{ $assetdetl->id }})">Details</button>
+                                                                        <button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete({{ $assetdetl->id }})" >Delete</button>
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                        @endif
                                                         
-                                                            <td>
-                                                                @if ($data->is_finalized)
-                                                                    <button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal({{ $assetdetl->id }}, false)">Details</button>
-                                                                @else
-                                                                    <button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal({{ $assetdetl->id }})">Details</button>
-                                                                    <button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete({{ $assetdetl->id }})" >Delete</button>
-                                                                @endif
-                                                            </td>
-                                                        </tr>
                                                             
                                                         @endforeach
                                                         
@@ -302,15 +322,17 @@
                     var newRowId = rowCount + 1; // Unique ID for new row
                     // console.log('addNewRow1', newRowId);
                     var newRow = `
-                        <tr>
-                            <td><input type="text" class="form-control" data-id="${newRowId}" id="data_${newRowId}" autocomplete="off" autocorrect="off" spellcheck="false"></td>
-                            <td><span class="text-center" id="asset_description${newRowId}"></span></td>
-                            <td><span class="text-center" id="asset_model_${newRowId}"></span></td>
-                            <td><span class="text-center" id="serial_${newRowId}"></span></td>
+                        <tr id="row_${newRowId}">
                             <td>
-                                <button type="button" id="data_save_${newRowId}" class="btn btn-outline-success saveRow">Save</button>
-                                <button type="button" id="data_remove_${newRowId}" class="btn btn-outline-danger removeRow">Remove</button>
+                                <select class="form-select" id="asset_type_${newRowId}" data-id="${newRowId}" onchange="changeAssetType(this, ${newRowId})">
+                                    <option value="">Select Asset Type</option>
+                                    
+                                        <option value="ass">Asset</option>
+                                        <option value="csbles">Consumables</option>
+                                    
+                                </select>
                             </td>
+                            
                         </tr>
                 `;
                 $('#data_selected tbody').append(newRow);
@@ -384,6 +406,44 @@
             }
 
 
+            function changeAssetType(selectedItem, rowID){
+                var selectedValue = selectedItem.value;
+                var rowSelector = '#row_' + rowID;
+                var row = $(rowSelector);
+
+                // Remove all cells except the first (the select)
+                row.find('td:not(:first)').remove();
+                console.log(selectedValue, rowID);
+                if (selectedValue === "ass"){
+                    // If "Asset" is selected, add asset input fields
+                    var inputField = `<input type="text" class="form-control" data-id="${rowID}" id="data_${rowID}" autocomplete="off" autocorrect="off" spellcheck="false">`;
+                    row.append(`
+                        <td>${inputField}</td>
+                        <td><span class="text-center" id="asset_description${rowID}"></span></td>
+                        <td><span class="text-center" id="asset_model_${rowID}"></span></td>
+                        <td><span class="text-center" id="serial_${rowID}"></span></td>
+                        <td>
+                            <button type="button" id="data_save_${rowID}" class="btn btn-outline-success saveRow">Save</button>
+                            <button type="button" id="data_remove_${rowID}" class="btn btn-outline-danger removeRow">Remove</button>
+                        </td>
+                    `);
+                    $('#data_' + rowID).focus();
+
+                } else if (selectedValue === "csbles") {
+                    // If "Consumables" is selected, add consumable input fields
+                    row.append(`
+                        <td colspan="2"><input type="text" class="form-control mb-2" placeholder="Consumable Description" data-id="${rowID}" id="data_cons${rowID}" autocomplete="off" autocorrect="off" spellcheck="false"></td>
+                        <td colspan="2"><input type="number" class="form-control" placeholder="Qty" min="1" data-id="${rowID}" id="qty_${rowID}"></td>
+                        <td>
+                            <button type="button" id="data_save_${rowID}" class="btn btn-outline-success saveRow">Save</button>
+                            <button type="button" id="data_remove_${rowID}" class="btn btn-outline-danger removeRow">Remove</button>
+                        </td>
+                    `);
+                    $('#data_cons' + rowID).focus();
+                }
+            }
+
+
             $(document).ready(function () {
                 // var table = $('#example3').DataTable();
 
@@ -391,16 +451,26 @@
                     
                     var rowCount = parseInt($('#last_count_data').val()); // Get current row count
                     var newRowId = rowCount + 1; // Unique ID for new row
+                    //  <td><input type="text" class="form-control" data-id="${newRowId}" id="data_${newRowId}" autocomplete="off" autocorrect="off" spellcheck="false"></td>
+                    //         <td><span class="text-center" id="asset_description${newRowId}"></span></td>
+                    //         <td><span class="text-center" id="asset_model_${newRowId}"></span></td>
+                    //         <td><span class="text-center" id="serial_${newRowId}"></span></td>
+                    //         <td>
+                    //             <button type="button" id="data_save_${newRowId}" class="btn btn-outline-success saveRow">Save</button>
+                    //             <button type="button" id="data_remove_${newRowId}" class="btn btn-outline-danger removeRow">Remove</button>
+                    //         </td>
                     var newRow = `
-                        <tr>
-                            <td><input type="text" class="form-control" data-id="${newRowId}" id="data_${newRowId}" autocomplete="off" autocorrect="off" spellcheck="false"></td>
-                            <td><span class="text-center" id="asset_description${newRowId}"></span></td>
-                            <td><span class="text-center" id="asset_model_${newRowId}"></span></td>
-                            <td><span class="text-center" id="serial_${newRowId}"></span></td>
+                        <tr id="row_${newRowId}">
                             <td>
-                                <button type="button" id="data_save_${newRowId}" class="btn btn-outline-success saveRow">Save</button>
-                                <button type="button" id="data_remove_${newRowId}" class="btn btn-outline-danger removeRow">Remove</button>
+                                <select class="form-select" id="asset_type_${newRowId}" data-id="${newRowId}" onchange="changeAssetType(this, ${newRowId})">
+                                    <option value="">Select Asset Type</option>
+                                    
+                                        <option value="ass">Asset</option>
+                                        <option value="csbles">Consumables</option>
+                                    
+                                </select>
                             </td>
+                           
                         </tr>
                     `;
                     $('#data_selected tbody').append(newRow);
@@ -439,7 +509,8 @@
                                                 });
                                                 document.getElementById("data_"+intCurrent).value = "";
                                             }
-                                            
+                                            var text_data = $('#data_'+intCurrent);
+                                            text_data.replaceWith(`<span class="text-center" id="data_${intCurrent}">`+response.data.asset_id+`</span>`);
                                             var text_data = $('#data_'+intCurrent);
                                             text_data.replaceWith(`<span class="text-center" id="data_${intCurrent}">`+response.data.asset_id+`</span>`);
                                             document.getElementById("asset_description"+intCurrent).innerHTML = response.data.asset_description
@@ -461,8 +532,11 @@
                     $('#data_selected tbody').on('click', '.saveRow', function () {
                         var row = $(this).closest('tr'); // Get the row
                         var inputData = row.find('input').val(); // Get input value
+                        var assetType = row.find('select[id^="asset_type_"]').val();
+                        var qtyInput = row.find('input[id^="qty_"]').val();
+                        console.log(assetType, inputData, qtyInput);
                         var button = $(this); // Reference to the button
-                        // console.log(inputData)
+                        // console.log(row)
                         if (inputData.trim() === "") {
                             alert("Please enter a value before saving.");
                             return;
@@ -470,41 +544,98 @@
                         // var main_id = document.getElementById("issuance_id").value;
                         // Simulate AJAX request to save data
                         Swal.showLoading();
-                        $.ajax({
-                            url: '/AssetAssign/getAsset', // Replace with your actual API endpoint
-                            method: 'POST',
-                            data: { 
-                                "_token": '{{ csrf_token() }}',
-                                "asset_id": inputData
-                            },
-                            success: function (response) {
-                                if(response.status == "success"){
-                                    var rowCount2 = parseInt($('#last_count_data').val());
-                                    var intCurrent = rowCount2;
-                                    // console.log("start",rowCount2)
-                                        Swal.showLoading();
-                                        if(response.data == null){
+                        if(assetType == "csbles"){
+                            var main_id = document.getElementById("asset_disposal_id").value;
+                            $.ajax({
+                                url: '/AssetDisposal/save_consumable', // Replace with your actual API endpoint
+                                method: 'POST',
+                                data: { 
+                                    "_token": '{{ csrf_token() }}',
+                                    "asset_disposal_id": main_id,
+                                    "asset_id": inputData,
+                                    "asset_type": assetType,
+                                    "qty": qtyInput
+                                },
+                                success: function (response) {
+                                    if(response.status == "success"){
+                                        var rowCount2 = parseInt($('#last_count_data').val());
+                                        var intCurrent = rowCount2;
+                                        // console.log("start",rowCount2)
+                                            Swal.showLoading();
+                                            if(response.data == null){
+                                                Swal.close();
+                                                Swal.fire({
+                                                    title: "Asset not Found",
+                                                    icon: "error"
+                                                });
+                                                document.getElementById("data_"+intCurrent).value = "";
+                                            }
+                                            
+                                             var text_data = $('#data_cons'+intCurrent);
+                                            text_data.replaceWith(`<span class="text-center" id="data_cons${intCurrent}">`+response.data.consumable_item+`</span>`);
+                                            var text_data_qty = $('#qty_'+intCurrent);
+                                            text_data_qty.replaceWith(`<span class="text-center" id="qty_${intCurrent}">`+response.data.qty+`</span>`);
+
+                                            var select_data = $('#asset_type_' + intCurrent);
+                                            select_data.replaceWith(`<span class="text-center" id="data_cons${intCurrent}">Consumables</span>`);
+
+
+                                            var button = $('#data_save_'+intCurrent);
+                                            var button_remove = $('#data_remove_'+intCurrent);
+                                            button.replaceWith(`<button type="button" class="btn btn-outline-primary viewDetails" onclick="showSwal(`+response.data.id+`)">Details</button>`);
+                                            button_remove.replaceWith(`<button type="button" class="btn btn-outline-danger viewDetails" onclick="getDelete(`+response.data.id+`)" >Delete</button>`);
+
+                                            addNewRow1(intCurrent);
                                             Swal.close();
-                                            Swal.fire({
-                                                title: "Asset not Found",
-                                                icon: "error"
-                                            });
-                                            document.getElementById("data_"+intCurrent).value = "";
+                                            // addNewRow()
+                                            
                                         }
-                                        
-                                        var text_data = $('#data_'+intCurrent);
-                                        text_data.replaceWith(`<span class="text-center" id="data_${intCurrent}">`+response.data.asset_id+`</span>`);
-                                        document.getElementById("asset_description"+intCurrent).innerHTML = response.data.asset_description
-                                        document.getElementById("serial_"+intCurrent).innerHTML = response.data.serial_number
-                                        document.getElementById("asset_model_"+intCurrent).innerHTML = response.data.model_no
-                                        getSave_detl(intCurrent, response.data.id);
-                                        // addNewRow()
-                                        
-                                    }
-                            },
-                            error: function (error) {
-                            }
-                        });
+                                },
+                                error: function (error) {
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                url: '/AssetAssign/getAsset', // Replace with your actual API endpoint
+                                method: 'POST',
+                                data: { 
+                                    "_token": '{{ csrf_token() }}',
+                                    "asset_id": inputData,
+                                    "asset_type": assetType,
+                                    "qty": qtyInput
+                                },
+                                success: function (response) {
+                                    if(response.status == "success"){
+                                        var rowCount2 = parseInt($('#last_count_data').val());
+                                        var intCurrent = rowCount2;
+                                        // console.log("start",rowCount2)
+                                            Swal.showLoading();
+                                            if(response.data == null){
+                                                Swal.close();
+                                                Swal.fire({
+                                                    title: "Asset not Found",
+                                                    icon: "error"
+                                                });
+                                                document.getElementById("data_"+intCurrent).value = "";
+                                            }
+                                            
+                                            var select_data = $('#asset_type_' + intCurrent);
+                                            select_data.replaceWith(`<span class="text-center" id="data_cons${intCurrent}">Asset</span>`);
+                                            var text_data = $('#data_'+intCurrent);
+                                            text_data.replaceWith(`<span class="text-center" id="data_${intCurrent}">`+response.data.asset_id+`</span>`);
+                                            document.getElementById("asset_description"+intCurrent).innerHTML = response.data.asset_description
+                                            document.getElementById("serial_"+intCurrent).innerHTML = response.data.serial_number
+                                            document.getElementById("asset_model_"+intCurrent).innerHTML = response.data.model_no
+                                            getSave_detl(intCurrent, response.data.id);
+                                            // addNewRow()
+                                            
+                                        }
+                                },
+                                error: function (error) {
+                                }
+                            });
+                        }
+                        
                     });
 
                     // Handle "Remove" button click
