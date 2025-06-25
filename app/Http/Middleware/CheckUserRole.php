@@ -24,8 +24,7 @@ class CheckUserRole
             $user = Auth::user();
             $role = $user->role; // Get user role
             
-            
-            if ($role) {
+            if ($role && $user->active_status == 1) { // Check if role exists and user is active
                 $permissions = User_pages_permission::where('roles_id', $role->id)
                     ->with('page') // Load related page data
                     ->get();
@@ -60,7 +59,6 @@ class CheckUserRole
                 Session::flush();
                 return redirect()->route('login')->with('error', 'Login First!');
             }
-            // dd($role);
         }
         return $next($request);
     }
