@@ -27,7 +27,7 @@
                                         <th class="staff_thead_no">Revised No</th>
                                         <th class="staff_thead_status">Status</th>
                                         <th class="staff_thead_status">Action</th>
-                                        <th class="staff_thead_status">Gatepass</th>
+                                        {{-- <th class="staff_thead_status">Gatepass</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -62,9 +62,9 @@
                                         <td> 
                                             <a class="btn btn-outline-info" href="/AssetAssign/detl/{{ $issu->id }}">View</a>
                                         </td>
-                                        <td> 
+                                        {{-- <td> 
                                             <a class="btn btn-outline-warning" href="/AssetAssign/detl/{{ $issu->id }}">View</a>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                     
                                     @endforeach
