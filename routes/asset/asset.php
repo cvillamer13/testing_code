@@ -10,4 +10,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/edit/{id}', [AssetController::class, 'edit'])->name('Asset.edit');
     Route::post('/edit/{id}', [AssetController::class, 'update']);
+
+    Route::post('/delete/{id}', [AssetController::class, 'delete_asset']);
 });

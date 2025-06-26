@@ -260,5 +260,27 @@ class AssetController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
+
+
+
+    function delete_asset(Request $request, $id){
+        try {
+            $asset = Asset::find($id);
+            if ($asset) {
+                $asset->deletedby = session('user_email');
+                $asset->isDelete = true;
+                $asset->save();
+                return redirect()->route('Asset.view')->with('success', 'Asset deleted successfully.');
+            } else {
+                return redirect()->back()->with('error', 'Asset not found.');
+            }
+            echo "<pre>";
+            print_r($id);
+            exit;
+        } catch (\Throwable $th) {
+            // throw $th;
+            return redirect()->back()->with('error', 'Asset not found.');
+        }
+    }
     
 }

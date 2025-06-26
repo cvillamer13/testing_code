@@ -29,7 +29,7 @@
                                         <th class="staff_thead_email">Asset Description </th>
                                         <th class="staff_thead_email">Serial Number </th>
                                         <th class="staff_thead_status">Status</th>
-                                        <th class="staff_thead_status">Action</th>
+                                        <th class="staff_thead_status" colspan="2">Action</th>
                                         <th class="staff_thead_status">Asset Assigned</th>
                                     </tr>
                                 </thead>
@@ -42,6 +42,15 @@
                                             <td>{{ $ass->serial_number }}</td>
                                             <td>{{ $ass->asset_status_data->status ?? 'N/A' }}</td>
                                             <td><a class="badge badge-lg badge-info" id="staff_id_new" href="./edit/{{ $ass->id }}"><i class="la la-pencil"></i>View</a></td>
+                                            <td>
+                                                <form action="./delete/{{ $ass->id }}" method="POST" style="display:inline;" class="delete-asset-form">
+                                                    @csrf
+                                                    @method('POST')
+                                                    <button type="submit" class="badge badge-lg badge-danger btn-delete-asset">
+                                                        <i class="las la-trash-alt"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </td>
                                             <td><a class="badge badge-lg badge-success" data-toggle="modal" data-target="#modal_assign" id="view_assign" data-asset_id="{{ $ass->id }}"><i class="las la-eye"></i>view</a></td>
                                         </tr>
                                     @endforeach
