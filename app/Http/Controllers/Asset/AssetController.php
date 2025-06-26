@@ -274,9 +274,7 @@ class AssetController extends Controller
             } else {
                 return redirect()->back()->with('error', 'Asset not found.');
             }
-            echo "<pre>";
-            print_r($id);
-            exit;
+            
         } catch (\Throwable $th) {
             // throw $th;
             return redirect()->back()->with('error', 'Asset not found.');

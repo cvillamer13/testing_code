@@ -10,6 +10,7 @@ use App\Http\Controllers\Location\LocationController;
 use Illuminate\Support\Facades\Route;
 use App\Mail\MyTestEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\PositionController;
 
 
 /*
@@ -74,6 +75,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/Location/getLocation', [LocationController::class, 'getLocation']);
     Route::post('/Location/getLocation_name', [LocationController::class, 'getLocation_name']);
     Route::post('/Location/delete', [LocationController::class, 'delete']);
+
+    //Poistion
+    Route::get('/Position/view', [PositionController::class, 'view'])->name('position.view');
     
 });
 
