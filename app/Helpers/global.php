@@ -33,8 +33,6 @@ if (!function_exists('checkingPages')) {
     }
 }
 
-
-
 if (!function_exists('generateRefNumber')) {
     function generateRefNumber()
     {
@@ -51,7 +49,6 @@ if (!function_exists('generateRefNumber')) {
         return $ref->reference_number;
     }
 }
-
 
 if (!function_exists('generateGatepassNumber')) {
     function generateGatepassNumber()
@@ -75,8 +72,6 @@ if (!function_exists('generateGatepassNumber')) {
     }
 }
 
-
-
 if (!function_exists('generateAssetReturnsNumber')) {
     function generateAssetReturnsNumber()
     {
@@ -120,9 +115,6 @@ if (!function_exists('generateAssetReturnsNumber')) {
         return $ref->reference_number;
     }
 }
-
-
-
 
 function get_approvers($typeprocess){
     $approvers = ApproversMatrix::where('type_of_process', $typeprocess)->orderBy('increment_num', 'asc')->get();
@@ -166,7 +158,6 @@ function get_current_approvers($id_data, $pages_id, $user_id){
     // return $approvers;
 
 }
-
 
 if (!function_exists('approvalIssuance')) {
     function approvalIssuance($issuance_id, $typeprocess, $pages_id, $rev_num, $issueby, $assignee, $date_req, $date_need, $the_status)
@@ -282,7 +273,6 @@ if (!function_exists('approvalIssuance')) {
 
 }
 
-
 if (!function_exists('approvalGatepass')) {
     function approvalGatepass($gatepass_id, $typeprocess, $pages_id)
     {
@@ -334,15 +324,6 @@ if (!function_exists('approvalGatepass')) {
     }
 
 }
-
-
-
-
-
-
-
-
-
 
 if (!function_exists('approvalAssetTransfer')) {
     function approvalAssetTransfer($transfer_id, $typeprocess, $pages_id, $the_status = "P")
@@ -465,10 +446,6 @@ if (!function_exists('approvalAssetTransfer')) {
 
 }
 
-
-
-
-
 if (!function_exists('generate_asset_borrowed_ref')) {
     function generate_asset_borrowed_ref()
     {
@@ -502,8 +479,6 @@ if (!function_exists('generate_asset_borrowed_ref')) {
         return $ref->reference_number;
     }
 }
-
-
 
 if (!function_exists('approvalBorrowedAsset')) {
     function approvalBorrowedAsset($borrowed_id, $typeprocess, $pages_id, $the_status)
@@ -613,7 +588,6 @@ if (!function_exists('approvalBorrowedAsset')) {
 
 }
 
-
 if (!function_exists('generateAssetDisposalNumber')) {
     function generateAssetDisposalNumber()
     {
@@ -635,7 +609,6 @@ if (!function_exists('generateAssetDisposalNumber')) {
         return $ref->reference_number;
     }
 }
-
 
 if (!function_exists('approvalAssetDisposalAsset')) {
     function approvalAssetDisposalAsset($borrowed_id, $typeprocess, $pages_id, $the_status)
@@ -737,8 +710,6 @@ if (!function_exists('approvalAssetDisposalAsset')) {
 
 }
 
-
-
 if (!function_exists('changing_assetstatus')) {
     function changing_assetstatus($asset_id, $status_id){
         $data = Asset::find($asset_id);
@@ -747,7 +718,6 @@ if (!function_exists('changing_assetstatus')) {
         return $data;
     }
 }
-
 
 if (!function_exists('asset_assign_changes')) {
     function asset_assign_changes($asset_id, $emp_id, $status, $current = false){
@@ -767,8 +737,6 @@ if (!function_exists('asset_assign_changes')) {
         return $data;
     }
 }
-
-
 
 if (!function_exists('asset_assignee')) {
     function asset_assignee($asset_id, $emp_id){
